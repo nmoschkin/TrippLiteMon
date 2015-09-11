@@ -1,0 +1,352 @@
+﻿<Window x:Class="PowerMon"
+    x:Name="PowerMon"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:TrippLite"
+    Title="PowerMon" Height="308" Width="632"
+    ResizeMode="NoResize"
+    HorizontalAlignment="Center"
+    VerticalAlignment="Center"
+    Background="{DynamicResource TrippLiteBlueGradient}" Icon="{DynamicResource TrippLiteIcon}">
+
+    <Window.Triggers>
+
+        <EventTrigger RoutedEvent="MouseLeave" SourceName="LoadVisual">
+
+            <EventTrigger.Actions>
+                <BeginStoryboard Name="LoadVisualLeaveStoryboard">
+                    <Storyboard>
+                        <DoubleAnimation
+                            Storyboard.TargetName="LoadVisual" 
+                            Storyboard.TargetProperty="EffectLevel" 
+                            To="0" Duration="0:0:0.15" />
+
+                    </Storyboard>
+                </BeginStoryboard>
+                <StopStoryboard BeginStoryboardName="LoadVisualEnterStoryboard"/>
+            </EventTrigger.Actions>
+
+        </EventTrigger>
+
+        <EventTrigger RoutedEvent="MouseEnter" SourceName="LoadVisual">
+
+            <EventTrigger.Actions>
+                <BeginStoryboard Name="LoadVisualEnterStoryboard">
+                    <Storyboard>
+                        <DoubleAnimation
+                            Storyboard.TargetName="LoadVisual" 
+                            Storyboard.TargetProperty="EffectLevel" 
+                            To="1" Duration="0:0:0.15" />
+
+                    </Storyboard>
+                </BeginStoryboard>
+                <StopStoryboard BeginStoryboardName="LoadVisualLeaveStoryboard"/>
+
+            </EventTrigger.Actions>
+
+        </EventTrigger>
+
+    </Window.Triggers>
+   
+    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowGridLines="False" Width="{Binding}" Height="{Binding}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="160" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource TrippLiteGray}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="1">
+                <Grid 
+                    HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Top" 
+                    Height="44" 
+                    Background="{DynamicResource TrippLiteGray}"
+                    Margin="12,12,12,12">
+                    
+                    
+                    
+                    <Image x:Name="LogoImage" Stretch="Uniform" Margin="4,4,4,4" Source="{StaticResource TrippLiteLogo}"/>
+
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="0" Grid.RowSpan="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="160"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <!-- Buttons Grid -->
+                <Grid Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="38" />
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="40" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="LeftButton"
+                            Grid.Column="1" 
+                            HorizontalAlignment="Center" 
+                            VerticalAlignment="Top" 
+                            Width="30" 
+                            Height="30" 
+                            Margin="1,1,1,1" 
+                            Opacity="0"
+                            Style="{DynamicResource LeftButtonStyle}"
+                            >
+
+                    </Button>
+                    <Button x:Name="RightButton"
+                            Grid.Column="2" 
+                            HorizontalAlignment="Center" 
+                            VerticalAlignment="Top" 
+                            Width="30" 
+                            Height="30" 
+                            Margin="1,1,1,1" 
+                            Opacity="0"
+                            Style="{DynamicResource RightButtonStyle}"
+                            >
+
+                    </Button>
+
+                </Grid>
+
+                <!-- Main Display Grid -->
+                <Grid Height="160" 
+                      HorizontalAlignment="Stretch" 
+                      Margin="38,0,38,0" 
+                      VerticalAlignment="Center"
+                      Background="{DynamicResource TrippLiteLcd}">
+
+                    <Grid>
+
+                        <Border x:Name="LCDBorder" 
+                                BorderThickness="1" 
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Stretch"
+                                BorderBrush="{DynamicResource TrippLiteBlue}">
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="120"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="4"/>
+                                    <RowDefinition Height="12"/>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="12"/>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+
+                                <StackPanel
+                                    Margin="2,10,4,-12" 
+                                    Grid.Row="0" 
+                                    Grid.Column="1" 
+                                    Grid.RowSpan="5">
+
+                                    <Grid
+                                        x:Name="OtherSettings">
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition x:Name="Col1" Width="96" />
+                                            <ColumnDefinition x:Name="Col2" Width="96" />
+                                            <ColumnDefinition x:Name="Col3" Width="96" />
+                                            <ColumnDefinition x:Name="Col4" Width="96" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid x:Name="Settings1" Grid.Row="0" Margin="2,2,2,2" Grid.Column="0">
+
+                                        </Grid>
+                                        <Grid x:Name="Settings2" Margin="2,2,2,2" Grid.Row="0" Grid.Column="1">
+
+                                        </Grid>
+                                        <Grid x:Name="Settings3" Grid.Row="0" Margin="2,2,2,2" Grid.Column="2">
+
+                                        </Grid>
+                                        <Grid x:Name="Settings4" Margin="2,2,2,2" Grid.Row="0" Grid.Column="3">
+
+                                        </Grid>
+
+                                    </Grid>
+
+                                </StackPanel>
+
+                                <TextBlock x:Name="MainsLabel"
+                                           Grid.Row="1"
+                                           Grid.Column="2"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           FontFamily="Segoe UI"
+                                           FontStretch="Normal"
+                                           Foreground="{DynamicResource TrippLiteLcdType}"
+                                           FontSize="8">
+                                    Input Voltage
+                                </TextBlock>
+
+                                <TextBlock x:Name="LineVoltage"
+                                    Grid.Row="2" 
+                                    Margin="12,2,12,2" 
+                                    Grid.Column="2" 
+                                    FontFamily="Digital dream Skew Narrow"
+                                    FontStretch="Normal"
+                                    FontWeight="ExtraBold"
+                                    FontSize="28"
+                                    Foreground="{DynamicResource TrippLiteLcdType}"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center">
+
+                                </TextBlock>
+
+                                <TextBlock x:Name="BattLabel"
+                                           Grid.Row="3"
+                                           Grid.Column="2"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           FontFamily="Segoe UI"
+                                           FontStretch="Normal"
+                                           Foreground="{DynamicResource TrippLiteLcdType}"
+                                           FontSize="8">
+                                    Output Voltage
+                                </TextBlock>
+
+                                <TextBlock x:Name="FeedVoltage"
+                                    Grid.Row="4" 
+                                    Margin="12,2,12,2" 
+                                    Grid.Column="2" 
+                                    FontFamily="Digital dream Skew Narrow"
+                                    FontStretch="Normal"
+                                    FontWeight="ExtraBold"
+                                    FontSize="28"
+                                    Foreground="{DynamicResource TrippLiteLcdType}"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center">
+
+                                </TextBlock>
+
+                                <StackPanel
+                                    Grid.Row="5"
+                                    Grid.Column="2"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center">
+
+
+                                    <local:LoadBar
+                                    x:Name="LoadVisual"
+                                    Width="100"
+                                    Height="30"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Bottom">
+
+                                    </local:LoadBar>
+
+                                </StackPanel>
+                               
+                            </Grid>
+
+                        </Border>
+
+                    </Grid>
+
+                </Grid>
+
+            </Grid>
+
+        </Grid>
+
+        <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="128"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="60"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0" Margin="12,12,12,12">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" 
+                               x:Name="ProductId" 
+                               Foreground="{DynamicResource TrippLiteGray}" 
+                               FontFamily="Segoe UI" FontSize="10" 
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Center">
+
+                    </TextBlock>
+
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="3" Grid.Column="0" Margin="12,0,12,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" 
+                               x:Name="LabelSerial"
+                               Foreground="{DynamicResource TrippLiteDimGray}" 
+                               FontFamily="Segoe UI" 
+                               FontSize="8" 
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Bottom">
+                        Serial Number
+                    </TextBlock>
+                    <TextBlock Grid.Row="1" 
+                               x:Name="SerialNo" 
+                               Foreground="{DynamicResource TrippLiteGray}" 
+                               FontFamily="Segoe UI" 
+                               FontSize="11" 
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Bottom">
+
+                    </TextBlock>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="2" Margin="4,0,4,0">
+                <TextBlock Grid.Row="1" x:Name="ModelId" Foreground="{DynamicResource TrippLiteGray}" FontFamily="Segoe UI" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                </TextBlock>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="0" Grid.RowSpan="1"  Margin="12,12,12,12">
+                <Grid 
+                    HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Center" 
+                    Height="84">
+
+                    <Image x:Name="ModelImage"
+                           VerticalAlignment="Center" 
+                           HorizontalAlignment="Center" 
+                           Stretch="Uniform"
+                           Source="{StaticResource Smart1500LCDT}">
+
+                        <Image.BitmapEffect>
+                            <DropShadowBitmapEffect Color="{DynamicResource ShadowColor}" Direction="199" Softness="0.4" ShadowDepth="3" />
+                        </Image.BitmapEffect>
+
+                        <Image.SnapsToDevicePixels>True</Image.SnapsToDevicePixels>
+
+                        <Image.Style>
+                            <Style>
+                                <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
+                            </Style>
+                        </Image.Style>
+
+                    </Image>
+
+                </Grid>
+            </Grid>
+        </Grid>
+
+
+    </Grid>
+</Window>
