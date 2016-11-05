@@ -23,13 +23,9 @@ Public Class LoadBar
       GetType(UInteger), GetType(LoadBar),
       New PropertyMetadata(Nothing))
 
-    Public Shared ReadOnly OutlinePointsProperty As DependencyProperty = DependencyProperty.Register("OutlinePoints",
-      GetType(PointCollection), GetType(LoadBar),
-      New PropertyMetadata(Nothing))
-
-    Public Shared ReadOnly MeasurePointsProperty As DependencyProperty = DependencyProperty.Register("MeasurePoints",
-      GetType(PointCollection), GetType(LoadBar),
-      New PropertyMetadata(Nothing))
+    'Public Shared ReadOnly OutlinePointsProperty As DependencyProperty = DependencyProperty.Register("OutlinePoints",
+    '  GetType(PointCollection), GetType(LoadBar),
+    '  New PropertyMetadata(Nothing))
 
     Public Shared ReadOnly EffectLevelProperty As DependencyProperty = DependencyProperty.Register("EffectLevel",
       GetType(Double), GetType(LoadBar),
@@ -122,25 +118,15 @@ Public Class LoadBar
         End Set
     End Property
 
-    <Browsable(True), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)>
-    Public Property OutlinePoints As PointCollection
-        Get
-            OutlinePoints = DirectCast(GetValue(OutlinePointsProperty), PointCollection)
-        End Get
-        Set(value As PointCollection)
-            SetValue(OutlinePointsProperty, value)
-        End Set
-    End Property
-
-    <Browsable(True), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)>
-    Public Property MeasurePoints As PointCollection
-        Get
-            MeasurePoints = DirectCast(GetValue(MeasurePointsProperty), PointCollection)
-        End Get
-        Set(value As PointCollection)
-            SetValue(MeasurePointsProperty, value)
-        End Set
-    End Property
+    '<Browsable(True), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)>
+    'Public Property OutlinePoints As PointCollection
+    '    Get
+    '        OutlinePoints = DirectCast(GetValue(OutlinePointsProperty), PointCollection)
+    '    End Get
+    '    Set(value As PointCollection)
+    '        SetValue(OutlinePointsProperty, value)
+    '    End Set
+    'End Property
 
     ''' <summary>
     ''' Returns the maximum number of sections supported for this instance.
@@ -164,7 +150,7 @@ Public Class LoadBar
         _refSize = DrawingArea.RenderSize
         If _refSize.Height = 0 Then Exit Sub
 
-        UpdateOutline()
+        'UpdateOutline()
 
         '' this is the current angle calculated from the current box dimensions
         Dim pol As Polar.PolarCoordinates = Polar.ToPolarCoordinates(_refSize.Width, _refSize.Height)
@@ -173,20 +159,20 @@ Public Class LoadBar
         CalculateSections()
     End Sub
 
-    ''' <summary>
-    ''' Update the rectangular outline of the control.
-    ''' </summary>
-    ''' <remarks></remarks>
-    Private Sub UpdateOutline()
-        Dim s As Size = _refSize
-        Dim pc As New PointCollection
+    '''' <summary>
+    '''' Update the rectangular outline of the control.
+    '''' </summary>
+    '''' <remarks></remarks>
+    'Private Sub UpdateOutline()
+    '    Dim s As Size = _refSize
+    '    Dim pc As New PointCollection
 
-        pc.Add(New Point(0, s.Height))
-        pc.Add(New Point(s.Width, s.Height))
-        pc.Add(New Point(s.Width, 0))
+    '    pc.Add(New Point(0, s.Height))
+    '    pc.Add(New Point(s.Width, s.Height))
+    '    pc.Add(New Point(s.Width, 0))
 
-        OutlinePoints = pc
-    End Sub
+    '    OutlinePoints = pc
+    'End Sub
 
     ''' <summary>
     ''' Calculate only the lighted bars and backing effect.
@@ -251,7 +237,6 @@ Public Class LoadBar
         '' calculate from hypoteneuse side.
         Dim fr As Double = pol.Radius / wWidth
         Dim cblin As Integer = CalcBars(LoadValue, Sections) - 1
-        Dim blu As Double = Blunting * fr
 
         BarsArea.Children.Clear()
         System.Threading.Thread.Sleep(0)

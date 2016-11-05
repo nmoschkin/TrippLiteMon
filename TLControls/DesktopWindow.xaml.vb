@@ -140,7 +140,7 @@ Public Class DesktopWindow
         For Each pr In _ViewModel.Properties
             Select Case pr.Code
 
-                Case TrippLiteCodes.InputVoltage, TrippLiteCodes.OutputVoltage, TrippLiteCodes.OutputLoad, TrippLiteCodes.OutputPower
+                Case TrippLiteCodes.InputVoltage, TrippLiteCodes.OutputVoltage, TrippLiteCodes.OutputLoad, TrippLiteCodes.OutputPower, TrippLiteCodes.OutputCurrent
                     Exit Select
 
                 Case Else
@@ -162,7 +162,7 @@ Public Class DesktopWindow
         For Each pr In _ViewModel.Properties
             Select Case pr.Code
 
-                Case TrippLiteCodes.InputVoltage, TrippLiteCodes.OutputVoltage, TrippLiteCodes.OutputLoad, TrippLiteCodes.OutputPower
+                Case TrippLiteCodes.InputVoltage, TrippLiteCodes.OutputVoltage, TrippLiteCodes.OutputLoad, TrippLiteCodes.OutputPower, TrippLiteCodes.OutputCurrent
                     Exit Select
 
                 Case Else

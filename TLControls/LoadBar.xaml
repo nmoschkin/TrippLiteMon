@@ -16,23 +16,10 @@
 
         <Canvas x:Name="DrawingArea" Margin="4,4,4,4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Polygon
-                Opacity="0"
-                x:Name="MeasureBar"
-                Points="{Binding ElementName=LoadBar, Path=MeasurePoints}"
-                Fill="{DynamicResource TrippLiteLcdType}">
-            </Polygon>
-            <Polygon
-                x:Name="OutlineBar"
-                Points="{Binding ElementName=LoadBar, Path=OutlinePoints}"
-                Stroke="{DynamicResource TrippLiteLcdType}" 
-                StrokeThickness="0">
-                
-            </Polygon>
-            <Polygon
                 x:Name="BackingBar"
                 Opacity="0"
-                Points="{Binding ElementName=LoadBar, Path=OutlinePoints}"
                 Fill="{DynamicResource TrippLiteLcdType}">
+                <!--Points="{Binding ElementName=LoadBar, Path=OutlinePoints}"-->
 
                 <Polygon.Effect>
                     <DropShadowEffect Opacity="{Binding ElementName=LoadBar, Path=EffectLevel}" BlurRadius="2" ShadowDepth="2" Color="{DynamicResource TrippLiteDimGrayColor}" />

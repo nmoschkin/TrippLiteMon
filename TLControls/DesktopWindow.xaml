@@ -118,13 +118,15 @@
                 <local:LoadBar 
                         Grid.Row="2"
                         Grid.Column="1"
+                        Margin="0,-6,0,0"
                         x:Name="LoadVisual"
                         LoadValue="{Binding LoadBarValue,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Height="24"
                         Width="88"/>
-
+               
+                
             </Grid>
 
 
