@@ -245,7 +245,9 @@
                 VerticalAlignment="Center" 
                 Margin="0"
                 HorizontalAlignment="Left" 
-                Width="88"
+                Width="100"
+                MinWidth="100"
+                MaxWidth="100"             
                 Height="Auto"
                 Focusable="False"
                 Background="Transparent" 
@@ -263,10 +265,10 @@
             <StackPanel x:Name="Content" 
                             Width="{Binding}"
                             Height="{Binding}"
-                            Margin="2"
+                            Margin="12,4,4,4"
                             Grid.Row="0" 
                             Grid.Column="0"
-                            HorizontalAlignment="Center"
+                            HorizontalAlignment="Stretch"
                             Panel.ZIndex="1">
 
                 <StackPanel>
