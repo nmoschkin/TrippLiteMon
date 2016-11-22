@@ -249,27 +249,34 @@ Public Class DesktopWindow
 
     End Sub
 
-    Private Sub ChangePowerState(psu As Boolean)
+    Private Sub ChangePowerState(psu As Boolean, Optional reset As Boolean = False)
 
-        If Not psu Then
-            _ViewModel.MakeLoadBarProperty(_ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.OutputLoad))
-            _ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.ChargeRemaining).IsActiveProperty = False
-            psuA.psu = True
-        Else
-            _ViewModel.MakeLoadBarProperty(_ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.ChargeRemaining))
-            _ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.OutputLoad).IsActiveProperty = False
-            psuA.psu = False
+        psuA.first = False
+
+        If reset Then
+            psuA.psu = (Not psu)
         End If
 
+        If psu = psuA.psu Then Return
+
+        If psu = True Then
+            _ViewModel.MakeLoadBarProperty(_ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.ChargeRemaining))
+            _ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.OutputLoad).IsActiveProperty = False
+            psuA.psu = True
+        Else
+            _ViewModel.MakeLoadBarProperty(_ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.OutputLoad))
+            _ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.ChargeRemaining).IsActiveProperty = False
+            psuA.psu = False
+        End If
 
     End Sub
 
     Private Sub _ViewModel_PowerStateChanged(sender As Object, e As PowerStateChangedEventArgs) Handles _ViewModel.PowerStateChanged
 
         If e.NewState = PowerStates.Utility Then
-            ChangePowerState(False)
+            ChangePowerState(False, psuA.first)
         Else
-            ChangePowerState(True)
+            ChangePowerState(True, psuA.first)
         End If
 
     End Sub
@@ -278,6 +285,10 @@ End Class
 
 Friend Module psuA
 
+    <ThreadStatic>
     Public psu As Boolean = False
+
+    <ThreadStatic>
+    Public first As Boolean = True
 
 End Module
