@@ -118,12 +118,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_ABCA7B7E8253CF4F579C2790DB6D3DEA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_5778D120932E498391FBB9924AD76FCA"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -163,6 +157,12 @@
         "OwnerKey" = "8:_5E21FED1869194D5F666D7044C6860D5"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_ABCA7B7E8253CF4F579C2790DB6D3DEA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -181,6 +181,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.5"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.5 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.5"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -197,6 +213,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.5"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.5 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.5"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -292,7 +324,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:TLModel, Version=1.1.2015.823, Culture=neutral, PublicKeyToken=a1f473aab2d93592, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:TLModel, Version=1.2.2016.1117, Culture=neutral, PublicKeyToken=a1f473aab2d93592, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_8D65FEBC549607AFEA1C1C017942AB98"
@@ -436,7 +468,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:TLControls, Version=1.1.2015.823, Culture=neutral, PublicKeyToken=a1f473aab2d93592, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:TLControls, Version=1.2.2016.1117, Culture=neutral, PublicKeyToken=a1f473aab2d93592, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_F9E061A544FB0BAB1B2500A342531564"
@@ -519,15 +551,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:TLMInstall"
-        "ProductCode" = "8:{EFAF9779-74AB-41DB-AAFD-4DE5B56B7BBE}"
-        "PackageCode" = "8:{13C1492D-5EF5-4F8F-A393-1E89AF888B85}"
+        "ProductCode" = "8:{DF785867-EA93-4488-AC0F-AE401C4C01FB}"
+        "PackageCode" = "8:{C8CDE7E3-2B86-4B46-AACC-384A584A7B79}"
         "UpgradeCode" = "8:{3A4E6DFA-3C08-4CBB-9F6C-50C09EC776D7}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.1.0"
+        "ProductVersion" = "8:1.2.3"
         "Manufacturer" = "8:Nathan Moschkin"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://nmtripp.codeplex.com/"

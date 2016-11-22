@@ -249,20 +249,35 @@ Public Class DesktopWindow
 
     End Sub
 
-    Dim psu As Boolean = False
+    Private Sub ChangePowerState(psu As Boolean)
+
+        If Not psu Then
+            _ViewModel.MakeLoadBarProperty(_ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.OutputLoad))
+            _ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.ChargeRemaining).IsActiveProperty = False
+            psuA.psu = True
+        Else
+            _ViewModel.MakeLoadBarProperty(_ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.ChargeRemaining))
+            _ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.OutputLoad).IsActiveProperty = False
+            psuA.psu = False
+        End If
+
+
+    End Sub
 
     Private Sub _ViewModel_PowerStateChanged(sender As Object, e As PowerStateChangedEventArgs) Handles _ViewModel.PowerStateChanged
 
         If e.NewState = PowerStates.Utility Then
-            If Not psu Then _ViewModel.MakeLoadBarProperty(_ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.OutputLoad))
-            _ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.ChargeRemaining).IsActiveProperty = False
-            psu = True
+            ChangePowerState(False)
         Else
-            If psu Then _ViewModel.MakeLoadBarProperty(_ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.ChargeRemaining))
-            _ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.OutputLoad).IsActiveProperty = False
-            psu = False
+            ChangePowerState(True)
         End If
 
     End Sub
 
 End Class
+
+Friend Module psuA
+
+    Public psu As Boolean = False
+
+End Module

@@ -15,7 +15,7 @@ Imports System.Windows
 <Assembly: AssemblyDescription("TrippLite UPS Control Library")>
 <Assembly: AssemblyCompany("Nathan Moschkin")>
 <Assembly: AssemblyProduct("TrippLite UPS Control Library")>
-<Assembly: AssemblyCopyright("Copyright @ 2015 Nathan Moschkin")>
+<Assembly: AssemblyCopyright("Copyright @ 2016 Nathan Moschkin")>
 <Assembly: AssemblyTrademark("")> 
 <Assembly: ComVisible(false)>
 
@@ -55,5 +55,5 @@ Imports System.Windows
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.1.2015.823")>
-<Assembly: AssemblyFileVersion("1.1.2015.823")>
+<Assembly: AssemblyVersion("1.2.2016.1121")>
+<Assembly: AssemblyFileVersion("1.2.2016.1121")>

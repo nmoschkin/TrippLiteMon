@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("TrippLite UPS Device Library")>
 <Assembly: AssemblyCompany("Nathan Moschkin")>
 <Assembly: AssemblyProduct("TrippLite UPS Device Library")>
-<Assembly: AssemblyCopyright("Copyright © 2015 Nathan Moschkin")>
+<Assembly: AssemblyCopyright("Copyright © 2016 Nathan Moschkin")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.1.2015.823")>
-<Assembly: AssemblyFileVersion("1.1.2015.823")>
+<Assembly: AssemblyVersion("1.2.2016.1121")>
+<Assembly: AssemblyFileVersion("1.2.2016.1121")>
