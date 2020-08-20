@@ -10,7 +10,8 @@
     <AssemblyName>TLModel</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -82,6 +83,7 @@
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -117,13 +119,17 @@
     <None Include="TrippLiteMon.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DataTools\DTCore\DTCore.vbproj">
+    <ProjectReference Include="..\..\nmdt\DTCore\DTCore.vbproj">
       <Project>{254ad7b9-4120-47b3-a8f5-23548d22a93f}</Project>
       <Name>DTCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\DataTools\DTInterop\DTInteropTrippLite.vbproj">
+    <ProjectReference Include="..\..\nmdt\DTInterop\DTInteropTrippLite.vbproj">
       <Project>{fbe303a8-9852-49b1-811e-3d118b948e31}</Project>
       <Name>DTInteropTrippLite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\nmdt\DTMath\DTMath.vbproj">
+      <Project>{ee44ca63-b163-4c90-b4ca-49a813b36a53}</Project>
+      <Name>DTMath</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

@@ -61,7 +61,7 @@ Public Class PowerMon
 
     End Sub
 
-    Private Sub OpenCool_MouseUp(sender As Object, e As Windows.Input.MouseButtonEventArgs) Handles OpenCool.MouseUp
+    Private Sub OpenCool_MouseUp(sender As Object, e As System.Windows.Input.MouseButtonEventArgs) Handles OpenCool.MouseUp
         RaiseEvent OpenCoolWindow(Me, New EventArgs)
     End Sub
 

@@ -141,7 +141,7 @@ Public Class StatusDisplay
 
         gr = New StackPanel
         gr.Children.Add(t.LoadContent)
-        gr.HorizontalAlignment = Windows.HorizontalAlignment.Left
+        gr.HorizontalAlignment = HorizontalAlignment.Left
         gr.DataContext = prop
 
         gr.Margin = ItemSpacing
@@ -169,7 +169,7 @@ Public Class StatusDisplay
 
     End Sub
 
-    Private Sub StatusDisplay_Unloaded(sender As Object, e As Windows.RoutedEventArgs) Handles Me.Unloaded
+    Private Sub StatusDisplay_Unloaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
 
         If _ViewModel IsNot Nothing Then
 

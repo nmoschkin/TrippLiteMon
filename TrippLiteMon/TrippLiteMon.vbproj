@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>TrippLite</RootNamespace>
     <AssemblyName>TrippLiteMon</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MyType>Custom</MyType>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <PublishUrl>publish\64\</PublishUrl>
@@ -36,6 +36,7 @@
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -199,6 +200,7 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="My Project\app.manifest">
       <SubType>Designer</SubType>
     </None>
@@ -234,9 +236,17 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DataTools\DTCore\DTCore.vbproj">
+    <ProjectReference Include="..\..\nmdt\DTCore\DTCore.vbproj">
       <Project>{254ad7b9-4120-47b3-a8f5-23548d22a93f}</Project>
       <Name>DTCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\nmdt\DTInterop\DTInteropTrippLite.vbproj">
+      <Project>{fbe303a8-9852-49b1-811e-3d118b948e31}</Project>
+      <Name>DTInteropTrippLite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\nmdt\DTMath\DTMath.vbproj">
+      <Project>{ee44ca63-b163-4c90-b4ca-49a813b36a53}</Project>
+      <Name>DTMath</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLControls\TLControls.vbproj">
       <Project>{276a34c8-f653-4ee1-a357-9a057b1d2625}</Project>
