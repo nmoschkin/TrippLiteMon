@@ -54,6 +54,29 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>TrippLiteMon.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DocumentationFile>TLControls.xml</DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <BaseAddress>2318336</BaseAddress>
+    <DocumentationFile>TLControls.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System.Core" />
@@ -169,20 +192,8 @@
     <None Include="TrippLiteMon.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\nmdt\DTCore\DTCore.vbproj">
-      <Project>{254ad7b9-4120-47b3-a8f5-23548d22a93f}</Project>
-      <Name>DTCore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\nmdt\DTInterop\DTInteropTrippLite.vbproj">
-      <Project>{fbe303a8-9852-49b1-811e-3d118b948e31}</Project>
-      <Name>DTInteropTrippLite</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\nmdt\DTMath\DTMath.vbproj">
-      <Project>{ee44ca63-b163-4c90-b4ca-49a813b36a53}</Project>
-      <Name>DTMath</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLModel\TLModel.vbproj">
-      <Project>{492d63f7-8df9-4d48-9820-6a68fc20f570}</Project>
+    <ProjectReference Include="..\TLModel\TLModel.csproj">
+      <Project>{FB09E29C-41A1-02B9-1A78-A0169EB7C1D0}</Project>
       <Name>TLModel</Name>
     </ProjectReference>
   </ItemGroup>

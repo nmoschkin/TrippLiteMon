@@ -4,7 +4,7 @@ Imports System.Threading
 Imports System.Runtime.InteropServices
 Imports System.ComponentModel
 Imports DataTools.Memory
-Imports DataTools.SystemInfo
+Imports DataTools.SystemInformation
 
 Imports DataTools.Interop.Native
 Imports DataTools.Interop

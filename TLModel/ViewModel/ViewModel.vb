@@ -647,7 +647,7 @@ Public Class TrippLitePropertyViewModel
     End Property
 
     ''' <summary>
-    ''' Gets or sets a value indicating whether or not this property will actively triggering change events.
+    ''' Gets or sets a value indicating whether or not this property will actively trigger change events.
     ''' </summary>
     ''' <value></value>
     ''' <returns></returns>
@@ -978,7 +978,7 @@ Public Class LoadBarPropertyHandler
     ''' <remarks></remarks>
     Public Function HandleLoadBarValue(v As Double) As Double
         _Value = v
-        Return HandleLoadBarValue
+        Return HandleLoadBarValue()
     End Function
 
     ''' <summary>
