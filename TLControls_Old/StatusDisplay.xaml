@@ -1,0 +1,146 @@
+﻿<UserControl x:Class="StatusDisplay"
+             x:Name="StatusDisplay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TrippLite"
+             mc:Ignorable="d" 
+             d:DesignHeight="236" d:DesignWidth="392">
+    <UserControl.Resources>
+        <ResourceDictionary Source="Resources.xaml" />
+    </UserControl.Resources>
+    <UserControl.Triggers>
+
+        <EventTrigger RoutedEvent="MouseLeave" SourceName="LoadVisual">
+
+            <EventTrigger.Actions>
+                <BeginStoryboard Name="LoadVisualLeaveStoryboard">
+                    <Storyboard>
+                        <DoubleAnimation
+                            Storyboard.TargetName="LoadVisual" 
+                            Storyboard.TargetProperty="EffectLevel" 
+                            To="0" Duration="0:0:0.15" />
+
+                    </Storyboard>
+                </BeginStoryboard>
+                <StopStoryboard BeginStoryboardName="LoadVisualEnterStoryboard"/>
+            </EventTrigger.Actions>
+
+        </EventTrigger>
+
+        <EventTrigger RoutedEvent="MouseEnter" SourceName="LoadVisual">
+
+            <EventTrigger.Actions>
+                <BeginStoryboard Name="LoadVisualEnterStoryboard">
+                    <Storyboard>
+                        <DoubleAnimation
+                            Storyboard.TargetName="LoadVisual" 
+                            Storyboard.TargetProperty="EffectLevel" 
+                            To="1" Duration="0:0:0.15" />
+
+                    </Storyboard>
+                </BeginStoryboard>
+                <StopStoryboard BeginStoryboardName="LoadVisualLeaveStoryboard"/>
+
+            </EventTrigger.Actions>
+
+        </EventTrigger>
+
+    </UserControl.Triggers>
+
+    <Border x:Name="LCDBorder" 
+                BorderThickness="1" 
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch"
+                ClipToBounds="True"
+                BorderBrush="{DynamicResource TrippLiteBlue}">
+    
+        <Grid
+            Background="{DynamicResource TrippLiteLcd}">
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="140" />
+            </Grid.ColumnDefinitions>
+    
+            <Grid Grid.Column="0">
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                
+                <ListView Grid.Column="0"
+                          VerticalAlignment="Stretch"
+                          HorizontalAlignment="Stretch"
+                          BorderThickness="0"
+                          Focusable="False"
+                          SelectionMode="Single"
+                          Background="{x:Null}"
+                          BorderBrush="Transparent"
+                          ItemTemplate="{StaticResource NormalItemTemplate}"
+                          ItemsSource="{Binding ElementName=StatusDisplay,Path=ViewModel.Properties}"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                          x:Name="ItemsParent">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel
+                                x:Name="SmallItems"
+                                Focusable="False"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Orientation="Horizontal"
+                                Background="{DynamicResource TrippLiteLcd}"/>
+                                
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                      
+                </ListView>
+                
+            </Grid>
+            
+            <Grid Grid.Column="1" >
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition MinHeight="132" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0"
+                            VerticalAlignment="Stretch">
+
+                    <ItemsControl
+                        Padding="{Binding ItemSpacing,ElementName=StatusDisplay}"
+                        x:Name="BigItems"
+                        Focusable="False"
+                        ItemTemplate="{StaticResource ProminentItemTemplate}"
+                        ItemsSource="{Binding ProminentProperties}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Background="{DynamicResource TrippLiteLcd}"
+                        BorderThickness="0"
+                    />
+
+                </StackPanel>
+                
+                <StackPanel Grid.Row="1"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                            Margin="2,2,10,2">
+                    
+                    <local:LoadBar 
+                        x:Name="LoadVisual"
+                        LoadValue="{Binding LoadBarValue,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Height="30"
+                        Width="120"/>
+                </StackPanel>
+            </Grid>
+            
+        </Grid>
+                           
+    </Border>
+
+</UserControl>

@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="MoveablePanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Height="238" Width="342">
+    
+    <Grid x:Name="MasterGrid">
+        <ListView x:Name="MainView"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            Background="{x:Null}">
+            <ListView.Resources>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Height" Value="64" />
+                </Style>
+            </ListView.Resources>
+
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel 
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Orientation="Horizontal"
+                        ItemWidth="248"
+                        />
+
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
+    </Grid>
+</UserControl>
