@@ -5,6 +5,7 @@
     xmlns:TrippLite="clr-namespace:TrippLite"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="UcLoad"
     d:DesignHeight="30"
     d:DesignWidth="100"
     mc:Ignorable="d">
@@ -24,16 +25,16 @@
             VerticalAlignment="Stretch">
             <Polygon
                 x:Name="BackingBar"
-                Fill="{DynamicResource TrippLiteLcdType}"
+                Fill="{StaticResource TrippLiteLcdType}"
                 Opacity="0">
                 <!--  Points="{Binding ElementName=LoadBar, Path=OutlinePoints}"  -->
 
                 <Polygon.Effect>
                     <DropShadowEffect
                         BlurRadius="2"
-                        Opacity="{Binding ElementName=LoadBar, Path=EffectLevel}"
+                        Opacity="{Binding ElementName=UcLoad, Path=EffectLevel}"
                         ShadowDepth="2"
-                        Color="{DynamicResource TrippLiteDimGrayColor}" />
+                        Color="{StaticResource TrippLiteDimGrayColor}" />
                 </Polygon.Effect>
 
             </Polygon>

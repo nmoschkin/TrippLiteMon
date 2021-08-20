@@ -63,6 +63,8 @@ namespace TrippLite
         {
             this.InitializeComponent();
             _ViewModel = ViewModel;
+            OpenPower.MouseUp += OpenPower_MouseUp;
+            OpenCool.MouseUp += OpenCool_MouseUp;
             double screenWidth = SystemParameters.PrimaryScreenWidth;
             double screenHeight = SystemParameters.PrimaryScreenHeight;
             double windowWidth = this.Width;

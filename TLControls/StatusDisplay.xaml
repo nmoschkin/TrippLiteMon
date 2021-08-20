@@ -83,7 +83,7 @@
                     BorderThickness="0"
                     Focusable="False"
                     ItemTemplate="{StaticResource NormalItemTemplate}"
-                    ItemsSource="{Binding ElementName=StatusDisplay, Path=ViewModel.Properties}"
+                    ItemsSource="{Binding Properties}"
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
                     SelectionMode="Single">

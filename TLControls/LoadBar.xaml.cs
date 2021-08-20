@@ -14,7 +14,7 @@ using System.Windows.Controls;
 namespace TrippLite
 {
     [Serializable]
-    public partial class LoadBar : UserControl
+    public partial class LoadBar 
     {
         private Size _refSize = new Size(0d, 0d);
         private double _angle = 0d;
@@ -321,23 +321,28 @@ namespace TrippLite
         public LoadBar(int maxSections)
         {
             this.InitializeComponent();
+
+            this.SizeChanged += LoadBar_SizeChanged;
+
             _maxSections = maxSections;
-            instanceInit();
+            InstanceInit();
         }
 
         public LoadBar()
         {
-
             // This call is required by the designer.
             this.InitializeComponent();
-            instanceInit();
+
+            this.SizeChanged += LoadBar_SizeChanged;
+
+            InstanceInit();
         }
 
         /// <summary>
-    /// Initialize the instance of the load bar.
-    /// </summary>
-    /// <remarks></remarks>
-        private void instanceInit()
+        /// Initialize the instance of the load bar.
+        /// </summary>
+        /// <remarks></remarks>
+        private void InstanceInit()
         {
             for (int i = 1, loopTo = _maxSections; i <= loopTo; i++)
                 _polyCache.Add(new Polygon());

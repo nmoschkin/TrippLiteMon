@@ -168,7 +168,7 @@ namespace TrippLite
             _ViewModel = new TrippLiteViewModel();
             this.SetValue(ViewModelPropertyKey, _ViewModel);
             _ViewModel.Initialize();
-
+            DataContext = _ViewModel;
             // This call is required by the designer.
             this.InitializeComponent();
         }
