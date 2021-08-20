@@ -8,7 +8,7 @@
     <RootNamespace>TrippLite</RootNamespace>
     <AssemblyName>TLControls</AssemblyName>
     <OutputType>Library</OutputType>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <MyType>Custom</MyType>
     <ProjectGuid>{276A34C8-F653-4EE1-A357-9A057B1D2625}</ProjectGuid>
     <TargetFrameworkProfile />
@@ -169,15 +169,19 @@
     <None Include="TrippLiteMon.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\nmdt\DTCore\DTCore.vbproj">
+    <ProjectReference Include="..\..\dtlib\DTCore\DTCore.vbproj">
       <Project>{254ad7b9-4120-47b3-a8f5-23548d22a93f}</Project>
       <Name>DTCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\nmdt\DTInterop\DTInteropTrippLite.vbproj">
+    <ProjectReference Include="..\..\dtlib\DTExtended\DTExtended.vbproj">
+      <Project>{acda3789-0159-457f-84d6-664f712b0349}</Project>
+      <Name>DTExtended</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\dtlib\DTInterop\DTInteropTrippLite.vbproj">
       <Project>{fbe303a8-9852-49b1-811e-3d118b948e31}</Project>
       <Name>DTInteropTrippLite</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\nmdt\DTMath\DTMath.vbproj">
+    <ProjectReference Include="..\..\dtlib\DTMath\DTMath.vbproj">
       <Project>{ee44ca63-b163-4c90-b4ca-49a813b36a53}</Project>
       <Name>DTMath</Name>
     </ProjectReference>

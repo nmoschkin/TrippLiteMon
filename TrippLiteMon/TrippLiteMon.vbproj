@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>TrippLite</RootNamespace>
     <AssemblyName>TrippLiteMon</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <MyType>Custom</MyType>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <PublishUrl>publish\64\</PublishUrl>
@@ -236,17 +236,13 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\nmdt\DTCore\DTCore.vbproj">
+    <ProjectReference Include="..\..\dtlib\DTCore\DTCore.vbproj">
       <Project>{254ad7b9-4120-47b3-a8f5-23548d22a93f}</Project>
       <Name>DTCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\nmdt\DTInterop\DTInteropTrippLite.vbproj">
+    <ProjectReference Include="..\..\dtlib\DTInterop\DTInteropTrippLite.vbproj">
       <Project>{fbe303a8-9852-49b1-811e-3d118b948e31}</Project>
       <Name>DTInteropTrippLite</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\nmdt\DTMath\DTMath.vbproj">
-      <Project>{ee44ca63-b163-4c90-b4ca-49a813b36a53}</Project>
-      <Name>DTMath</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLControls\TLControls.vbproj">
       <Project>{276a34c8-f653-4ee1-a357-9a057b1d2625}</Project>
