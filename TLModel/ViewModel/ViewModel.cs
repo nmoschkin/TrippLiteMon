@@ -61,6 +61,8 @@ namespace TrippLite
 
         public delegate void PowerStateChangedEventHandler(object sender, PowerStateChangedEventArgs e);
 
+        private CancellationTokenSource cts;
+
         #region LoadBar
 
         public LoadBarPropertyHandler LoadBarHandler { get; set; }
@@ -503,7 +505,8 @@ namespace TrippLite
             if (_WThread is null)
                 return;
             _Running = false;
-            _WThread.Abort();
+            cts?.Cancel();
+            cts = null;
             _WThread = null;
         }
 
@@ -517,11 +520,15 @@ namespace TrippLite
                 return;
             }
 
+            cts = new CancellationTokenSource();
+            
             _Running = true;
-            _WThread = new Thread(() =>
+            _WThread = new Thread(async () =>
             {
                 long tinc = 0L;
-                Thread.Sleep(DelayStart);
+
+                await Task.Delay(DelayStart, cts.Token);
+
                 do
                 {
                     if (!_Running || Thread.CurrentThread.ThreadState == System.Threading.ThreadState.AbortRequested)
@@ -540,7 +547,7 @@ namespace TrippLite
                     {
                         GC.Collect(2);
                         Thread.Sleep(0);
-                        Dispatcher.BeginInvoke(new Action(() =>
+                        await Dispatcher.BeginInvoke(new Action(() =>
                         {
                             GC.Collect(2);
                             Thread.Sleep(0);
@@ -551,7 +558,7 @@ namespace TrippLite
                     tinc += ti;
                     Thread.Sleep((int)ti);
                 }
-                while (true);
+                while (!cts?.IsCancellationRequested ?? false);
             });
             _WThread.IsBackground = true;
             _WThread.SetApartmentState(ApartmentState.STA);

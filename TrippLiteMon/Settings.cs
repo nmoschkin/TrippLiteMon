@@ -77,7 +77,7 @@ namespace TrippLite
                 var key = Registry.CurrentUser.CreateSubKey(TrippLiteMonKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
                 var mm = new MemPtr(16);
                 mm.FromStruct(value);
-                key.SetValue("PrimaryWindowBounds", (byte[])mm, RegistryValueKind.Binary);
+                key.SetValue("PrimaryWindowBounds", mm.ToByteArray(0, 16), RegistryValueKind.Binary);
                 key.Close();
                 mm.Free();
             }
@@ -108,7 +108,7 @@ namespace TrippLite
                 var key = Registry.CurrentUser.CreateSubKey(TrippLiteMonKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
                 var mm = new MemPtr(16);
                 mm.FromStruct(value);
-                key.SetValue("CoolWindowBounds", (byte[])mm, RegistryValueKind.Binary);
+                key.SetValue("CoolWindowBounds", mm.ToByteArray(0, 16), RegistryValueKind.Binary);
                 key.Close();
                 mm.Free();
             }

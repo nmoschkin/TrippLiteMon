@@ -208,6 +208,17 @@ namespace TrippLite
             DisplayCodes = new ObservableCollection<TrippLiteCodes>();
             ViewModel = new TrippLiteViewModel();
             this.InitializeComponent();
+
+            CloseButton.Click += CloseButton_Click;
+            MoveButton.PreviewMouseLeftButtonDown += MoveButton_PreviewMouseLeftButtonDown;
+            MoveButton.PreviewMouseLeftButtonUp += MoveButton_PreviewMouseLeftButtonUp;
+            MoveButton.PreviewMouseMove += MoveButton_PreviewMouseMove;
+            this.Unloaded += DesktopWindow_Unloaded;
+
+            OptionsButton.Click += OptionsButton_Click;
+            RevertToBig.Click += RevertToBig_Click;
+            SysPower.Click += SysPower_Click;
+
             _ViewModel.Initialize();
             foreach (var pr in _ViewModel.Properties)
             {
@@ -259,6 +270,7 @@ namespace TrippLite
             {
                 _ViewModel.StartWatching();
             }
+
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
