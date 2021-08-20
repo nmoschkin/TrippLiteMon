@@ -5,7 +5,8 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+	  <UseWindowsForms>true</UseWindowsForms>
+	  <AssemblyName>$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>TrippLite</RootNamespace>
     <Platforms>AnyCPU;x64</Platforms>
     <LangVersion>preview</LangVersion>

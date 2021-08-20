@@ -46,9 +46,9 @@ namespace TrippLite
         public int MaxTries { get; set; } = 100;
         public int TimerInterval { get; set; } = 200;
         public int DelayStart { get; set; } = 500;
-        public TrippLitePropertyBagViewModel Properties { get; set; } 
+        public TrippLitePropertyBagViewModel Properties { get; set; }
         public TrippLitePropertyBagViewModel ProminentProperties { get; set; }
-        public TrippLitePropertyBagViewModel LoadProperties { get; set; } 
+        public TrippLitePropertyBagViewModel LoadProperties { get; set; }
 
         private Thread _WThread;
         private TrippLitePropertyViewModel _lbProp;
@@ -294,29 +294,29 @@ namespace TrippLite
                 if (_TrippLite.Connected == false)
                 {
                     _waitInit = new Thread(() =>
-                                        {
-                                            int i;
-                                            var loopTo = MaxTries;
-                                            for (i = 0; i <= loopTo; i++)
-                                            {
-                                                Thread.Sleep(100);
-                                                _TrippLite.Connect();
-                                                if (_TrippLite is object && _TrippLite.IsTrippLite)
-                                                {
-                                                    Dispatcher.Invoke(() =>
-                                                                                        {
-                                                                                            _init = true;
-                                                                                            _internalInit();
-                                                                                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrippLite"));
-                                                                                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Properties"));
-                                                                                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ProminentProperties"));
-                                                                                            ViewModelInitialized?.Invoke(this, new EventArgs());
-                                                                                        });
-                                                    _waitInit = null;
-                                                    return;
-                                                }
-                                            }
-                                        });
+                    {
+                        int i;
+                        var loopTo = MaxTries;
+                        for (i = 0; i <= loopTo; i++)
+                        {
+                            Thread.Sleep(100);
+                            _TrippLite.Connect();
+                            if (_TrippLite is object && _TrippLite.IsTrippLite)
+                            {
+                                Dispatcher.Invoke(() =>
+                                {
+                                    _init = true;
+                                    _internalInit();
+                                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrippLite"));
+                                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Properties"));
+                                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ProminentProperties"));
+                                    ViewModelInitialized?.Invoke(this, new EventArgs());
+                                });
+                                _waitInit = null;
+                                return;
+                            }
+                        }
+                    });
                     _waitInit.SetApartmentState(ApartmentState.MTA);
                     _waitInit.IsBackground = false;
                     _waitInit.Start();
@@ -519,40 +519,40 @@ namespace TrippLite
 
             _Running = true;
             _WThread = new Thread(() =>
+            {
+                long tinc = 0L;
+                Thread.Sleep(DelayStart);
+                do
+                {
+                    if (!_Running || Thread.CurrentThread.ThreadState == System.Threading.ThreadState.AbortRequested)
+                        return;
+                    if (!_TrippLite.RefreshData(this))
+                    {
+                        _Running = false;
+                    }
+
+                    if (!_Running)
+                    {
+                        return;
+                    }
+
+                    if (tinc >= 10000L)
+                    {
+                        GC.Collect(2);
+                        Thread.Sleep(0);
+                        Dispatcher.BeginInvoke(new Action(() =>
                         {
-                            long tinc = 0L;
-                            Thread.Sleep(DelayStart);
-                            do
-                            {
-                                if (!_Running || Thread.CurrentThread.ThreadState == System.Threading.ThreadState.AbortRequested)
-                                    return;
-                                if (!_TrippLite.RefreshData(this))
-                                {
-                                    _Running = false;
-                                }
+                            GC.Collect(2);
+                            Thread.Sleep(0);
+                        }));
+                        tinc = 0L;
+                    }
 
-                                if (!_Running)
-                                {
-                                    return;
-                                }
-
-                                if (tinc >= 10000L)
-                                {
-                                    GC.Collect(2);
-                                    Thread.Sleep(0);
-                                    Dispatcher.BeginInvoke(new Action(() =>
-                                                                  {
-                                                                      GC.Collect(2);
-                                                                      Thread.Sleep(0);
-                                                                  }));
-                                    tinc = 0L;
-                                }
-
-                                tinc += ti;
-                                Thread.Sleep((int)ti);
-                            }
-                            while (true);
-                        });
+                    tinc += ti;
+                    Thread.Sleep((int)ti);
+                }
+                while (true);
+            });
             _WThread.IsBackground = true;
             _WThread.SetApartmentState(ApartmentState.STA);
             _WThread.Start();
@@ -621,9 +621,9 @@ namespace TrippLite
     }
 
     /// <summary>
-/// The object that represents the TrippLite property ViewModel
-/// </summary>
-/// <remarks></remarks>
+    /// The object that represents the TrippLite property ViewModel
+    /// </summary>
+    /// <remarks></remarks>
     public class TrippLitePropertyViewModel : INotifyPropertyChanged, IDisposable, IChild<TrippLiteViewModel>
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -661,11 +661,11 @@ namespace TrippLite
         private PropertyChangedEventArgs _DispEvent = new PropertyChangedEventArgs("DisplayValue");
 
         /// <summary>
-    /// Creates a new object with the specified base object and owner.
-    /// </summary>
-    /// <param name="p"></param>
-    /// <param name="owner"></param>
-    /// <remarks></remarks>
+        /// Creates a new object with the specified base object and owner.
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="owner"></param>
+        /// <remarks></remarks>
         internal TrippLitePropertyViewModel(TrippLiteProperty p, TrippLiteViewModel owner)
         {
             if (p is null)
@@ -684,11 +684,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Gets the parent of this object (IChild)
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets the parent of this object (IChild)
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public TrippLiteViewModel Parent
         {
             get
@@ -705,7 +705,7 @@ namespace TrippLite
         TrippLiteViewModel IChild<TrippLiteViewModel>.Parent
         {
             get => _Owner;
-            set => _Owner = value;  
+            set => _Owner = value;
         }
 
         /// <summary>
@@ -730,11 +730,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Indicates whether or not this property belongs to the prominent list.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Indicates whether or not this property belongs to the prominent list.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool Prominent
         {
             get
@@ -749,11 +749,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Returns the raw value of the HID property.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Returns the raw value of the HID property.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public long Value
         {
             get
@@ -763,11 +763,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Returns the HID feature code that the value of this property represents.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Returns the HID feature code that the value of this property represents.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public TrippLiteCodes Code
         {
             get
@@ -777,11 +777,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Returns the header or title of this property.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Returns the header or title of this property.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string Header
         {
             get
@@ -791,11 +791,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Returns the formatted display value of this property.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Returns the formatted display value of this property.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string DisplayValue
         {
             get
@@ -805,9 +805,9 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Set the display value of the current value of the property.
-    /// </summary>
-    /// <remarks></remarks>
+        /// Set the display value of the current value of the property.
+        /// </summary>
+        /// <remarks></remarks>
         public void SetDisplayValue()
         {
             if (_Prominent)
@@ -821,10 +821,10 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Returns the formatted display value of this property.
-    /// </summary>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Returns the formatted display value of this property.
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override string ToString()
         {
             return _DisplayValue;
@@ -927,14 +927,14 @@ namespace TrippLite
 
 
         /// <summary>
-    /// Creates a new object with the specified get and set minimum and maximum value delegate functions and optional intial value.
-    /// </summary>
-    /// <param name="getMinFunc">The get minimum delegate.</param>
-    /// <param name="setMinFunc">The set minimum delegate.</param>
-    /// <param name="getMaxFunc">The get maximum delegate.</param>
-    /// <param name="setMaxFunc">The set maximum delegate.</param>
-    /// <param name="value">The optional initial value.</param>
-    /// <remarks></remarks>
+        /// Creates a new object with the specified get and set minimum and maximum value delegate functions and optional intial value.
+        /// </summary>
+        /// <param name="getMinFunc">The get minimum delegate.</param>
+        /// <param name="setMinFunc">The set minimum delegate.</param>
+        /// <param name="getMaxFunc">The get maximum delegate.</param>
+        /// <param name="setMaxFunc">The set maximum delegate.</param>
+        /// <param name="value">The optional initial value.</param>
+        /// <remarks></remarks>
         public LoadBarPropertyHandler(GetMinimumValue getMinFunc, SetMinimumValue setMinFunc, GetMaximumValue getMaxFunc, SetMaximumValue setMaxFunc, double value = 0d)
 
 
@@ -951,12 +951,12 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Creates a new object with the specified minimum, maximum and initial values.
-    /// </summary>
-    /// <param name="minVal">Minimum value.</param>
-    /// <param name="maxVal">Maximum value.</param>
-    /// <param name="value">Default value.</param>
-    /// <remarks></remarks>
+        /// Creates a new object with the specified minimum, maximum and initial values.
+        /// </summary>
+        /// <param name="minVal">Minimum value.</param>
+        /// <param name="maxVal">Maximum value.</param>
+        /// <param name="value">Default value.</param>
+        /// <remarks></remarks>
         public LoadBarPropertyHandler(double minVal, double maxVal, double value)
         {
             _getMin = new GetMinimumValue(() => _min);
@@ -991,21 +991,21 @@ namespace TrippLite
         private SetMaximumValue _setMax;
 
         /// <summary>
-    /// Creates a new object with the specified minimum and maximum values.
-    /// </summary>
-    /// <param name="minVal">Minimum value.</param>
-    /// <param name="maxVal">Maximum value.</param>
-    /// <remarks></remarks>
+        /// Creates a new object with the specified minimum and maximum values.
+        /// </summary>
+        /// <param name="minVal">Minimum value.</param>
+        /// <param name="maxVal">Maximum value.</param>
+        /// <remarks></remarks>
         public LoadBarPropertyHandler(double minVal, double maxVal) : this(minVal, maxVal, minVal)
         {
         }
 
         /// <summary>
-    /// Gets or sets the minimum load bar value.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the minimum load bar value.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public double MinValue
         {
             get
@@ -1020,11 +1020,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Gets or sets the maximum load bar value.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the maximum load bar value.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public double MaxValue
         {
             get
@@ -1039,11 +1039,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Gets or sets the current load bar value.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the current load bar value.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public double Value
         {
             get
@@ -1073,11 +1073,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Handle the load bar value for the given value.
-    /// </summary>
-    /// <param name="v"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Handle the load bar value for the given value.
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public double HandleLoadBarValue(double v)
         {
             _Value = v;
@@ -1085,10 +1085,10 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Handle the load bar value for the current value.
-    /// </summary>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Handle the load bar value for the current value.
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public double HandleLoadBarValue()
         {
             double d = MaxValue - MinValue;

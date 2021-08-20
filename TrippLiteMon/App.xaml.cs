@@ -14,6 +14,7 @@ namespace TrippLite
     /// </summary>
     public partial class App : Application
     {
+
         public App()
         {
 
@@ -90,7 +91,7 @@ namespace TrippLite
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            //System.Windows.Forms.Application.EnableVisualStyles();
+            System.Windows.Forms.Application.EnableVisualStyles();
             if (Settings.LastWindow == LastWindowType.Cool)
             {
                 SwitchToCool();
