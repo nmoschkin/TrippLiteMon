@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
+using static TrippLite.TrippLiteCodeUtility;
+
 namespace TrippLite
 {
 
@@ -19,7 +21,7 @@ namespace TrippLite
     /// <typeparam name="T">The attribute type from which to retrieve the property.</typeparam>
     /// <typeparam name="U">The type of the attribute property to retrieve.</typeparam>
     /// <typeparam name="V">The enum type.</typeparam>
-    /// <param name="o">The enum value for which to retrieve the attribute.</param>
+    /// <param name="o">The enum va ue for which to retrieve the attribute.</param>
     /// <param name="valueName">The name of the property inside the Attribute object to retrieve.</param>
     /// <param name="b">Optional binding flags for member searching.</param>
     /// <returns>A value of type U that represents the value of the property of the attribute of the member of the enumeration.</returns>

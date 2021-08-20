@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Threading;
 
-using DataTools.Memory;
+using DataTools.Win32.Memory;
 using DataTools.SystemInformation;
+using System.Runtime.InteropServices;
+
+using static TrippLite.TrippLiteCodeUtility;
 
 namespace TrippLite
 {
@@ -34,7 +36,7 @@ namespace TrippLite
 
         protected MemPtr mm;
         protected IntPtr _hid;
-        protected DataTools.Interop.Usb.HidDeviceInfo _Power;
+        protected DataTools.Hardware.Usb.HidDeviceInfo _Power;
         protected long[] _Values = new long[256];
         protected bool _conn = false;
         protected bool _isTL = false;
@@ -58,11 +60,11 @@ namespace TrippLite
     /// <param name="forceRefreshCache">Whether or not to refresh the internal HID power device cache.</param>
     /// <returns></returns>
     /// <remarks></remarks>
-        public static DataTools.Interop.Usb.HidDeviceInfo[] FindAllTrippLiteDevices(bool forceRefreshCache = false)
+        public static DataTools.Hardware.Usb.HidDeviceInfo[] FindAllTrippLiteDevices(bool forceRefreshCache = false)
         {
-            var lOut = new List<DataTools.Interop.Usb.HidDeviceInfo>();
-            DataTools.Interop.Usb.HidDeviceInfo[] devs;
-            devs = DataTools.Interop.Usb.HidFeatures.HidDevicesByUsage(DataTools.Interop.Usb.HidUsagePage.PowerDevice1);
+            var lOut = new List<DataTools.Hardware.Usb.HidDeviceInfo>();
+            DataTools.Hardware.Usb.HidDeviceInfo[] devs;
+            devs = DataTools.Hardware.Usb.HidFeatures.HidDevicesByUsage(DataTools.Hardware.Usb.HidUsagePage.PowerDevice1);
             if (devs is object)
             {
                 foreach (var dev in devs)
@@ -102,12 +104,12 @@ namespace TrippLite
         public static void OpenSystemPowerOptions(IntPtr hwndOwner = default, bool win10 = true)
         {
             bool do10 = win10 & SysInfo.OSInfo.IsWindows10;
-            var shex = new DataTools.Interop.Native.PInvoke.SHELLEXECUTEINFO();
+            var shex = new DataTools.Win32.SHELLEXECUTEINFO();
             shex.cbSize = Marshal.SizeOf(shex);
-            shex.fMask = (uint)(DataTools.Interop.Native.PInvoke.SEE_MASK_UNICODE | DataTools.Interop.Native.PInvoke.SEE_MASK_ASYNCOK | DataTools.Interop.Native.PInvoke.SEE_MASK_FLAG_DDEWAIT);
+            shex.fMask = (uint)(DataTools.Win32.User32.SEE_MASK_UNICODE | DataTools.Win32.User32.SEE_MASK_ASYNCOK | DataTools.Win32.User32.SEE_MASK_FLAG_DDEWAIT);
             shex.hWnd = hwndOwner;
             shex.hInstApp = Process.GetCurrentProcess().Handle;
-            shex.nShow = DataTools.Interop.Native.PInvoke.SW_SHOW;
+            shex.nShow = DataTools.Win32.User32.SW_SHOW;
             if (do10)
             {
                 shex.lpFile = "ms-settings:powersleep";
@@ -119,7 +121,7 @@ namespace TrippLite
             }
 
             shex.lpVerb = "";
-            DataTools.Interop.Native.PInvoke.ShellExecuteEx(ref shex);
+            DataTools.Win32.User32.ShellExecuteEx(ref shex);
         }
 
         /// <summary>
@@ -128,19 +130,19 @@ namespace TrippLite
     /// <param name="device">Optional manually-selected device.</param>
     /// <returns></returns>
     /// <remarks></remarks>
-        public bool Connect(DataTools.Interop.Usb.HidDeviceInfo device = null)
+        public bool Connect(DataTools.Hardware.Usb.HidDeviceInfo device = null)
         {
 
             // ' we won't be connecting if it's already disposed.
             if (disposedValue)
                 return false;
-            DataTools.Interop.Usb.HidDeviceInfo[] devs;
+            DataTools.Hardware.Usb.HidDeviceInfo[] devs;
             int i = 0;
             if (device is null)
             {
                 do
                 {
-                    devs = DataTools.Interop.Usb.HidFeatures.HidDevicesByUsage(DataTools.Interop.Usb.HidUsagePage.PowerDevice1);
+                    devs = DataTools.Hardware.Usb.HidFeatures.HidDevicesByUsage(DataTools.Hardware.Usb.HidUsagePage.PowerDevice1);
                     if (devs is object)
                     {
                         foreach (var dev in devs)
@@ -184,7 +186,7 @@ namespace TrippLite
             i = 0;
             if (_conn)
             {
-                _hid = DataTools.Interop.Usb.HidFeatures.OpenHid(_Power);
+                _hid = DataTools.Hardware.Usb.HidFeatures.OpenHid(_Power);
                 mm.AllocZero(_buffLen);
             }
 
@@ -201,7 +203,7 @@ namespace TrippLite
             try
             {
                 mm.Free();
-                DataTools.Interop.Usb.HidFeatures.CloseHid(_hid);
+                DataTools.Hardware.Usb.HidFeatures.CloseHid(_hid);
                 _hid = (IntPtr)(-1);
                 _conn = false;
                 _Power = null;
@@ -350,7 +352,7 @@ namespace TrippLite
     /// <value></value>
     /// <returns></returns>
     /// <remarks></remarks>
-        public DataTools.Interop.Usb.HidDeviceInfo Device
+        public DataTools.Hardware.Usb.HidDeviceInfo Device
         {
             get
             {
@@ -414,6 +416,8 @@ namespace TrippLite
         #endregion
 
         #region Protected Methods
+        
+        static int lps;
 
         protected bool _internalRefresh(System.Windows.DependencyObject dep = null)
         {
@@ -431,11 +435,12 @@ namespace TrippLite
             {
                 foreach (var prop in _Bag)
                 {
-                    mm.set_LongAtAbsolute(1L, 0L);
-                    mm[0L] = (byte)prop.Code;
-                    if (DataTools.Interop.Native.UsbLibHelpers.HidD_GetFeature(_hid, mm, (int)_buffLen))
+                    mm.LongAtAbsolute(1L) = 0L;
+                    mm.ByteAt(0) = (byte)prop.Code;
+                    var res = DataTools.Hardware.Usb.HidFeatures.GetHIDFeature(_hid, (int)prop.Code, (int)_buffLen);
+                    if (res != null)
                     {
-                        v = mm.get_IntegerAtAbsolute(1L);
+                        v = res.intVal;
                         switch (prop.Code)
                         {
                             case TrippLiteCodes.InputVoltage:
@@ -471,30 +476,7 @@ namespace TrippLite
                 // '
                 // ' Check for power failure
             };
-#error Cannot convert LocalDeclarationStatementSyntax - see comment for details
-            /* Cannot convert LocalDeclarationStatementSyntax, System.NotSupportedException: StaticKeyword not supported!
-               at ICSharpCode.CodeConverter.CSharp.SyntaxKindExtensions.ConvertToken(SyntaxKind t, TokenContext context)
-               at ICSharpCode.CodeConverter.CSharp.CommonConversions.ConvertModifier(SyntaxToken m, TokenContext context)
-               at ICSharpCode.CodeConverter.CSharp.CommonConversions.<ConvertModifiersCore>d__43.MoveNext()
-               at System.Linq.Enumerable.<ConcatIterator>d__59`1.MoveNext()
-               at System.Linq.Enumerable.WhereEnumerableIterator`1.MoveNext()
-               at System.Linq.Buffer`1..ctor(IEnumerable`1 source)
-               at System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
-               at Microsoft.CodeAnalysis.SyntaxTokenList.CreateNode(IEnumerable`1 tokens)
-               at ICSharpCode.CodeConverter.CSharp.CommonConversions.ConvertModifiers(SyntaxNode node, IReadOnlyCollection`1 modifiers, TokenContext context, Boolean isVariableOrConst, SyntaxKind[] extraCsModifierKinds)
-               at ICSharpCode.CodeConverter.CSharp.MethodBodyExecutableStatementVisitor.<VisitLocalDeclarationStatement>d__31.MoveNext()
-            --- End of stack trace from previous location where exception was thrown ---
-               at ICSharpCode.CodeConverter.CSharp.HoistedNodeStateVisitor.<AddLocalVariablesAsync>d__6.MoveNext()
-            --- End of stack trace from previous location where exception was thrown ---
-               at ICSharpCode.CodeConverter.CSharp.CommentConvertingMethodBodyVisitor.<DefaultVisitInnerAsync>d__3.MoveNext()
 
-            Input:
-                    ''
-                    '' Check for power failure
-                    Static lps As Integer = 0
-
-             */
-            int lpsMax = 0;
             if (involtRet == true)
             {
                 min = _Bag.FindProperty(TrippLiteCodes.LowVoltageTransfer).Value;
