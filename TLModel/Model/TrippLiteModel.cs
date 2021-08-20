@@ -18,15 +18,11 @@ namespace TrippLite
     public class TrippLiteUPS : System.Runtime.ConstrainedExecution.CriticalFinalizerObject, INotifyPropertyChanged, IDisposable
     {
 
-        #endregion
-
-        #region Constructor
-
         /// <summary>
-    /// Initialize a new TrippLiteUPS object.
-    /// </summary>
-    /// <param name="connect"></param>
-    /// <remarks></remarks>
+        /// Initialize a new TrippLiteUPS object.
+        /// </summary>
+        /// <param name="connect"></param>
+        /// <remarks></remarks>
         public TrippLiteUPS(bool connect = true)
         {
             _Bag = new TrippLitePropertyBag(this);
@@ -55,11 +51,11 @@ namespace TrippLite
         #region Shared
 
         /// <summary>
-    /// Returns a list of all TrippLite devices.
-    /// </summary>
-    /// <param name="forceRefreshCache">Whether or not to refresh the internal HID power device cache.</param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Returns a list of all TrippLite devices.
+        /// </summary>
+        /// <param name="forceRefreshCache">Whether or not to refresh the internal HID power device cache.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static DataTools.Hardware.Usb.HidDeviceInfo[] FindAllTrippLiteDevices(bool forceRefreshCache = false)
         {
             var lOut = new List<DataTools.Hardware.Usb.HidDeviceInfo>();
@@ -80,11 +76,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// List all TrippLite devices by serial number, only.
-    /// </summary>
-    /// <param name="forceRefreshCache">Whether or not to refresh the internal HID power device cache.</param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// List all TrippLite devices by serial number, only.
+        /// </summary>
+        /// <param name="forceRefreshCache">Whether or not to refresh the internal HID power device cache.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static string[] ListTrippLiteDevicesBySerialNumber(bool forceRefreshCache = false)
         {
             var devs = FindAllTrippLiteDevices(forceRefreshCache);
@@ -96,20 +92,23 @@ namespace TrippLite
 
 
         /// <summary>
-    /// Opens the system power options.
-    /// Opens either the control panel or the Windows 10 settings panel.
-    /// </summary>
-    /// <param name="hwndOwner">Optional pointer to the parent window (default is null).</param>
-    /// <param name="win10">Open the Windows 10 settings panel, if available (default is True).</param>
+        /// Opens the system power options.
+        /// Opens either the control panel or the Windows 10 settings panel.
+        /// </summary>
+        /// <param name="hwndOwner">Optional pointer to the parent window (default is null).</param>
+        /// <param name="win10">Open the Windows 10 settings panel, if available (default is True).</param>
         public static void OpenSystemPowerOptions(IntPtr hwndOwner = default, bool win10 = true)
         {
             bool do10 = win10 & SysInfo.OSInfo.IsWindows10;
+
             var shex = new DataTools.Win32.SHELLEXECUTEINFO();
+
             shex.cbSize = Marshal.SizeOf(shex);
             shex.fMask = (uint)(DataTools.Win32.User32.SEE_MASK_UNICODE | DataTools.Win32.User32.SEE_MASK_ASYNCOK | DataTools.Win32.User32.SEE_MASK_FLAG_DDEWAIT);
             shex.hWnd = hwndOwner;
             shex.hInstApp = Process.GetCurrentProcess().Handle;
             shex.nShow = DataTools.Win32.User32.SW_SHOW;
+
             if (do10)
             {
                 shex.lpFile = "ms-settings:powersleep";
@@ -125,11 +124,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Connect to a TrippLite battery.
-    /// </summary>
-    /// <param name="device">Optional manually-selected device.</param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Connect to a TrippLite battery.
+        /// </summary>
+        /// <param name="device">Optional manually-selected device.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool Connect(DataTools.Hardware.Usb.HidDeviceInfo device = null)
         {
 
@@ -194,10 +193,10 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Disconnect the device and free all resources.
-    /// </summary>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Disconnect the device and free all resources.
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool Disconnect()
         {
             try
@@ -221,11 +220,11 @@ namespace TrippLite
         #region Public Properties
 
         /// <summary>
-    /// Gets a value indicating whether or not the current object is connected to a battery.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets a value indicating whether or not the current object is connected to a battery.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool Connected
         {
             get
@@ -235,11 +234,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Returns the current power state of the Tripp Lite device.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Returns the current power state of the Tripp Lite device.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public PowerStates PowerState
         {
             get
@@ -260,11 +259,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Gets the description of the current power state.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets the description of the current power state.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string PowerStateDescription
         {
             get
@@ -277,11 +276,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Gets the detailed description of the current power state.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets the detailed description of the current power state.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string PowerStateDetail
         {
             get
@@ -291,11 +290,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Gets the title of the device.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets the title of the device.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string Title
         {
             get
@@ -305,11 +304,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Gets the model of the SMART Tripp Lite UPS
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets the model of the SMART Tripp Lite UPS
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string ModelId
         {
             get
@@ -319,11 +318,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Contains all properties exposed by the Tripp Lite HID Power Interface
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Contains all properties exposed by the Tripp Lite HID Power Interface
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public TrippLitePropertyBag PropertyBag
         {
             get
@@ -333,11 +332,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Indicates whether this power interface is attached to a Tripp Lite power device.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Indicates whether this power interface is attached to a Tripp Lite power device.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool IsTrippLite
         {
             get
@@ -347,11 +346,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Contains detailed Operating System-Reported information about the device.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Contains detailed Operating System-Reported information about the device.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public DataTools.Hardware.Usb.HidDeviceInfo Device
         {
             get
@@ -365,10 +364,10 @@ namespace TrippLite
         #region Public Methods
 
         /// <summary>
-    /// Refresh the data from the device, using the default number of tries and the default delay.
-    /// </summary>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Refresh the data from the device, using the default number of tries and the default delay.
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool RefreshData(System.Windows.DependencyObject dep = null)
         {
             bool RefreshDataRet = default;
@@ -377,12 +376,12 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Refresh the data from the device.
-    /// </summary>
-    /// <param name="tries">The number of times to attempt to collect data.</param>
-    /// <param name="delay">The interval between each try, in milliseconds.</param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Refresh the data from the device.
+        /// </summary>
+        /// <param name="tries">The number of times to attempt to collect data.</param>
+        /// <param name="delay">The interval between each try, in milliseconds.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool RefreshData(int tries, int delay, System.Windows.DependencyObject dep = null)
         {
             bool b;
@@ -401,12 +400,12 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Signals the system to signal refresh events for all properties regardless of their changed state.
-    /// Property events will always signal if a property changes.
-    /// To refresh the status of the device, use the RefreshData() method.
-    /// (This method does not trigger the PowerStateChanged event)
-    /// </summary>
-    /// <remarks></remarks>
+        /// Signals the system to signal refresh events for all properties regardless of their changed state.
+        /// Property events will always signal if a property changes.
+        /// To refresh the status of the device, use the RefreshData() method.
+        /// (This method does not trigger the PowerStateChanged event)
+        /// </summary>
+        /// <remarks></remarks>
         public void SignalRefresh()
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PowerState"));
@@ -416,7 +415,7 @@ namespace TrippLite
         #endregion
 
         #region Protected Methods
-        
+
         static int lps;
 
         protected bool _internalRefresh(System.Windows.DependencyObject dep = null)
@@ -491,7 +490,7 @@ namespace TrippLite
                                 {
                                     if (dep is object)
                                     {
-                                        dep.Dispatcher.BeginInvoke(new Action(() => PowerState = PowerStates.Battery));
+                                        dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.Battery);
                                     }
                                     else
                                     {
@@ -517,7 +516,7 @@ namespace TrippLite
                                 {
                                     if (dep is object)
                                     {
-                                        dep.Dispatcher.BeginInvoke(new Action(() => PowerState = PowerStates.BatteryTransferLow));
+                                        dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.BatteryTransferLow);
                                     }
                                     else
                                     {
@@ -543,7 +542,7 @@ namespace TrippLite
                                 {
                                     if (dep is object)
                                     {
-                                        dep.Dispatcher.BeginInvoke(new Action(() => PowerState = PowerStates.BatteryTransferHigh));
+                                        dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.BatteryTransferHigh);
                                     }
                                     else
                                     {
@@ -569,7 +568,7 @@ namespace TrippLite
                                 {
                                     if (dep is object)
                                     {
-                                        dep.Dispatcher.BeginInvoke(new Action(() => PowerState = PowerStates.Utility));
+                                        dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.Utility);
                                     }
                                     else
                                     {
@@ -592,7 +591,7 @@ namespace TrippLite
             if (dep is object)
             {
                 foreach (var prop in cex)
-                    dep.Dispatcher.BeginInvoke(new Action(() => prop.SignalRefresh()));
+                    dep.Dispatcher.BeginInvoke(() => prop.SignalRefresh());
             }
             else
             {

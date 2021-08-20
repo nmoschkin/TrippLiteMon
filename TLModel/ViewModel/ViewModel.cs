@@ -521,7 +521,7 @@ namespace TrippLite
             }
 
             cts = new CancellationTokenSource();
-            
+
             _Running = true;
             _WThread = new Thread(async () =>
             {
