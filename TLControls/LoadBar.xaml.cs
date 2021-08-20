@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 
 using DataTools.MathTools.PolarMath;
+using DataTools.MathTools.Extensions;
 
 using Microsoft.VisualBasic.CompilerServices;
 
@@ -191,8 +192,8 @@ namespace TrippLite
             // UpdateOutline()
 
             // ' this is the current angle calculated from the current box dimensions
-            var pol = Polar.ToPolarCoordinates(_refSize.Width, _refSize.Height);
-            _angle = pol.Angle;
+            var pol = PolarCoordinates.ToPolarCoordinates(_refSize.Width, _refSize.Height);
+            _angle = pol.Arc;
             CalculateSections();
         }
 
@@ -258,7 +259,7 @@ namespace TrippLite
             double wWidth = s.Width;
             SolidColorBrush bc = (SolidColorBrush)Application.Current.Resources["TrippLiteLcdType"];
             // ' the width of each section will be calculated here, subtracting initial width by the spacing
-            var pol = Polar.ToPolarCoordinates(wWidth, wHeight);
+            var pol = PolarCoordinates.ToPolarCoordinates(wWidth, wHeight);
             double w = (wWidth - SectionSpacing * (Sections - 1L)) / Sections;
             double sw = SectionSpacing;
             Point pt;
@@ -277,13 +278,13 @@ namespace TrippLite
                 p = _polyCache[i];
                 pol.Radius = x + w;
                 pol.Radius *= fr;
-                pt = Polar.ToScreenCoordinates(pol);
+                pt = PolarCoordinatesExtensions.ToScreenCoordinates(pol, new Rect(pt.X, pt.Y, s.Width, s.Height));
                 pc.Add(new Point(x, s.Height));
                 pc.Add(new Point(pt.X, s.Height));
                 pc.Add(new Point(pt.X, Math.Max(0d, wHeight - pt.Y)));
                 pol.Radius = x;
                 pol.Radius *= fr;
-                pt = Polar.ToScreenCoordinates(pol);
+                pt = PolarCoordinatesExtensions.ToScreenCoordinates(pol, new Rect(pt.X, pt.Y, s.Width, s.Height));
                 pc.Add(new Point(pt.X, Math.Max(0d, wHeight - pt.Y)));
                 pc.Add(new Point(pt.X, s.Height));
                 p.Points = pc;

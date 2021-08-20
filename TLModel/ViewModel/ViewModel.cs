@@ -29,7 +29,6 @@ namespace TrippLite
             {
                 if (__TrippLite != null)
                 {
-                    #endregion
 
                     __TrippLite.PowerStateChanged -= _TrippLite_PowerStateChanged;
                 }
@@ -47,9 +46,9 @@ namespace TrippLite
         public int MaxTries { get; set; } = 100;
         public int TimerInterval { get; set; } = 200;
         public int DelayStart { get; set; } = 500;
-        public TrippLitePropertyBagViewModel Properties { get; set; } = new TrippLitePropertyBagViewModel(this);
-        public TrippLitePropertyBagViewModel ProminentProperties { get; set; } = new TrippLitePropertyBagViewModel(this);
-        public TrippLitePropertyBagViewModel LoadProperties { get; set; } = new TrippLitePropertyBagViewModel(this);
+        public TrippLitePropertyBagViewModel Properties { get; set; } 
+        public TrippLitePropertyBagViewModel ProminentProperties { get; set; }
+        public TrippLitePropertyBagViewModel LoadProperties { get; set; } 
 
         private Thread _WThread;
         private TrippLitePropertyViewModel _lbProp;
@@ -273,12 +272,20 @@ namespace TrippLite
 
         public TrippLiteViewModel(bool init)
         {
+
+
+            Properties = new TrippLitePropertyBagViewModel(this);
+            ProminentProperties = new TrippLitePropertyBagViewModel(this);
+            LoadProperties = new TrippLitePropertyBagViewModel(this);
+
             if (init)
                 Initialize();
         }
 
         public bool Initialize()
         {
+
+
             if (_init)
                 return false;
             try
@@ -636,9 +643,6 @@ namespace TrippLite
             {
                 if (__Prop != null)
                 {
-
-                    #region Events
-
                     __Prop.PropertyChanged -= _Prop_PropertyChanged;
                 }
 
@@ -698,12 +702,18 @@ namespace TrippLite
             }
         }
 
+        TrippLiteViewModel IChild<TrippLiteViewModel>.Parent
+        {
+            get => _Owner;
+            set => _Owner = value;  
+        }
+
         /// <summary>
-    /// Gets or sets a value indicating whether or not this property will actively trigger change events.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets a value indicating whether or not this property will actively trigger change events.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool IsActiveProperty
         {
             get

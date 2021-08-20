@@ -426,7 +426,7 @@ namespace TrippLite
             int v;
             int ret = 0;
             double max;
-
+            int lpsMax = 0;
             double min;
             var volt = default(double);
             bool involtRet = false;

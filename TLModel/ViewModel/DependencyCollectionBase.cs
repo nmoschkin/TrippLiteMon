@@ -60,6 +60,12 @@ namespace TrippLite
             }
         }
 
+        U IChild<U>.Parent
+        {
+            get => _Parent;
+            set => _Parent = value;
+        }
+
         public bool TransferItem(T item, DependencyCollectionBase<T, U> newCol)
         {
             if (Contains(item))
@@ -124,7 +130,7 @@ namespace TrippLite
             return new DependencyCollectionBaseEnumerator<T, U>(this);
         }
 
-        public IEnumerator GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return new DependencyCollectionBaseEnumerator<T, U>(this);
         }
@@ -150,7 +156,7 @@ namespace TrippLite
             }
         }
 
-        public object Current
+        object IEnumerator.Current
         {
             get
             {

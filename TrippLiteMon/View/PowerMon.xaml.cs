@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace TrippLite
 {
-    public partial class PowerMon
+    public partial class PowerMon : Window
     {
         private TrippLiteViewModel __ViewModel;
 

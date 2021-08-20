@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-using DataTools.Memory;
+using DataTools.Win32.Memory;
 
 using Microsoft.Win32;
 
@@ -59,15 +59,15 @@ namespace TrippLite
                 RectangleF PrimaryWindowBoundsRet = default;
                 var key = Registry.CurrentUser.CreateSubKey(TrippLiteMonKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
                 var mm = new MemPtr(16);
-                mm.SetBytes((IntPtr)0, (byte[])key.GetValue("PrimaryWindowBounds", (byte[])mm));
+                mm.FromByteArray((byte[])key.GetValue("PrimaryWindowBounds", (byte[])mm));
                 key.Close();
-                if (mm.get_SingleAt(2L) == 0f || mm.get_SingleAt(3L) == 0f)
+                if (mm.SingleAt(2L) == 0f || mm.SingleAt(3L) == 0f)
                 {
                     mm.Free();
                     return new RectangleF(0f, 0f, 0f, 0f);
                 }
 
-                PrimaryWindowBoundsRet = new RectangleF(mm.get_SingleAt(0L), mm.get_SingleAt(1L), mm.get_SingleAt(2L), mm.get_SingleAt(3L));
+                PrimaryWindowBoundsRet = new RectangleF(mm.SingleAt(0L), mm.SingleAt(1L), mm.SingleAt(2L), mm.SingleAt(3L));
                 mm.Free();
                 return PrimaryWindowBoundsRet;
             }
@@ -90,15 +90,15 @@ namespace TrippLite
                 RectangleF CoolWindowBoundsRet = default;
                 var key = Registry.CurrentUser.CreateSubKey(TrippLiteMonKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
                 var mm = new MemPtr(16);
-                mm.SetBytes((IntPtr)0, (byte[])key.GetValue("CoolWindowBounds", (byte[])mm));
+                mm.FromByteArray((byte[])key.GetValue("CoolWindowBounds", (byte[])mm));
                 key.Close();
-                if (mm.get_SingleAt(2L) == 0f || mm.get_SingleAt(3L) == 0f)
+                if (mm.SingleAt(2L) == 0f || mm.SingleAt(3L) == 0f)
                 {
                     mm.Free();
                     return new RectangleF(0f, 0f, 0f, 0f);
                 }
 
-                CoolWindowBoundsRet = new RectangleF(mm.get_SingleAt(0L), mm.get_SingleAt(1L), mm.get_SingleAt(2L), mm.get_SingleAt(3L));
+                CoolWindowBoundsRet = new RectangleF(mm.SingleAt(0L), mm.SingleAt(1L), mm.SingleAt(2L), mm.SingleAt(3L));
                 mm.Free();
                 return CoolWindowBoundsRet;
             }

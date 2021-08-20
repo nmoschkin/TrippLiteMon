@@ -1,5 +1,4 @@
 ﻿<Window x:Class="TrippLite.DesktopWindow"
-        x:Name="DesktopWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="DesktopWindow" Height="150" Width="240"

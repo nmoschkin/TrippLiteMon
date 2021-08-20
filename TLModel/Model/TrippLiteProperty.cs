@@ -2,7 +2,9 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-using DataTools.Memory;
+using DataTools.Win32.Memory;
+
+using static TrippLite.TrippLiteCodeUtility;
 
 namespace TrippLite
 {
@@ -73,12 +75,18 @@ namespace TrippLite
             }
         }
 
+        TrippLiteUPS IChild<TrippLiteUPS>.Parent
+        {
+            get => _Model;
+            set => _Model = value;
+        }
+
         /// <summary>
-    /// Gets the hard-coded number format for this property type.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets the hard-coded number format for this property type.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string NumberFormat
         {
             get
@@ -285,24 +293,25 @@ namespace TrippLite
             bool SetValueRet = default;
             if (IsSettable == false || value is null || value.Length != _byteLen)
                 return false;
-            var dev = DataTools.Interop.Usb.HidFeatures.OpenHid(_Model.Device);
+            var dev = DataTools.Hardware.Usb.HidFeatures.OpenHid(_Model.Device);
             if (dev == IntPtr.Zero)
                 return false;
-            MemPtr mm;
+            MemPtr mm = new MemPtr();
             mm.Alloc(1 + value.Length);
-            mm[0L] = (byte)_Code;
-            mm.SetBytes((IntPtr)1, value);
-            SetValueRet = DataTools.Interop.Native.UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)mm.Length());
-            DataTools.Interop.Usb.HidFeatures.CloseHid(dev);
+            mm.ByteAt(0) = (byte)_Code;
+
+            SetValueRet = DataTools.Win32.UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)1 + value.Length);
+            DataTools.Hardware.Usb.HidFeatures.CloseHid(dev);
+
             if (SetValueRet)
             {
                 if (value.Length >= 8)
                 {
-                    _Value = mm.get_LongAt(1L);
+                    _Value = mm.LongAt(1L);
                 }
                 else
                 {
-                    _Value = mm.get_IntegerAt(1L);
+                    _Value = mm.IntAt(1L);
                 }
 
                 mm.Free();
@@ -326,25 +335,25 @@ namespace TrippLite
         {
             long GetValueRet = default;
             GetValueRet = 0L;
-            var dev = DataTools.Interop.Usb.HidFeatures.OpenHid(_Model.Device);
+            var dev = DataTools.Hardware.Usb.HidFeatures.OpenHid(_Model.Device);
             if (dev == IntPtr.Zero)
                 return _Value;
-            MemPtr mm;
-            mm.AllocZero(_byteLen + 1);
-            mm[0L] = (byte)_Code;
-            if (DataTools.Interop.Native.UsbLibHelpers.HidD_GetFeature(dev, mm.Handle, (int)mm.Length()))
+            MemPtr mm = new MemPtr();
+            mm.Alloc(_byteLen + 1);
+            mm.ByteAt(0) = (byte)_Code;
+            if (DataTools.Win32.UsbLibHelpers.HidD_GetFeature(dev, mm.Handle, (int)_byteLen + 1))
             {
                 if (_byteLen == 8)
                 {
-                    GetValueRet = mm.get_LongAtAbsolute(1L);
+                    GetValueRet = mm.LongAtAbsolute(1L);
                 }
                 else
                 {
-                    GetValueRet = mm.get_IntegerAtAbsolute(1L);
+                    GetValueRet = mm.IntAtAbsolute(1L);
                 }
             }
 
-            DataTools.Interop.Usb.HidFeatures.CloseHid(dev);
+            DataTools.Hardware.Usb.HidFeatures.CloseHid(dev);
             mm.Free();
             return GetValueRet;
         }
@@ -364,16 +373,16 @@ namespace TrippLite
                 return false;
             if (Value == value)
                 return false;
-            var dev = DataTools.Interop.Usb.HidFeatures.OpenHid(_Model.Device);
+            var dev = DataTools.Hardware.Usb.HidFeatures.OpenHid(_Model.Device);
             if (dev == IntPtr.Zero)
                 return false;
-            MemPtr mm;
+            MemPtr mm = new MemPtr();
             mm.Alloc(9L);
-            mm[0L] = (byte)_Code;
-            mm.set_LongAtAbsolute(1L, value);
-            SetValueRet = DataTools.Interop.Native.UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)mm.Length());
+            mm.ByteAt(0L) = (byte)_Code;
+            mm.LongAtAbsolute(1L) = value;
+            SetValueRet = DataTools.Win32.UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)9);
             mm.Free();
-            DataTools.Interop.Usb.HidFeatures.CloseHid(dev);
+            DataTools.Hardware.Usb.HidFeatures.CloseHid(dev);
             if (SetValueRet)
             {
                 _Value = value;
@@ -399,16 +408,16 @@ namespace TrippLite
                 return false;
             if (Value == value)
                 return false;
-            var dev = DataTools.Interop.Usb.HidFeatures.OpenHid(_Model.Device);
+            var dev = DataTools.Hardware.Usb.HidFeatures.OpenHid(_Model.Device);
             if (dev == IntPtr.Zero)
                 return false;
-            MemPtr mm;
+            MemPtr mm = new MemPtr();
             mm.Alloc(5L);
-            mm[0L] = (byte)_Code;
-            mm.set_IntegerAtAbsolute(1L, value);
-            SetValueRet = DataTools.Interop.Native.UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)mm.Length());
+            mm.ByteAt(0L) = (byte)_Code;
+            mm.IntAtAbsolute(1L) = value;
+            SetValueRet = DataTools.Win32.UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)5);
             mm.Free();
-            DataTools.Interop.Usb.HidFeatures.CloseHid(dev);
+            DataTools.Hardware.Usb.HidFeatures.CloseHid(dev);
             if (SetValueRet)
             {
                 _Value = value;
@@ -434,16 +443,16 @@ namespace TrippLite
                 return false;
             if (Value == value)
                 return false;
-            var dev = DataTools.Interop.Usb.HidFeatures.OpenHid(_Model.Device);
+            var dev = DataTools.Hardware.Usb.HidFeatures.OpenHid(_Model.Device);
             if (dev == IntPtr.Zero)
                 return false;
-            MemPtr mm;
+            MemPtr mm = new MemPtr();
             mm.Alloc(3L);
-            mm[0L] = (byte)_Code;
-            mm.set_ShortAtAbsolute(1L, value);
-            SetValueRet = DataTools.Interop.Native.UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)mm.Length());
+            mm.ByteAt(0L) = (byte)_Code;
+            mm.ShortAtAbsolute(1L) = value;
+            SetValueRet = DataTools.Win32.UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)3);
             mm.Free();
-            DataTools.Interop.Usb.HidFeatures.CloseHid(dev);
+            DataTools.Hardware.Usb.HidFeatures.CloseHid(dev);
             if (SetValueRet)
             {
                 _Value = value;
@@ -467,16 +476,16 @@ namespace TrippLite
                 return false;
             if (Value == value)
                 return false;
-            var dev = DataTools.Interop.Usb.HidFeatures.OpenHid(_Model.Device);
+            var dev = DataTools.Hardware.Usb.HidFeatures.OpenHid(_Model.Device);
             if (dev == IntPtr.Zero)
                 return false;
-            MemPtr mm;
+            MemPtr mm = new MemPtr();
             mm.Alloc(2L);
-            mm[0L] = (byte)_Code;
-            mm[1L] = value;
-            SetValueRet = DataTools.Interop.Native.UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)mm.Length());
+            mm.ByteAt(0L) = (byte)_Code;
+            mm.ByteAt(1L) = value;
+            SetValueRet = DataTools.Win32.UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)2);
             mm.Free();
-            DataTools.Interop.Usb.HidFeatures.CloseHid(dev);
+            DataTools.Hardware.Usb.HidFeatures.CloseHid(dev);
             if (SetValueRet)
             {
                 _Value = value;
@@ -629,6 +638,12 @@ namespace TrippLite
             {
                 _Model = value;
             }
+        }
+
+        TrippLiteUPS IChild<TrippLiteUPS>.Parent
+        {
+            get => _Model;
+            set => _Model = value;
         }
 
         public TrippLiteProperty FindProperty(TrippLiteCodes c)

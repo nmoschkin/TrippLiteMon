@@ -5,6 +5,39 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>TrippLite</RootNamespace>
+    <Platforms>AnyCPU;x64</Platforms>
+    <LangVersion>preview</LangVersion>
+    <StartupObject>TrippLiteMon.App</StartupObject>
+    <ApplicationIcon>Resources\TrippLite.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataTools5\DataTools.Hardware\DataTools.Hardware.csproj" />
+    <ProjectReference Include="..\DataTools5\DataTools.Win32.Memory\DataTools.Win32.Memory.csproj" />
+    <ProjectReference Include="..\DataTools5\DataTools.Win32\DataTools.Win32.csproj" />
+    <ProjectReference Include="..\DataTools5\DataTools\DataTools.csproj" />
+    <ProjectReference Include="..\TLControls\TLControls.csproj" />
+    <ProjectReference Include="..\TLModel\TLModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\TrippLite.ico" />
+	</ItemGroup>
 
 </Project>
