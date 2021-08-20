@@ -1,28 +1,40 @@
-﻿<UserControl x:Class="LoadBar"
-             x:Name="LoadBar"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:TrippLite="clr-namespace:TrippLite"
-             mc:Ignorable="d" 
-             d:DesignHeight="30" d:DesignWidth="100">
-  
-    
+﻿<UserControl
+    x:Class="TrippLite.LoadBar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:TrippLite="clr-namespace:TrippLite"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="UcLoad"
+    d:DesignHeight="30"
+    d:DesignWidth="100"
+    mc:Ignorable="d">
+
+
     <Grid>
-        <Canvas x:Name="BarsArea" Margin="4,4,4,4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Canvas
+            x:Name="BarsArea"
+            Margin="4,4,4,4"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch" />
 
-        </Canvas>
-
-        <Canvas x:Name="DrawingArea" Margin="4,4,4,4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Canvas
+            x:Name="DrawingArea"
+            Margin="4,4,4,4"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
             <Polygon
                 x:Name="BackingBar"
-                Opacity="0"
-                Fill="{DynamicResource TrippLiteLcdType}">
-                <!--Points="{Binding ElementName=LoadBar, Path=OutlinePoints}"-->
+                Fill="{StaticResource TrippLiteLcdType}"
+                Opacity="0">
+                <!--  Points="{Binding ElementName=LoadBar, Path=OutlinePoints}"  -->
 
                 <Polygon.Effect>
-                    <DropShadowEffect Opacity="{Binding ElementName=LoadBar, Path=EffectLevel}" BlurRadius="2" ShadowDepth="2" Color="{DynamicResource TrippLiteDimGrayColor}" />
+                    <DropShadowEffect
+                        BlurRadius="2"
+                        Opacity="{Binding ElementName=UcLoad, Path=EffectLevel}"
+                        ShadowDepth="2"
+                        Color="{StaticResource TrippLiteDimGrayColor}" />
                 </Polygon.Effect>
 
             </Polygon>

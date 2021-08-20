@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>TrippLite</RootNamespace>
+    <Platforms>AnyCPU;x64</Platforms>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataTools5\DataTools.Hardware\DataTools.Hardware.csproj" />
+    <ProjectReference Include="..\DataTools5\DataTools.Win32.Memory\DataTools.Win32.Memory.csproj" />
+    <ProjectReference Include="..\DataTools5\DataTools.Win32\DataTools.Win32.csproj" />
+    <ProjectReference Include="..\DataTools5\DataTools\DataTools.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,17 +1,16 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <SolidColorBrush Color="DarkRed" x:Key="TrippLiteErrorDark" />
-    <SolidColorBrush Color="DarkOrange" x:Key="TrippLiteWarnDark" />
-    <SolidColorBrush Color="DarkGreen" x:Key="TrippLiteOKDark" />
+    <SolidColorBrush x:Key="TrippLiteErrorDark" Color="DarkRed" />
+    <SolidColorBrush x:Key="TrippLiteWarnDark" Color="DarkOrange" />
+    <SolidColorBrush x:Key="TrippLiteOKDark" Color="DarkGreen" />
 
-    <SolidColorBrush Color="Red" x:Key="TrippLiteError" />
-    <SolidColorBrush Color="Orange" x:Key="TrippLiteWarn" />
-    <SolidColorBrush Color="Green" x:Key="TrippLiteOK" />
+    <SolidColorBrush x:Key="TrippLiteError" Color="Red" />
+    <SolidColorBrush x:Key="TrippLiteWarn" Color="Orange" />
+    <SolidColorBrush x:Key="TrippLiteOK" Color="Green" />
 
-    <SolidColorBrush Color="LightCoral" x:Key="TrippLiteErrorLight" />
-    <SolidColorBrush Color="LightGoldenrodYellow" x:Key="TrippLiteWarnLight" />
-    <SolidColorBrush Color="LightGreen" x:Key="TrippLiteLight" />
+    <SolidColorBrush x:Key="TrippLiteErrorLight" Color="LightCoral" />
+    <SolidColorBrush x:Key="TrippLiteWarnLight" Color="LightGoldenrodYellow" />
+    <SolidColorBrush x:Key="TrippLiteLight" Color="LightGreen" />
 
     <Color x:Key="TrippLiteErrorDarkColor">DarkRed</Color>
     <Color x:Key="TrippLiteWarnDarkColor">DarkOrange</Color>
@@ -25,7 +24,7 @@
     <Color x:Key="TrippLiteWarnLightColor">LightGoldenrodYellow</Color>
     <Color x:Key="TrippLiteLightColor">LightGreen</Color>
 
-    <Style TargetType="{x:Type TextBlock}" x:Key="NormalPropertyHeadline">
+    <Style x:Key="NormalPropertyHeadline" TargetType="{x:Type TextBlock}">
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="FontFamily" Value="Segoe UI" />
@@ -35,7 +34,7 @@
         <Setter Property="Margin" Value="4,4,4,2" />
     </Style>
 
-    <Style TargetType="{x:Type TextBlock}" x:Key="NormalProperty">
+    <Style x:Key="NormalProperty" TargetType="{x:Type TextBlock}">
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="FontFamily" Value="./Resources/#Digital dream Skew Narrow" />
@@ -45,7 +44,7 @@
         <Setter Property="Margin" Value="4,2,4,4" />
     </Style>
 
-    <Style TargetType="{x:Type TextBlock}" x:Key="SmallNormalProperty">
+    <Style x:Key="SmallNormalProperty" TargetType="{x:Type TextBlock}">
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="FontFamily" Value="Segoe UI" />
@@ -56,7 +55,7 @@
         <Setter Property="Margin" Value="4,4,4,2" />
     </Style>
 
-    <Style TargetType="{x:Type TextBlock}" x:Key="ProminentPropertyHeadline">
+    <Style x:Key="ProminentPropertyHeadline" TargetType="{x:Type TextBlock}">
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="FontFamily" Value="Segoe UI" />
@@ -66,7 +65,7 @@
         <Setter Property="Margin" Value="4,4,4,2" />
     </Style>
 
-    <Style TargetType="{x:Type TextBlock}" x:Key="ProminentProperty">
+    <Style x:Key="ProminentProperty" TargetType="{x:Type TextBlock}">
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="FontFamily" Value="./Resources/#Digital dream Skew Narrow" />
@@ -76,7 +75,7 @@
         <Setter Property="Margin" Value="4,2,4,4" />
     </Style>
 
-    <Style TargetType="{x:Type TextBlock}" x:Key="CoolPropertyHeadline">
+    <Style x:Key="CoolPropertyHeadline" TargetType="{x:Type TextBlock}">
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="FontFamily" Value="Segoe UI" />
@@ -86,7 +85,7 @@
         <Setter Property="Margin" Value="4,4,4,2" />
     </Style>
 
-    <Style TargetType="{x:Type TextBlock}" x:Key="CoolProperty">
+    <Style x:Key="CoolProperty" TargetType="{x:Type TextBlock}">
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="FontFamily" Value="./Resources/#Digital dream Skew Narrow" />
@@ -99,16 +98,17 @@
 
 
     <DataTemplate x:Key="NormalItemTemplate">
-        <Grid x:Name="ContentGrid" 
-                Margin="0,0,0,0"
-                VerticalAlignment="Center" 
-                HorizontalAlignment="Left" 
-                Focusable="False"
-                Width="110"
-                Height="Auto"
-                Background="{DynamicResource TrippLiteLcd}" 
-                Opacity="1" 
-                ClipToBounds="True">
+        <Grid
+            x:Name="ContentGrid"
+            Width="110"
+            Height="Auto"
+            Margin="0,0,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Background="{DynamicResource TrippLiteLcd}"
+            ClipToBounds="True"
+            Focusable="False"
+            Opacity="1">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -118,51 +118,55 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <Rectangle x:Name="HighlighterStroke" 
-                            Grid.Row="0" 
-                            Grid.Column="0"
-                            Width="{Binding}"
-                            Height="{Binding}"
-                            Stroke="{DynamicResource TrippLiteBlue}"
-                            Opacity="1"
-                            StrokeThickness="1"
-                            Fill="Transparent"
-                            Panel.ZIndex="0"/>
+            <Rectangle
+                x:Name="HighlighterStroke"
+                Grid.Row="0"
+                Grid.Column="0"
+                Width="{Binding}"
+                Height="{Binding}"
+                Panel.ZIndex="0"
+                Fill="Transparent"
+                Opacity="1"
+                Stroke="{DynamicResource TrippLiteBlue}"
+                StrokeThickness="1" />
 
-            <Rectangle x:Name="HighlighterFill" 
-                            Grid.Row="0" 
-                            Grid.Column="0"
-                            Width="{Binding}"
-                            Height="{Binding}"
-                            Fill="{DynamicResource TrippLiteBlue}"
-                            StrokeThickness="0"
-                            Opacity="0.2"
-                            Panel.ZIndex="0"/>
+            <Rectangle
+                x:Name="HighlighterFill"
+                Grid.Row="0"
+                Grid.Column="0"
+                Width="{Binding}"
+                Height="{Binding}"
+                Panel.ZIndex="0"
+                Fill="{DynamicResource TrippLiteBlue}"
+                Opacity="0.2"
+                StrokeThickness="0" />
 
-            <StackPanel x:Name="Content" 
-                            Margin="4,3,4,3"
-                            Width="{Binding}"
-                            Height="{Binding}"
-                            Grid.Row="0" 
-                            Grid.Column="0"
-                            Panel.ZIndex="1">
+            <StackPanel
+                x:Name="Content"
+                Grid.Row="0"
+                Grid.Column="0"
+                Width="{Binding}"
+                Height="{Binding}"
+                Margin="4,3,4,3"
+                Panel.ZIndex="1">
 
                 <StackPanel>
-                    <TextBlock 
-                            Margin="2,2,2,2"
-                            x:Name="Header" 
-                            HorizontalAlignment="Left"
-                            Text="{Binding Header, Mode=OneTime}" 
-                            Style="{DynamicResource NormalPropertyHeadline}" />
+                    <TextBlock
+                        x:Name="Header"
+                        Margin="2,2,2,2"
+                        HorizontalAlignment="Left"
+                        Style="{DynamicResource NormalPropertyHeadline}"
+                        Text="{Binding Header, Mode=OneTime}" />
 
                 </StackPanel>
                 <StackPanel>
-                    <TextBlock Grid.Row="1" 
-                            Margin="2,2,2,2"
-                            x:Name="Reading" 
-                            HorizontalAlignment="Left"
-                            Text="{Binding DisplayValue,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" 
-                            Style="{DynamicResource NormalProperty}" />
+                    <TextBlock
+                        x:Name="Reading"
+                        Grid.Row="1"
+                        Margin="2,2,2,2"
+                        HorizontalAlignment="Left"
+                        Style="{DynamicResource NormalProperty}"
+                        Text="{Binding DisplayValue, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
             </StackPanel>
 
@@ -170,16 +174,17 @@
     </DataTemplate>
 
     <DataTemplate x:Key="ProminentItemTemplate">
-        <Grid x:Name="ContentGrid" 
-                VerticalAlignment="Center" 
-                Margin="2,3,2,2"
-                HorizontalAlignment="Left" 
-                Width="110"
-                Height="Auto"
-                Focusable="False"
-                Background="{DynamicResource TrippLiteLcd}" 
-                Opacity="1" 
-                ClipToBounds="True">
+        <Grid
+            x:Name="ContentGrid"
+            Width="110"
+            Height="Auto"
+            Margin="2,3,2,2"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Background="{DynamicResource TrippLiteLcd}"
+            ClipToBounds="True"
+            Focusable="False"
+            Opacity="1">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -189,51 +194,55 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <Rectangle x:Name="HighlighterStroke" 
-                            Grid.Row="0" 
-                            Grid.Column="0"
-                            Width="{Binding}"
-                            Height="{Binding}"
-                            Stroke="{DynamicResource TrippLiteBlue}"
-                            Opacity="1"
-                            StrokeThickness="1"
-                            Fill="Transparent"
-                            Panel.ZIndex="0"/>
+            <Rectangle
+                x:Name="HighlighterStroke"
+                Grid.Row="0"
+                Grid.Column="0"
+                Width="{Binding}"
+                Height="{Binding}"
+                Panel.ZIndex="0"
+                Fill="Transparent"
+                Opacity="1"
+                Stroke="{DynamicResource TrippLiteBlue}"
+                StrokeThickness="1" />
 
-            <Rectangle x:Name="HighlighterFill" 
-                            Grid.Row="0" 
-                            Grid.Column="0"
-                            Width="{Binding}"
-                            Height="{Binding}"
-                            Fill="{DynamicResource TrippLiteBlue}"
-                            StrokeThickness="0"
-                            Opacity="0.2"
-                            Panel.ZIndex="0"/>
+            <Rectangle
+                x:Name="HighlighterFill"
+                Grid.Row="0"
+                Grid.Column="0"
+                Width="{Binding}"
+                Height="{Binding}"
+                Panel.ZIndex="0"
+                Fill="{DynamicResource TrippLiteBlue}"
+                Opacity="0.2"
+                StrokeThickness="0" />
 
-            <StackPanel x:Name="Content" 
-                            Width="{Binding}"
-                            Height="{Binding}"
-                            Margin="8,4,8,4"
-                            Grid.Row="0" 
-                            Grid.Column="0"
-                            Panel.ZIndex="1">
+            <StackPanel
+                x:Name="Content"
+                Grid.Row="0"
+                Grid.Column="0"
+                Width="{Binding}"
+                Height="{Binding}"
+                Margin="8,4,8,4"
+                Panel.ZIndex="1">
 
                 <StackPanel>
-                    <TextBlock 
-                            Margin="2,2,2,2"
-                            x:Name="Header" 
-                            HorizontalAlignment="Stretch"
-                            Text="{Binding Header, Mode=OneTime}" 
-                            Style="{DynamicResource ProminentPropertyHeadline}" />
+                    <TextBlock
+                        x:Name="Header"
+                        Margin="2,2,2,2"
+                        HorizontalAlignment="Stretch"
+                        Style="{DynamicResource ProminentPropertyHeadline}"
+                        Text="{Binding Header, Mode=OneTime}" />
 
                 </StackPanel>
                 <StackPanel>
-                    <TextBlock Grid.Row="1" 
-                            Margin="2,2,2,2"
-                            x:Name="Reading" 
-                            HorizontalAlignment="Stretch"
-                            Text="{Binding DisplayValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" 
-                            Style="{DynamicResource ProminentProperty}" />
+                    <TextBlock
+                        x:Name="Reading"
+                        Grid.Row="1"
+                        Margin="2,2,2,2"
+                        HorizontalAlignment="Stretch"
+                        Style="{DynamicResource ProminentProperty}"
+                        Text="{Binding DisplayValue, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
             </StackPanel>
         </Grid>
@@ -241,18 +250,19 @@
 
 
     <DataTemplate x:Key="CoolItemTemplate">
-        <Grid x:Name="ContentGrid" 
-                VerticalAlignment="Center" 
-                Margin="0"
-                HorizontalAlignment="Left" 
-                Width="100"
-                MinWidth="100"
-                MaxWidth="100"             
-                Height="Auto"
-                Focusable="False"
-                Background="Transparent" 
-                Opacity="1" 
-                ClipToBounds="True">
+        <Grid
+            x:Name="ContentGrid"
+            Width="100"
+            Height="Auto"
+            MinWidth="100"
+            MaxWidth="100"
+            Margin="0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Background="Transparent"
+            ClipToBounds="True"
+            Focusable="False"
+            Opacity="1">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -262,31 +272,33 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <StackPanel x:Name="Content" 
-                            Width="{Binding}"
-                            Height="{Binding}"
-                            Margin="12,4,4,4"
-                            Grid.Row="0" 
-                            Grid.Column="0"
-                            HorizontalAlignment="Stretch"
-                            Panel.ZIndex="1">
+            <StackPanel
+                x:Name="Content"
+                Grid.Row="0"
+                Grid.Column="0"
+                Width="{Binding}"
+                Height="{Binding}"
+                Margin="12,4,4,4"
+                HorizontalAlignment="Stretch"
+                Panel.ZIndex="1">
 
                 <StackPanel>
-                    <TextBlock 
-                            Margin="2,2,2,2"
-                            x:Name="Header" 
-                            HorizontalAlignment="Stretch"
-                            Text="{Binding Header, Mode=OneTime}" 
-                            Style="{DynamicResource CoolPropertyHeadline}" />
+                    <TextBlock
+                        x:Name="Header"
+                        Margin="2,2,2,2"
+                        HorizontalAlignment="Stretch"
+                        Style="{DynamicResource CoolPropertyHeadline}"
+                        Text="{Binding Header, Mode=OneTime}" />
 
                 </StackPanel>
                 <StackPanel>
-                    <TextBlock Grid.Row="1" 
-                            Margin="2,2,2,2"
-                            x:Name="Reading" 
-                            HorizontalAlignment="Stretch"
-                            Text="{Binding DisplayValue, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" 
-                            Style="{DynamicResource CoolProperty}" />
+                    <TextBlock
+                        x:Name="Reading"
+                        Grid.Row="1"
+                        Margin="2,2,2,2"
+                        HorizontalAlignment="Stretch"
+                        Style="{DynamicResource CoolProperty}"
+                        Text="{Binding DisplayValue, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
             </StackPanel>
         </Grid>
@@ -296,36 +308,36 @@
 
 
     <Style TargetType="{x:Type ListViewItem}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
     </Style>
 
-    <LinearGradientBrush x:Key="BlueGradient" EndPoint="0.5,1" StartPoint="0.5,0">
-        <GradientStop Color="White" Offset="0" />
-        <GradientStop Color="#FF62D9EC" Offset="1" />
+    <LinearGradientBrush x:Key="BlueGradient" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="White" />
+        <GradientStop Offset="1" Color="#FF62D9EC" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="TrippLiteBlueGradientMirror" StartPoint="0,0.5" EndPoint="1,0.5">
-        <GradientStop Color="#19589b" Offset="0" />
-        <GradientStop Color="#5999e1" Offset="0.5" />
-        <GradientStop Color="#19589b" Offset="1" />
+        <GradientStop Offset="0" Color="#19589b" />
+        <GradientStop Offset="0.5" Color="#5999e1" />
+        <GradientStop Offset="1" Color="#19589b" />
     </LinearGradientBrush>
 
     <RadialGradientBrush x:Key="TrippLiteBlueRadial" RadiusX="1" RadiusY="1">
-        <GradientStop Color="#19589b" Offset="0" />
-        <GradientStop Color="#5999e1" Offset="0.5" />
-        <GradientStop Color="#19589b" Offset="1" />
+        <GradientStop Offset="0" Color="#7f19589b" />
+        <GradientStop Offset="0.5" Color="#7f5999e1" />
+        <GradientStop Offset="1" Color="#7f19589b" />
     </RadialGradientBrush>
 
     <LinearGradientBrush x:Key="TrippLiteBlueGradient" StartPoint="0,0.5" EndPoint="1,0.5">
-        <GradientStop Color="#19589b" Offset="0" />
-        <GradientStop Color="#5999e1" Offset="1" />
+        <GradientStop Offset="0" Color="#19589b" />
+        <GradientStop Offset="1" Color="#5999e1" />
     </LinearGradientBrush>
 
-    <SolidColorBrush Color="#19589b" x:Key="TrippLiteBlue" />
+    <SolidColorBrush x:Key="TrippLiteBlue" Color="#19589b" />
 
-    <SolidColorBrush Color="#e8ebf0" x:Key="TrippLiteGray" />
+    <SolidColorBrush x:Key="TrippLiteGray" Color="#e8ebf0" />
 
-    <SolidColorBrush Color="#c0c0c0" x:Key="TrippLiteDimGray" />
+    <SolidColorBrush x:Key="TrippLiteDimGray" Color="#c0c0c0" />
 
     <Color x:Key="TrippLiteGrayColor">#e8ebf0</Color>
 
@@ -335,30 +347,36 @@
 
     <Color x:Key="ShadowColor">#606060</Color>
 
-    <SolidColorBrush Color="#FF79BBFF" x:Key="TrippLiteLcd" />
+    <SolidColorBrush x:Key="TrippLiteLcd" Color="#FF79BBFF" />
 
-    <SolidColorBrush Color="#7F79BBFF" x:Key="TrippLiteLcdTrans" />
+    <SolidColorBrush x:Key="TrippLiteLcdTrans" Color="#7F79BBFF" />
 
-    <SolidColorBrush Color="#FFD4E7FB" x:Name="TrippLiteLcdType" x:Key="TrippLiteLcdType" />
+    <SolidColorBrush
+        x:Key="TrippLiteLcdType"
+        x:Name="TrippLiteLcdType"
+        Color="#FFD4E7FB" />
 
     <RadialGradientBrush x:Key="LcdRadial" RadiusX="1" RadiusY="1">
-        <GradientStop Color="#FF79BBFF" Offset="1" />
-        <GradientStop Color="#FF79BBFF" Offset="0.8" />
-        <GradientStop Color="#ffaeeeff" Offset="0" />
+        <GradientStop Offset="1" Color="#FF79BBFF" />
+        <GradientStop Offset="0.8" Color="#FF79BBFF" />
+        <GradientStop Offset="0" Color="#ffaeeeff" />
     </RadialGradientBrush>
 
     <LinearGradientBrush x:Key="TrippLiteBackGradient" StartPoint="0,0.5" EndPoint="1,0.5">
-        <GradientStop Color="#e8ebf0" Offset="0" />
-        <GradientStop Color="#303030" Offset="1" />
+        <GradientStop Offset="0" Color="#e8ebf0" />
+        <GradientStop Offset="1" Color="#303030" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="TrippLitePenGradient" Opacity="0.75" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="#e8ebf0" Offset="0" />
-        <GradientStop Color="#eeeeee" Offset="0.5" />
-        <GradientStop Color="#303030" Offset="1" />
+        <GradientStop Offset="0" Color="#e8ebf0" />
+        <GradientStop Offset="0.5" Color="#eeeeee" />
+        <GradientStop Offset="1" Color="#303030" />
     </LinearGradientBrush>
 
-    <Pen Brush="{DynamicResource TrippLitePenGradient}" Thickness="1.5" x:Key="BorderPen" />
+    <Pen
+        x:Key="BorderPen"
+        Brush="{DynamicResource TrippLitePenGradient}"
+        Thickness="1.5" />
 
     <ImageSource x:Key="TrippLiteLogo">pack://application:,,,/TLControls;component/Resources/TrippLiteLogo.png</ImageSource>
     <ImageSource x:Key="Smart1500LCDT">pack://application:,,,/TLControls;component/Resources/TrippLiteSmart1500LCDT.png</ImageSource>
