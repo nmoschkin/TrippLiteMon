@@ -9,11 +9,12 @@ using DataTools.MathTools.PolarMath;
 using DataTools.MathTools.Extensions;
 
 using Microsoft.VisualBasic.CompilerServices;
+using System.Windows.Controls;
 
 namespace TrippLite
 {
     [Serializable]
-    public partial class LoadBar
+    public partial class LoadBar : UserControl
     {
         private Size _refSize = new Size(0d, 0d);
         private double _angle = 0d;
@@ -262,7 +263,7 @@ namespace TrippLite
             var pol = PolarCoordinates.ToPolarCoordinates(wWidth, wHeight);
             double w = (wWidth - SectionSpacing * (Sections - 1L)) / Sections;
             double sw = SectionSpacing;
-            Point pt;
+            LinearCoordinates pt;
             int i;
             double x = 0d;
             // ' calculate from hypoteneuse side.
@@ -278,13 +279,13 @@ namespace TrippLite
                 p = _polyCache[i];
                 pol.Radius = x + w;
                 pol.Radius *= fr;
-                pt = PolarCoordinatesExtensions.ToScreenCoordinates(pol, new Rect(pt.X, pt.Y, s.Width, s.Height));
+                pt = PolarCoordinates.ToLinearCoordinates(pol);
                 pc.Add(new Point(x, s.Height));
                 pc.Add(new Point(pt.X, s.Height));
                 pc.Add(new Point(pt.X, Math.Max(0d, wHeight - pt.Y)));
                 pol.Radius = x;
                 pol.Radius *= fr;
-                pt = PolarCoordinatesExtensions.ToScreenCoordinates(pol, new Rect(pt.X, pt.Y, s.Width, s.Height));
+                pt = PolarCoordinates.ToLinearCoordinates(pol);
                 pc.Add(new Point(pt.X, Math.Max(0d, wHeight - pt.Y)));
                 pc.Add(new Point(pt.X, s.Height));
                 p.Points = pc;

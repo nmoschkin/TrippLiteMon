@@ -10,7 +10,7 @@
     <RootNamespace>TrippLite</RootNamespace>
     <Platforms>AnyCPU;x64</Platforms>
     <LangVersion>preview</LangVersion>
-    <StartupObject>TrippLiteMon.App</StartupObject>
+    <StartupObject>TrippLite.App</StartupObject>
     <ApplicationIcon>Resources\TrippLite.ico</ApplicationIcon>
   </PropertyGroup>
 
