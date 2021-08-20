@@ -323,9 +323,9 @@
     </LinearGradientBrush>
 
     <RadialGradientBrush x:Key="TrippLiteBlueRadial" RadiusX="1" RadiusY="1">
-        <GradientStop Offset="0" Color="#19589b" />
-        <GradientStop Offset="0.5" Color="#5999e1" />
-        <GradientStop Offset="1" Color="#19589b" />
+        <GradientStop Offset="0" Color="#7f19589b" />
+        <GradientStop Offset="0.5" Color="#7f5999e1" />
+        <GradientStop Offset="1" Color="#7f19589b" />
     </RadialGradientBrush>
 
     <LinearGradientBrush x:Key="TrippLiteBlueGradient" StartPoint="0,0.5" EndPoint="1,0.5">
