@@ -9,6 +9,8 @@ using DataTools.SystemInformation;
 using System.Runtime.InteropServices;
 
 using static TrippLite.TrippLiteCodeUtility;
+using DataTools.Win32;
+using DataTools.Win32.Disk.VirtualDisk;
 
 namespace TrippLite
 {
@@ -142,6 +144,7 @@ namespace TrippLite
                 do
                 {
                     devs = DataTools.Hardware.Usb.HidFeatures.HidDevicesByUsage(DataTools.Hardware.Usb.HidUsagePage.PowerDevice1);
+                    var devs2 = DataTools.Hardware.Usb.HidFeatures.HidDevicesByUsage(DataTools.Hardware.Usb.HidUsagePage.PowerDevice2);
                     if (devs is object)
                     {
                         foreach (var dev in devs)
@@ -189,7 +192,163 @@ namespace TrippLite
                 mm.AllocZero(_buffLen);
             }
 
-            return _conn & _hid.ToInt64() > 0L;
+            var result = _conn & _hid.ToInt64() > 0L;
+
+
+            if (result)
+            {
+                EnumHidUsages();
+            }
+            return result;
+        }
+
+        IntPtr _preparsed;
+
+        public IEnumerable<PowerFeature> EnumHidUsages()
+        {
+            var res = UsbLibHelpers.HidD_GetPreparsedData(_hid, ref _preparsed);
+
+            if (res)
+            {
+                HidPValueCaps[] valCaps = new HidPValueCaps[1024];
+                HidPValueCapsRange[] valCapsRange = new HidPValueCapsRange[1024];
+
+                ushort size = 1024;
+
+                res = UsbLibHelpers.HidP_GetValueCaps(HidPReportType.HidP_Feature, valCaps, ref size, _preparsed);
+                
+                if (res)
+                {
+                    res = UsbLibHelpers.HidP_GetValueCaps(HidPReportType.HidP_Feature, valCapsRange, ref size, _preparsed);
+                }
+
+                UsbLibHelpers.HidD_FreePreparsedData(_preparsed);
+
+                if (res)
+                {
+                    if (size < 1024)
+                    {
+                        Array.Resize(ref valCaps, size);
+                        Array.Resize(ref valCapsRange, size);
+
+                    }
+                    List<PowerFeature> results = new List<PowerFeature>();
+
+                    for (int i = 0; i < size; i++)
+                    {
+
+                        PowerFeature feature = null;
+
+                        if (valCaps[i].IsDesignatorRange || valCaps[i].IsRange || valCaps[i].IsStringRange)
+                        {
+                            feature = new PowerFeature(valCapsRange[i]);
+                        }
+                        else
+                        {
+                            feature = new PowerFeature(valCaps[i]);
+                        }
+
+                        feature.PopulateValue(_hid);
+                        results.Add(feature);
+
+                    }
+
+                    return results;
+                }
+
+
+            }
+
+            return null;
+        }
+
+        public class PowerFeature
+        {
+            public bool IsRange => ValueCaps is IHidPValueCaps_Range;
+            
+            public HidPowerUsageCode Usage { get; private set; }
+
+            public HidPowerUsageCode LinkUsage { get; private set; }
+
+            public HidPowerPhysicalUnitCode Unit { get; private set; }
+
+            public HidPowerPhysicalUnit UnitInfo { get; private set; }
+
+            public IHidPValueCaps ValueCaps { get; private set; }
+
+            public byte[] Value { get; private set; }
+
+            public int IntValue { get; private set; }
+
+            public short ShortValue { get; private set; }
+
+            public byte ByteValue { get; private set; }
+
+            public long LongValue { get; private set; }
+
+            private string valstr = "(none)";
+
+            public void PopulateValue(IntPtr hHid)
+            {
+
+                MemPtr mm = new MemPtr();
+
+                int fs = UnitInfo.FieldSize / 8;
+                if (fs == 3) fs = 4;
+                mm.Alloc(UnitInfo.FieldSize + 1);
+                mm.ByteAt(0) = (byte)Usage;
+
+                UsbLibHelpers.HidD_GetFeature(hHid, mm.Handle, (int)UnitInfo.FieldSize + 1);
+
+                Value = mm.ToByteArray(1, UnitInfo.FieldSize - 1);
+                
+                
+                switch (UnitInfo.FieldSize)
+                {
+                    case 8:
+                        ByteValue = mm.ByteAt(1);
+                        valstr = ByteValue.ToString();
+                        break;
+
+                    case 16:
+                        ShortValue = mm.ShortAtAbsolute(1);
+                        valstr = ShortValue.ToString();
+                        break;
+
+                    case 24:
+                        IntValue = mm.IntAtAbsolute(1);
+                        valstr = IntValue.ToString();
+                        break;
+
+                    default:
+                        throw new NotSupportedException();
+                }
+                
+                mm.Free();
+
+            }
+
+            public PowerFeature(IHidPValueCaps valueCaps)
+            {
+                Unit = (HidPowerPhysicalUnitCode)valueCaps.Units;
+
+                if (valueCaps is IHidPValueCaps_NonRange nr)
+                {
+                    Usage = (HidPowerUsageCode)nr.Usage;
+                }
+
+                LinkUsage = (HidPowerUsageCode)valueCaps.LinkUsage;
+
+                ValueCaps = valueCaps;
+                UnitInfo = HidPowerPhysicalUnit.GetByCode(Unit);
+
+            }
+
+            public override string ToString()
+            {
+                return $"{Usage} / {LinkUsage} / {UnitInfo.Name} : {valstr}";
+            }
+
         }
 
         /// <summary>
@@ -201,6 +360,12 @@ namespace TrippLite
         {
             try
             {
+                if (_preparsed != IntPtr.Zero)
+                {
+                    UsbLibHelpers.HidD_FreePreparsedData(_preparsed);
+                    _preparsed = IntPtr.Zero;
+                }
+
                 mm.Free();
                 DataTools.Hardware.Usb.HidFeatures.CloseHid(_hid);
                 _hid = (IntPtr)(-1);
