@@ -16,16 +16,16 @@ namespace TrippLite
     {
 
         /// <summary>
-    /// Gets the specified property of the specified attribute type for the specified enumeration member.
-    /// </summary>
-    /// <typeparam name="T">The attribute type from which to retrieve the property.</typeparam>
-    /// <typeparam name="U">The type of the attribute property to retrieve.</typeparam>
-    /// <typeparam name="V">The enum type.</typeparam>
-    /// <param name="o">The enum va ue for which to retrieve the attribute.</param>
-    /// <param name="valueName">The name of the property inside the Attribute object to retrieve.</param>
-    /// <param name="b">Optional binding flags for member searching.</param>
-    /// <returns>A value of type U that represents the value of the property of the attribute of the member of the enumeration.</returns>
-    /// <remarks></remarks>
+        /// Gets the specified property of the specified attribute type for the specified enumeration member.
+        /// </summary>
+        /// <typeparam name="T">The attribute type from which to retrieve the property.</typeparam>
+        /// <typeparam name="U">The type of the attribute property to retrieve.</typeparam>
+        /// <typeparam name="V">The enum type.</typeparam>
+        /// <param name="o">The enum va ue for which to retrieve the attribute.</param>
+        /// <param name="valueName">The name of the property inside the Attribute object to retrieve.</param>
+        /// <param name="b">Optional binding flags for member searching.</param>
+        /// <returns>A value of type U that represents the value of the property of the attribute of the member of the enumeration.</returns>
+        /// <remarks></remarks>
         public static U GetEnumAttrVal<T, U, V>(V o, string valueName, BindingFlags b = BindingFlags.Public | BindingFlags.Static) where T : Attribute
         {
             T da;
@@ -147,9 +147,9 @@ namespace TrippLite
     #region Custom Attributes
 
     /// <summary>
-/// Provides a detailed description.
-/// </summary>
-/// <remarks></remarks>
+    /// Provides a detailed description.
+    /// </summary>
+    /// <remarks></remarks>
     public class DetailAttribute : Attribute
     {
         private string _Detail;
@@ -169,9 +169,9 @@ namespace TrippLite
     }
 
     /// <summary>
-/// Provides the byte length of the property.
-/// </summary>
-/// <remarks></remarks>
+    /// Provides the byte length of the property.
+    /// </summary>
+    /// <remarks></remarks>
     public class ByteLengthAttribute : Attribute
     {
         private ushort _Length = 4;
@@ -195,9 +195,9 @@ namespace TrippLite
     }
 
     /// <summary>
-/// Provides the multiplier of the property.
-/// </summary>
-/// <remarks></remarks>
+    /// Provides the multiplier of the property.
+    /// </summary>
+    /// <remarks></remarks>
     public class MultiplierAttribute : Attribute
     {
         private double _Value = 1.0d;
@@ -224,9 +224,9 @@ namespace TrippLite
     }
 
     /// <summary>
-/// Provides the unit of measure of the property.
-/// </summary>
-/// <remarks></remarks>
+    /// Provides the unit of measure of the property.
+    /// </summary>
+    /// <remarks></remarks>
     public class MeasureUnitAttribute : Attribute
     {
         private MeasureUnitTypes _Unit;
@@ -246,9 +246,9 @@ namespace TrippLite
     }
 
     /// <summary>
-/// Provides the unit symbol of the property.
-/// </summary>
-/// <remarks></remarks>
+    /// Provides the unit symbol of the property.
+    /// </summary>
+    /// <remarks></remarks>
     public class UnitSymbolAttribute : Attribute
     {
         private string _Symbol;
@@ -268,9 +268,9 @@ namespace TrippLite
     }
 
     /// <summary>
-/// Provides the number format for the property.
-/// </summary>
-/// <remarks></remarks>
+    /// Provides the number format for the property.
+    /// </summary>
+    /// <remarks></remarks>
     public class NumberFormatAttribute : Attribute
     {
         private string _Format;
@@ -299,49 +299,49 @@ namespace TrippLite
     #region Power Sources
 
     /// <summary>
-/// Represents an enumeration of power source characteristics.
-/// </summary>
-/// <remarks></remarks>
+    /// Represents an enumeration of power source characteristics.
+    /// </summary>
+    /// <remarks></remarks>
     [DefaultValue(-1)]
     public enum PowerStates
     {
 
         /// <summary>
-    /// Communication with the device has not been established.
-    /// </summary>
-    /// <remarks></remarks>
+        /// Communication with the device has not been established.
+        /// </summary>
+        /// <remarks></remarks>
         [Description("Uninitialized.")]
         [Detail("Communication with the device has not been established.")]
         Uninitialized = -1,
 
         /// <summary>
-    /// Operating on A/C power from the utility.
-    /// </summary>
-    /// <remarks></remarks>
+        /// Operating on A/C power from the utility.
+        /// </summary>
+        /// <remarks></remarks>
         [Description("Utility Power")]
         [Detail("Operating on A/C power from the utility.")]
         Utility,
 
         /// <summary>
-    /// Operating on battery power because there is no power coming from the utility.
-    /// </summary>
-    /// <remarks></remarks>
+        /// Operating on battery power because there is no power coming from the utility.
+        /// </summary>
+        /// <remarks></remarks>
         [Description("Battery Power")]
         [Detail("Operating on battery power because there is no power coming from the utility.")]
         Battery,
 
         /// <summary>
-    /// Operating on battery power because there is low voltage coming from the utility.
-    /// </summary>
-    /// <remarks></remarks>
+        /// Operating on battery power because there is low voltage coming from the utility.
+        /// </summary>
+        /// <remarks></remarks>
         [Description("Battery Power Due To Low Voltage")]
         [Detail("Operating on battery power because the voltage coming from the utility is too low.")]
         BatteryTransferLow,
 
         /// <summary>
-    /// Operating on battery power because there is high voltage coming from the utility.
-    /// </summary>
-    /// <remarks></remarks>
+        /// Operating on battery power because there is high voltage coming from the utility.
+        /// </summary>
+        /// <remarks></remarks>
         [Description("Battery Power Due To High Voltage")]
         [Detail("Operating on battery power because the voltage coming from the utility is too high.")]
         BatteryTransferHigh
@@ -352,15 +352,15 @@ namespace TrippLite
     #region TrippLiteCodes
 
     /// <summary>
-/// Represents feature command codes that can be sent to a Tripp Lite Smart battery.
-/// </summary>
-/// <remarks></remarks>
+    /// Represents feature command codes that can be sent to a Tripp Lite Smart battery.
+    /// </summary>
+    /// <remarks></remarks>
     public enum TrippLiteCodes : byte
     {
 
         /// <summary>
-    /// VA RATING
-    /// </summary>
+        /// VA RATING
+        /// </summary>
         [Description("VA RATING")]
         [Multiplier(1d)]
         [MeasureUnit(MeasureUnitTypes.Volt)]
@@ -369,8 +369,8 @@ namespace TrippLite
         VARATING = 0x3,
 
         /// <summary>
-    /// Nominal Battery Voltage
-    /// </summary>
+        /// Nominal Battery Voltage
+        /// </summary>
         [Description("Nominal Battery Voltage")]
         [Multiplier(1d)]
         [MeasureUnit(MeasureUnitTypes.Volt)]
@@ -379,8 +379,8 @@ namespace TrippLite
         NominalBatteryVoltage = 0x4,
 
         /// <summary>
-    /// Low Voltage Transfer
-    /// </summary>
+        /// Low Voltage Transfer
+        /// </summary>
         [Description("Low Voltage Transfer")]
         [Multiplier(1d)]
         [MeasureUnit(MeasureUnitTypes.Volt)]
@@ -389,8 +389,8 @@ namespace TrippLite
         LowVoltageTransfer = 0x6,
 
         /// <summary>
-    /// High Voltage Transfer
-    /// </summary>
+        /// High Voltage Transfer
+        /// </summary>
         [Description("High Voltage Transfer")]
         [Multiplier(1d)]
         [MeasureUnit(MeasureUnitTypes.Volt)]
@@ -399,8 +399,8 @@ namespace TrippLite
         HighVoltageTransfer = 0x9,
 
         /// <summary>
-    /// Input Frequency
-    /// </summary>
+        /// Input Frequency
+        /// </summary>
         [Description("Input Frequency")]
         [Multiplier(0.1d)]
         [MeasureUnit(MeasureUnitTypes.Hertz)]
@@ -409,8 +409,8 @@ namespace TrippLite
         InputFrequency = 0x19,
 
         /// <summary>
-    /// Output Frequency
-    /// </summary>
+        /// Output Frequency
+        /// </summary>
         [Description("Output Frequency")]
         [Multiplier(0.1d)]
         [MeasureUnit(MeasureUnitTypes.Hertz)]
@@ -419,8 +419,8 @@ namespace TrippLite
         OutputFrequency = 0x1C,
 
         /// <summary>
-    /// Input Voltage
-    /// </summary>
+        /// Input Voltage
+        /// </summary>
         [Description("Input Voltage")]
         [Multiplier(0.1d)]
         [MeasureUnit(MeasureUnitTypes.Volt)]
@@ -429,8 +429,8 @@ namespace TrippLite
         InputVoltage = 0x31,
 
         /// <summary>
-    /// Output Voltage
-    /// </summary>
+        /// Output Voltage
+        /// </summary>
         [Description("Output Voltage")]
         [Multiplier(0.1d)]
         [MeasureUnit(MeasureUnitTypes.Volt)]
@@ -439,8 +439,8 @@ namespace TrippLite
         OutputVoltage = 0x1B,
 
         /// <summary>
-    /// Output Current
-    /// </summary>
+        /// Output Current
+        /// </summary>
         [Description("Output Current")]
         [Multiplier(0.1d)]
         [MeasureUnit(MeasureUnitTypes.Amp)]
@@ -449,8 +449,8 @@ namespace TrippLite
         OutputCurrent = 0x46,
 
         /// <summary>
-    /// Output Power
-    /// </summary>
+        /// Output Power
+        /// </summary>
         [Description("Output Power")]
         [Multiplier(1d)]
         [MeasureUnit(MeasureUnitTypes.Watt)]
@@ -459,8 +459,8 @@ namespace TrippLite
         OutputPower = 0x47,
 
         /// <summary>
-    /// Output Load
-    /// </summary>
+        /// Output Load
+        /// </summary>
         [Description("Ouput Load")]
         [Multiplier(1d)]
         [MeasureUnit(MeasureUnitTypes.Percent)]
@@ -469,8 +469,8 @@ namespace TrippLite
         OutputLoad = 0x1E,
 
         /// <summary>
-    /// Seconds Remaining Power
-    /// </summary>
+        /// Seconds Remaining Power
+        /// </summary>
         [Description("Time Remaining")]
         [Multiplier(1d / 60d)]
         [MeasureUnit(MeasureUnitTypes.Time)]
@@ -479,8 +479,8 @@ namespace TrippLite
         TimeRemaining = 0x35,
 
         /// <summary>
-    /// Seconds Remaining Power
-    /// </summary>
+        /// Seconds Remaining Power
+        /// </summary>
         [Description("Battery Voltage")]
         [Multiplier(0.1d)]
         [MeasureUnit(MeasureUnitTypes.Volt)]
@@ -489,8 +489,8 @@ namespace TrippLite
         BatteryVoltage = 0x20,
 
         /// <summary>
-    /// Charge Remaining
-    /// </summary>
+        /// Charge Remaining
+        /// </summary>
         [Description("Charge Remaining")]
         [Multiplier(1d)]
         [MeasureUnit(MeasureUnitTypes.Percent)]
@@ -504,9 +504,9 @@ namespace TrippLite
     #region MeasureUnitTypes
 
     /// <summary>
-/// Indicates a measure unit type.
-/// </summary>
-/// <remarks></remarks>
+    /// Indicates a measure unit type.
+    /// </summary>
+    /// <remarks></remarks>
     public enum MeasureUnitTypes
     {
         [Description("Volts")]
@@ -536,9 +536,9 @@ namespace TrippLite
     #region MeasureUnit
 
     /// <summary>
-/// Represents a unit of measure.
-/// </summary>
-/// <remarks></remarks>
+    /// Represents a unit of measure.
+    /// </summary>
+    /// <remarks></remarks>
     public class MeasureUnit
     {
         protected string _UnitSymbol;

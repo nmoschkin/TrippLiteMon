@@ -10,7 +10,8 @@ using System.Runtime.InteropServices;
 
 using static TrippLite.TrippLiteCodeUtility;
 using DataTools.Win32;
-using DataTools.Win32.Disk.VirtualDisk;
+using DataTools.Win32.Usb;
+
 
 namespace TrippLite
 {
@@ -34,7 +35,7 @@ namespace TrippLite
 
         protected MemPtr mm;
         protected IntPtr _hid;
-        protected DataTools.Hardware.Usb.HidDeviceInfo _Power;
+        protected DataTools.Win32.Usb.HidDeviceInfo _Power;
         protected long[] _Values = new long[256];
         protected bool _conn = false;
         protected bool _isTL = false;
@@ -58,11 +59,11 @@ namespace TrippLite
         /// <param name="forceRefreshCache">Whether or not to refresh the internal HID power device cache.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-        public static DataTools.Hardware.Usb.HidDeviceInfo[] FindAllTrippLiteDevices(bool forceRefreshCache = false)
+        public static DataTools.Win32.Usb.HidDeviceInfo[] FindAllTrippLiteDevices(bool forceRefreshCache = false)
         {
-            var lOut = new List<DataTools.Hardware.Usb.HidDeviceInfo>();
-            DataTools.Hardware.Usb.HidDeviceInfo[] devs;
-            devs = DataTools.Hardware.Usb.HidFeatures.HidDevicesByUsage(DataTools.Hardware.Usb.HidUsagePage.PowerDevice1);
+            var lOut = new List<DataTools.Win32.Usb.HidDeviceInfo>();
+            DataTools.Win32.Usb.HidDeviceInfo[] devs;
+            devs = DataTools.Win32.Usb.HidFeatures.HidDevicesByUsage(DataTools.Win32.Usb.HidUsagePage.PowerDevice1);
             if (devs is object)
             {
                 foreach (var dev in devs)
@@ -131,20 +132,20 @@ namespace TrippLite
         /// <param name="device">Optional manually-selected device.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-        public bool Connect(DataTools.Hardware.Usb.HidDeviceInfo device = null)
+        public bool Connect(DataTools.Win32.Usb.HidDeviceInfo device = null)
         {
 
             // ' we won't be connecting if it's already disposed.
             if (disposedValue)
                 return false;
-            DataTools.Hardware.Usb.HidDeviceInfo[] devs;
+            DataTools.Win32.Usb.HidDeviceInfo[] devs;
             int i = 0;
             if (device is null)
             {
                 do
                 {
-                    devs = DataTools.Hardware.Usb.HidFeatures.HidDevicesByUsage(DataTools.Hardware.Usb.HidUsagePage.PowerDevice1);
-                    var devs2 = DataTools.Hardware.Usb.HidFeatures.HidDevicesByUsage(DataTools.Hardware.Usb.HidUsagePage.PowerDevice2);
+                    devs = DataTools.Win32.Usb.HidFeatures.HidDevicesByUsage(DataTools.Win32.Usb.HidUsagePage.PowerDevice1);
+                    var devs2 = DataTools.Win32.Usb.HidFeatures.HidDevicesByUsage(DataTools.Win32.Usb.HidUsagePage.PowerDevice2);
                     if (devs is object)
                     {
                         foreach (var dev in devs)
@@ -188,7 +189,7 @@ namespace TrippLite
             i = 0;
             if (_conn)
             {
-                _hid = DataTools.Hardware.Usb.HidFeatures.OpenHid(_Power);
+                _hid = DataTools.Win32.Usb.HidFeatures.OpenHid(_Power);
                 mm.AllocZero(_buffLen);
             }
 
@@ -210,45 +211,19 @@ namespace TrippLite
 
             if (res)
             {
-                HidPValueCaps[] valCaps = new HidPValueCaps[1024];
-                HidPValueCapsRange[] valCapsRange = new HidPValueCapsRange[1024];
-                var mm2 = (MemPtr)_hid;
-                var str = mm2.ToString();
+                HidPValueCaps[] valCaps;
 
-                ushort size = 1024;
-
-                res = UsbLibHelpers.HidP_GetValueCaps(HidPReportType.HidP_Feature, valCaps, ref size, _preparsed);
-                
-                if (res)
-                {
-                    res = UsbLibHelpers.HidP_GetValueCaps(HidPReportType.HidP_Feature, valCapsRange, ref size, _preparsed);
-                }
+                valCaps = UsbLibHelpers.GetValueCaps(HidPReportType.HidP_Feature, _preparsed);
 
                 UsbLibHelpers.HidD_FreePreparsedData(_preparsed);
 
                 if (res)
                 {
-                    if (size < 1024)
-                    {
-                        Array.Resize(ref valCaps, size);
-                        Array.Resize(ref valCapsRange, size);
-
-                    }
                     List<PowerFeature> results = new List<PowerFeature>();
 
-                    for (int i = 0; i < size; i++)
+                    for (int i = 0; i < valCaps.Length; i++)
                     {
-
-                        PowerFeature feature = null;
-
-                        if (valCaps[i].IsDesignatorRange || valCaps[i].IsRange || valCaps[i].IsStringRange)
-                        {
-                            feature = new PowerFeature(valCapsRange[i]);
-                        }
-                        else
-                        {
-                            feature = new PowerFeature(valCaps[i]);
-                        }
+                        var feature = new PowerFeature(valCaps[i]);
 
                         feature.PopulateValue(_hid);
                         results.Add(feature);
@@ -266,19 +241,19 @@ namespace TrippLite
 
         public class PowerFeature
         {
-            public bool IsRange => ValueCaps is IHidPValueCaps_Range;
+            public bool IsRange => ValueCaps.IsRange;
             
             public HidPowerUsageCode? Usage { get; private set; }
 
             public HidPowerUsageCode LinkUsage { get; private set; }
 
-            public HidPowerPhysicalUnitCode Unit { get; private set; }
+            public PowerUnitCode Unit { get; private set; }
 
-            public HidPowerPhysicalUnit UnitInfo { get; private set; }
+            public HidPowerUnit UnitInfo { get; private set; }
 
             public TrippLiteCodes TLCode { get; private set; }
 
-            public IHidPValueCaps ValueCaps { get; private set; }
+            public HidPValueCaps ValueCaps { get; private set; }
 
             public byte[] Value { get; private set; }
 
@@ -332,19 +307,16 @@ namespace TrippLite
 
             }
 
-            public PowerFeature(IHidPValueCaps valueCaps)
+            public PowerFeature(HidPValueCaps valueCaps)
             {
-                Unit = (HidPowerPhysicalUnitCode)valueCaps.Units;
+                Unit = (PowerUnitCode)valueCaps.Units;
 
-                if (valueCaps is IHidPValueCaps_NonRange nr)
-                {
-                    Usage = (HidPowerUsageCode)nr.Usage;
-                }
+                Usage = (HidPowerUsageCode)valueCaps.Usage;
 
                 LinkUsage = (HidPowerUsageCode)valueCaps.LinkUsage;
 
                 ValueCaps = valueCaps;
-                UnitInfo = HidPowerPhysicalUnit.GetByCode(Unit);
+                UnitInfo = HidPowerUnit.GetByCode(Unit);
                 TLCode = (TrippLiteCodes)((Usage) ?? LinkUsage);
             }
 
@@ -381,7 +353,7 @@ namespace TrippLite
                 }
 
                 mm.Free();
-                DataTools.Hardware.Usb.HidFeatures.CloseHid(_hid);
+                DataTools.Win32.Usb.HidFeatures.CloseHid(_hid);
                 _hid = (IntPtr)(-1);
                 _conn = false;
                 _Power = null;
@@ -530,7 +502,7 @@ namespace TrippLite
         /// <value></value>
         /// <returns></returns>
         /// <remarks></remarks>
-        public DataTools.Hardware.Usb.HidDeviceInfo Device
+        public DataTools.Win32.Usb.HidDeviceInfo Device
         {
             get
             {
@@ -615,7 +587,7 @@ namespace TrippLite
                 {
                     mm.LongAtAbsolute(1L) = 0L;
                     mm.ByteAt(0) = (byte)prop.Code;
-                    var res = DataTools.Hardware.Usb.HidFeatures.GetHIDFeature(_hid, (int)prop.Code, (int)_buffLen);
+                    var res = DataTools.Win32.Usb.HidFeatures.GetHIDFeature(_hid, (int)prop.Code, (int)_buffLen);
                     if (res != null)
                     {
                         v = res.intVal;

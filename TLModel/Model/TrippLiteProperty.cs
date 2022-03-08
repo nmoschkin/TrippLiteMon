@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 using DataTools.Win32.Memory;
+using DataTools.Win32.Usb;
 
 using static TrippLite.TrippLiteCodeUtility;
 
@@ -12,27 +13,31 @@ namespace TrippLite
     #region TrippLiteProperty Class
 
     /// <summary>
-/// Encapsulates a USB HID feature property for a Tripp Lite Smart Battery.
-/// </summary>
-/// <remarks></remarks>
+    /// Encapsulates a USB HID feature property for a Tripp Lite Smart Battery.
+    /// </summary>
+    /// <remarks></remarks>
     public sealed class TrippLiteProperty : INotifyPropertyChanged, IDisposable, IChild<TrippLiteUPS>
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
         private PropertyChangedEventArgs _propEvent = new PropertyChangedEventArgs("Value");
         private TrippLiteCodes _Code;
+
         internal long _Value = -1;
+
         private bool _IsSettable;
+
         internal TrippLiteUPS _Model;
         internal TrippLitePropertyBag _Bag;
+
         private ushort _byteLen = 4;
 
         /// <summary>
-    /// Initialize a new TrippLiteProperty
-    /// </summary>
-    /// <param name="owner">The TrippLiteUPS model object that will own this property.</param>
-    /// <param name="c">The property code.</param>
-    /// <remarks></remarks>
+        /// Initialize a new TrippLiteProperty
+        /// </summary>
+        /// <param name="owner">The TrippLiteUPS model object that will own this property.</param>
+        /// <param name="c">The property code.</param>
+        /// <remarks></remarks>
         internal TrippLiteProperty(TrippLiteUPS owner, TrippLiteCodes c)
         {
             _Model = owner;
@@ -41,27 +46,27 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Specify whether or not the property object will call to the device, directly, to retrieve (or set) the value of its property.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Specify whether or not the property object will call to the device, directly, to retrieve (or set) the value of its property.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool LiveInterface { get; set; } = false;
 
         /// <summary>
-    /// Indicates whether this is a property that raises change events.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Indicates whether this is a property that raises change events.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool IsActiveProperty { get; set; } = true;
 
         /// <summary>
-    /// Gets the owner TrippLiteUPS object for this property.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets the owner TrippLiteUPS object for this property.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public TrippLiteUPS Parent
         {
             get
@@ -96,11 +101,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Gets the multiplier of the property.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets the multiplier of the property.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public double Multiplier
         {
             get
@@ -110,11 +115,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Gets the length of the USB HID property, in bytes, as defined in TrippLiteCodes.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets the length of the USB HID property, in bytes, as defined in TrippLiteCodes.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public ushort ByteLength
         {
             get
@@ -128,11 +133,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Gets or sets the value of the property.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets or sets the value of the property.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public long Value
         {
             get
@@ -191,11 +196,11 @@ namespace TrippLite
         // End Property
 
         /// <summary>
-    /// Gets a value indicating whether or not this property supports setting on the device.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets a value indicating whether or not this property supports setting on the device.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool IsSettable
         {
             get
@@ -212,11 +217,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Gets the name of the property.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets the name of the property.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string Name
         {
             get
@@ -226,11 +231,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Gets the description of the property.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets the description of the property.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string Description
         {
             get
@@ -240,11 +245,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Gets the unit of the property.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets the unit of the property.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public MeasureUnitTypes Unit
         {
             get
@@ -254,11 +259,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Gets the Tripp Lite property code.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets the Tripp Lite property code.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public TrippLiteCodes Code
         {
             get
@@ -268,11 +273,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Gets detailed information about the property unit as a MeasureUnit object.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets detailed information about the property unit as a MeasureUnit object.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public MeasureUnit UnitInfo
         {
             get
@@ -282,26 +287,26 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Attempts to set a value or flag on the device using raw byte data.
-    /// The number of bytes in the byte array must exactly match the byte length of the property.
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Attempts to set a value or flag on the device using raw byte data.
+        /// The number of bytes in the byte array must exactly match the byte length of the property.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool SetValue(byte[] value)
         {
             bool SetValueRet = default;
             if (IsSettable == false || value is null || value.Length != _byteLen)
                 return false;
-            var dev = DataTools.Hardware.Usb.HidFeatures.OpenHid(_Model.Device);
+            var dev = DataTools.Win32.Usb.HidFeatures.OpenHid(_Model.Device);
             if (dev == IntPtr.Zero)
                 return false;
             MemPtr mm = new MemPtr();
             mm.Alloc(1 + value.Length);
             mm.ByteAt(0) = (byte)_Code;
 
-            SetValueRet = DataTools.Win32.UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)1 + value.Length);
-            DataTools.Hardware.Usb.HidFeatures.CloseHid(dev);
+            SetValueRet = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)1 + value.Length);
+            DataTools.Win32.Usb.HidFeatures.CloseHid(dev);
 
             if (SetValueRet)
             {
@@ -327,21 +332,21 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Attempts to retrieve the value directly from the device.
-    /// </summary>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Attempts to retrieve the value directly from the device.
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public long GetValue()
         {
             long GetValueRet = default;
             GetValueRet = 0L;
-            var dev = DataTools.Hardware.Usb.HidFeatures.OpenHid(_Model.Device);
+            var dev = DataTools.Win32.Usb.HidFeatures.OpenHid(_Model.Device);
             if (dev == IntPtr.Zero)
                 return _Value;
             MemPtr mm = new MemPtr();
             mm.Alloc(_byteLen + 1);
             mm.ByteAt(0) = (byte)_Code;
-            if (DataTools.Win32.UsbLibHelpers.HidD_GetFeature(dev, mm.Handle, (int)_byteLen + 1))
+            if (UsbLibHelpers.HidD_GetFeature(dev, mm.Handle, (int)_byteLen + 1))
             {
                 if (_byteLen == 8)
                 {
@@ -353,17 +358,17 @@ namespace TrippLite
                 }
             }
 
-            DataTools.Hardware.Usb.HidFeatures.CloseHid(dev);
+            DataTools.Win32.Usb.HidFeatures.CloseHid(dev);
             mm.Free();
             return GetValueRet;
         }
 
         /// <summary>
-    /// Attempt to set a value or flag on the device.
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Attempt to set a value or flag on the device.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool SetValue(long value)
         {
             bool SetValueRet = default;
@@ -373,16 +378,16 @@ namespace TrippLite
                 return false;
             if (Value == value)
                 return false;
-            var dev = DataTools.Hardware.Usb.HidFeatures.OpenHid(_Model.Device);
+            var dev = DataTools.Win32.Usb.HidFeatures.OpenHid(_Model.Device);
             if (dev == IntPtr.Zero)
                 return false;
             MemPtr mm = new MemPtr();
             mm.Alloc(9L);
             mm.ByteAt(0L) = (byte)_Code;
             mm.LongAtAbsolute(1L) = value;
-            SetValueRet = DataTools.Win32.UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)9);
+            SetValueRet = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)9);
             mm.Free();
-            DataTools.Hardware.Usb.HidFeatures.CloseHid(dev);
+            DataTools.Win32.Usb.HidFeatures.CloseHid(dev);
             if (SetValueRet)
             {
                 _Value = value;
@@ -394,11 +399,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Attempt to set a value or flag on the device.
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Attempt to set a value or flag on the device.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool SetValue(int value)
         {
             bool SetValueRet = default;
@@ -408,16 +413,16 @@ namespace TrippLite
                 return false;
             if (Value == value)
                 return false;
-            var dev = DataTools.Hardware.Usb.HidFeatures.OpenHid(_Model.Device);
+            var dev = DataTools.Win32.Usb.HidFeatures.OpenHid(_Model.Device);
             if (dev == IntPtr.Zero)
                 return false;
             MemPtr mm = new MemPtr();
             mm.Alloc(5L);
             mm.ByteAt(0L) = (byte)_Code;
             mm.IntAtAbsolute(1L) = value;
-            SetValueRet = DataTools.Win32.UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)5);
+            SetValueRet = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)5);
             mm.Free();
-            DataTools.Hardware.Usb.HidFeatures.CloseHid(dev);
+            DataTools.Win32.Usb.HidFeatures.CloseHid(dev);
             if (SetValueRet)
             {
                 _Value = value;
@@ -429,11 +434,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Attempt to set a value or flag on the device.
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Attempt to set a value or flag on the device.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool SetValue(short value)
         {
             bool SetValueRet = default;
@@ -443,16 +448,16 @@ namespace TrippLite
                 return false;
             if (Value == value)
                 return false;
-            var dev = DataTools.Hardware.Usb.HidFeatures.OpenHid(_Model.Device);
+            var dev = DataTools.Win32.Usb.HidFeatures.OpenHid(_Model.Device);
             if (dev == IntPtr.Zero)
                 return false;
             MemPtr mm = new MemPtr();
             mm.Alloc(3L);
             mm.ByteAt(0L) = (byte)_Code;
             mm.ShortAtAbsolute(1L) = value;
-            SetValueRet = DataTools.Win32.UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)3);
+            SetValueRet = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)3);
             mm.Free();
-            DataTools.Hardware.Usb.HidFeatures.CloseHid(dev);
+            DataTools.Win32.Usb.HidFeatures.CloseHid(dev);
             if (SetValueRet)
             {
                 _Value = value;
@@ -464,11 +469,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Attempt to set a value or flag on the device.
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Attempt to set a value or flag on the device.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool SetValue(byte value)
         {
             bool SetValueRet = default;
@@ -476,16 +481,16 @@ namespace TrippLite
                 return false;
             if (Value == value)
                 return false;
-            var dev = DataTools.Hardware.Usb.HidFeatures.OpenHid(_Model.Device);
+            var dev = DataTools.Win32.Usb.HidFeatures.OpenHid(_Model.Device);
             if (dev == IntPtr.Zero)
                 return false;
             MemPtr mm = new MemPtr();
             mm.Alloc(2L);
             mm.ByteAt(0L) = (byte)_Code;
             mm.ByteAt(1L) = value;
-            SetValueRet = DataTools.Win32.UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)2);
+            SetValueRet = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)2);
             mm.Free();
-            DataTools.Hardware.Usb.HidFeatures.CloseHid(dev);
+            DataTools.Win32.Usb.HidFeatures.CloseHid(dev);
             if (SetValueRet)
             {
                 _Value = value;
@@ -497,11 +502,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Attempt to move this item to another property bag.
-    /// </summary>
-    /// <param name="bag">The destination property bag.</param>
-    /// <returns>True if successful.</returns>
-    /// <remarks></remarks>
+        /// Attempt to move this item to another property bag.
+        /// </summary>
+        /// <param name="bag">The destination property bag.</param>
+        /// <returns>True if successful.</returns>
+        /// <remarks></remarks>
         public bool MoveTo(TrippLitePropertyBag bag)
         {
             if (_Model is null || ReferenceEquals(bag, _Bag))
@@ -518,10 +523,10 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Converts this property into its string representation
-    /// </summary>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Converts this property into its string representation
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override string ToString()
         {
             string ToStringRet = default;
@@ -530,11 +535,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Converts this property into its string representation using the provided number format.
-    /// </summary>
-    /// <param name="numFmt">The standard format string used to format the numeric value of this property.</param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Converts this property into its string representation using the provided number format.
+        /// </summary>
+        /// <param name="numFmt">The standard format string used to format the numeric value of this property.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string ToString(string numFmt)
         {
             string ToStringRet = default;
@@ -543,12 +548,12 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Converts this property into its string representation using the provided number format.
-    /// </summary>
-    /// <param name="numFmt">The standard format string used to format the numeric value of this property.</param>
-    /// <param name="suppressUnit">Sets a value indicating whether or not to suppress appending the unit symbol to the string value of this property.</param>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Converts this property into its string representation using the provided number format.
+        /// </summary>
+        /// <param name="numFmt">The standard format string used to format the numeric value of this property.</param>
+        /// <param name="suppressUnit">Sets a value indicating whether or not to suppress appending the unit symbol to the string value of this property.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string ToString(string numFmt, bool suppressUnit)
         {
             string ToStringRet = default;
@@ -614,19 +619,19 @@ namespace TrippLite
     #region TrippLitePropertyBag
 
     /// <summary>
-/// Represents a collection of all USB HID feature properties for a Tripp Lite Smart Battery
-/// </summary>
-/// <remarks></remarks>
+    /// Represents a collection of all USB HID feature properties for a Tripp Lite Smart Battery
+    /// </summary>
+    /// <remarks></remarks>
     public class TrippLitePropertyBag : ObservableCollection<TrippLiteProperty>, IDisposable, IChild<TrippLiteUPS>
     {
         private TrippLiteUPS _Model;
 
         /// <summary>
-    /// Gets the owner TrippLiteUPS object for this property bag.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Gets the owner TrippLiteUPS object for this property bag.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public TrippLiteUPS Parent
         {
             get
@@ -658,20 +663,20 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Initialize a new TrippLitePropertyBag and automatically populate the property bag with known property values from the TrippLiteCodes enumeration.
-    /// </summary>
-    /// <param name="owner">The TrippLiteUPS object upon which to initialize.</param>
-    /// <remarks></remarks>
+        /// Initialize a new TrippLitePropertyBag and automatically populate the property bag with known property values from the TrippLiteCodes enumeration.
+        /// </summary>
+        /// <param name="owner">The TrippLiteUPS object upon which to initialize.</param>
+        /// <remarks></remarks>
         public TrippLitePropertyBag(TrippLiteUPS owner) : this(owner, true)
         {
         }
 
         /// <summary>
-    /// Initialize a new TrippLitePropertyBag
-    /// </summary>
-    /// <param name="owner">The TrippLiteUPS object upon which to initialize.</param>
-    /// <param name="autoPopulate">Specify whether to automatically populate the property bag with known property values from the TrippLiteCodes enumeration.</param>
-    /// <remarks></remarks>
+        /// Initialize a new TrippLitePropertyBag
+        /// </summary>
+        /// <param name="owner">The TrippLiteUPS object upon which to initialize.</param>
+        /// <param name="autoPopulate">Specify whether to automatically populate the property bag with known property values from the TrippLiteCodes enumeration.</param>
+        /// <remarks></remarks>
         public TrippLitePropertyBag(TrippLiteUPS owner, bool autoPopulate) : base()
         {
             _Model = owner;

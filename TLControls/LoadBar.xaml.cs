@@ -6,7 +6,6 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 
 using DataTools.MathTools.PolarMath;
-using DataTools.MathTools.Extensions;
 
 using Microsoft.VisualBasic.CompilerServices;
 using System.Windows.Controls;

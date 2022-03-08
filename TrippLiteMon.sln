@@ -7,13 +7,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataTools", "DataTools", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TrippLite", "TrippLite", "{C44B1359-DCF1-46A6-AE48-9718346701F9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTools", "DataTools5\DataTools\DataTools.csproj", "{A4A6B4EA-3761-4A04-AFAE-DA5D0294E593}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTools", "DataTools\DataTools\DataTools.csproj", "{A4A6B4EA-3761-4A04-AFAE-DA5D0294E593}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTools.Win32.Memory", "DataTools5\DataTools.Win32.Memory\DataTools.Win32.Memory.csproj", "{3E2E42E1-B3BC-4B6D-83E2-20929D55F1CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTools.Win32.Memory", "DataTools\DataTools.Win32.Memory\DataTools.Win32.Memory.csproj", "{3E2E42E1-B3BC-4B6D-83E2-20929D55F1CE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTools.Win32", "DataTools5\DataTools.Win32\DataTools.Win32.csproj", "{BC555D86-0AE3-4ECB-A271-5C1346C5F933}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTools.Win32", "DataTools\DataTools.Win32\DataTools.Win32.csproj", "{BC555D86-0AE3-4ECB-A271-5C1346C5F933}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTools.Hardware", "DataTools5\DataTools.Hardware\DataTools.Hardware.csproj", "{E573663A-DD5F-4186-BC6F-C73ABE3900E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTools.Win32.Usb", "DataTools\DataTools.Win32.Usb\DataTools.Win32.Usb.csproj", "{E573663A-DD5F-4186-BC6F-C73ABE3900E9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TLModel", "TLModel\TLModel.csproj", "{147B67BD-7C79-43FA-BF1A-1A306FD61727}"
 EndProject
@@ -21,9 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TLControls", "TLControls\TL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrippLiteMon", "TrippLiteMon\TrippLiteMon.csproj", "{46D8E6EE-28D3-4164-9BC1-0DEE7779659E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTools.Graphics", "DataTools5\DataTools.Graphics\DataTools.Graphics.csproj", "{35785872-53E9-40DD-88E5-F1D628DA9312}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTools.Graphics", "DataTools\DataTools.Graphics\DataTools.Graphics.csproj", "{35785872-53E9-40DD-88E5-F1D628DA9312}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTools.ColorControls", "DataTools5\DataTools.ColorControls\DataTools.ColorControls.csproj", "{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTools.ColorControls", "DataTools\DataTools.ColorControls\DataTools.ColorControls.csproj", "{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTools.Desktop.WPF", "DataTools\DataTools.Desktop.WPF\DataTools.Desktop.WPF.csproj", "{EA380A99-F502-4F09-ABB5-579A64C816A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -181,6 +183,22 @@ Global
 		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Release|x64.Build.0 = Release|Any CPU
 		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Release|x86.ActiveCfg = Release|Any CPU
 		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Release|x86.Build.0 = Release|Any CPU
+		{EA380A99-F502-4F09-ABB5-579A64C816A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA380A99-F502-4F09-ABB5-579A64C816A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA380A99-F502-4F09-ABB5-579A64C816A9}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{EA380A99-F502-4F09-ABB5-579A64C816A9}.Debug|Mixed Platforms.Build.0 = Debug|x64
+		{EA380A99-F502-4F09-ABB5-579A64C816A9}.Debug|x64.ActiveCfg = Debug|x64
+		{EA380A99-F502-4F09-ABB5-579A64C816A9}.Debug|x64.Build.0 = Debug|x64
+		{EA380A99-F502-4F09-ABB5-579A64C816A9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EA380A99-F502-4F09-ABB5-579A64C816A9}.Debug|x86.Build.0 = Debug|Any CPU
+		{EA380A99-F502-4F09-ABB5-579A64C816A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA380A99-F502-4F09-ABB5-579A64C816A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA380A99-F502-4F09-ABB5-579A64C816A9}.Release|Mixed Platforms.ActiveCfg = Release|x64
+		{EA380A99-F502-4F09-ABB5-579A64C816A9}.Release|Mixed Platforms.Build.0 = Release|x64
+		{EA380A99-F502-4F09-ABB5-579A64C816A9}.Release|x64.ActiveCfg = Release|x64
+		{EA380A99-F502-4F09-ABB5-579A64C816A9}.Release|x64.Build.0 = Release|x64
+		{EA380A99-F502-4F09-ABB5-579A64C816A9}.Release|x86.ActiveCfg = Release|Any CPU
+		{EA380A99-F502-4F09-ABB5-579A64C816A9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -195,6 +213,7 @@ Global
 		{46D8E6EE-28D3-4164-9BC1-0DEE7779659E} = {C44B1359-DCF1-46A6-AE48-9718346701F9}
 		{35785872-53E9-40DD-88E5-F1D628DA9312} = {9AA1BBF3-A03E-4752-99F9-55E23DB86702}
 		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F} = {9AA1BBF3-A03E-4752-99F9-55E23DB86702}
+		{EA380A99-F502-4F09-ABB5-579A64C816A9} = {9AA1BBF3-A03E-4752-99F9-55E23DB86702}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {888481B6-A2B3-4D47-98B5-4FA312781DBF}
