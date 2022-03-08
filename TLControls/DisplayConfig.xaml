@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="DisplayConfig"
     Width="450"
-    Height="200"
+    Height="248"
     Background="{DynamicResource TrippLiteBlue}">
 
     <Window.Resources>
@@ -24,6 +24,7 @@
     <Grid Margin="4,4,4,4">
 
         <Grid.RowDefinitions>
+            <RowDefinition />
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
@@ -84,7 +85,14 @@
             Right-Hand Property 2:
         </Label>
 
-        <Grid Grid.Row="5" Grid.Column="1">
+        <Label
+            Grid.Row="5"
+            Grid.Column="0"
+            Style="{StaticResource PropLabelStyle}">
+            Cool Window Colors:
+        </Label>
+
+        <Grid Grid.Row="6" Grid.Column="1">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />

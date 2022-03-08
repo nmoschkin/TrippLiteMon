@@ -212,6 +212,8 @@ namespace TrippLite
             {
                 HidPValueCaps[] valCaps = new HidPValueCaps[1024];
                 HidPValueCapsRange[] valCapsRange = new HidPValueCapsRange[1024];
+                var mm2 = (MemPtr)_hid;
+                var str = mm2.ToString();
 
                 ushort size = 1024;
 
@@ -266,13 +268,15 @@ namespace TrippLite
         {
             public bool IsRange => ValueCaps is IHidPValueCaps_Range;
             
-            public HidPowerUsageCode Usage { get; private set; }
+            public HidPowerUsageCode? Usage { get; private set; }
 
             public HidPowerUsageCode LinkUsage { get; private set; }
 
             public HidPowerPhysicalUnitCode Unit { get; private set; }
 
             public HidPowerPhysicalUnit UnitInfo { get; private set; }
+
+            public TrippLiteCodes TLCode { get; private set; }
 
             public IHidPValueCaps ValueCaps { get; private set; }
 
@@ -341,12 +345,22 @@ namespace TrippLite
 
                 ValueCaps = valueCaps;
                 UnitInfo = HidPowerPhysicalUnit.GetByCode(Unit);
+                TLCode = (TrippLiteCodes)((Usage) ?? LinkUsage);
+            }
 
+            static Dictionary<string, string> CodeRef = new Dictionary<string, string>();
+
+            static PowerFeature()
+            {
+                for(int i = 0; i < 255; i++)
+                {
+                    CodeRef.Add($"{(HidPowerUsageCode)i}: {i})", $"{(TrippLiteCodes)(i - 2)}: {i - 2}");
+                }
             }
 
             public override string ToString()
             {
-                return $"{Usage} / {LinkUsage} / {UnitInfo.Name} : {valstr}";
+                return $" {(int)(Usage ?? 0)}: {Usage} / {(int)LinkUsage}: {LinkUsage} / {UnitInfo.Name} / (TL Code: {TLCode}) : {valstr}";
             }
 
         }

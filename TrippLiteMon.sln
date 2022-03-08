@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31613.86
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31612.314
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataTools", "DataTools", "{9AA1BBF3-A03E-4752-99F9-55E23DB86702}"
 EndProject
@@ -20,6 +20,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TLControls", "TLControls\TLControls.csproj", "{ABD350AB-9E4D-4B2C-A1B8-BDA1CB1D8D85}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrippLiteMon", "TrippLiteMon\TrippLiteMon.csproj", "{46D8E6EE-28D3-4164-9BC1-0DEE7779659E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTools.Graphics", "DataTools5\DataTools.Graphics\DataTools.Graphics.csproj", "{35785872-53E9-40DD-88E5-F1D628DA9312}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTools.ColorControls", "DataTools5\DataTools.ColorControls\DataTools.ColorControls.csproj", "{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -145,6 +149,38 @@ Global
 		{46D8E6EE-28D3-4164-9BC1-0DEE7779659E}.Release|x64.Build.0 = Release|x64
 		{46D8E6EE-28D3-4164-9BC1-0DEE7779659E}.Release|x86.ActiveCfg = Release|Any CPU
 		{46D8E6EE-28D3-4164-9BC1-0DEE7779659E}.Release|x86.Build.0 = Release|Any CPU
+		{35785872-53E9-40DD-88E5-F1D628DA9312}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35785872-53E9-40DD-88E5-F1D628DA9312}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35785872-53E9-40DD-88E5-F1D628DA9312}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{35785872-53E9-40DD-88E5-F1D628DA9312}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{35785872-53E9-40DD-88E5-F1D628DA9312}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{35785872-53E9-40DD-88E5-F1D628DA9312}.Debug|x64.Build.0 = Debug|Any CPU
+		{35785872-53E9-40DD-88E5-F1D628DA9312}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{35785872-53E9-40DD-88E5-F1D628DA9312}.Debug|x86.Build.0 = Debug|Any CPU
+		{35785872-53E9-40DD-88E5-F1D628DA9312}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35785872-53E9-40DD-88E5-F1D628DA9312}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35785872-53E9-40DD-88E5-F1D628DA9312}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{35785872-53E9-40DD-88E5-F1D628DA9312}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{35785872-53E9-40DD-88E5-F1D628DA9312}.Release|x64.ActiveCfg = Release|Any CPU
+		{35785872-53E9-40DD-88E5-F1D628DA9312}.Release|x64.Build.0 = Release|Any CPU
+		{35785872-53E9-40DD-88E5-F1D628DA9312}.Release|x86.ActiveCfg = Release|Any CPU
+		{35785872-53E9-40DD-88E5-F1D628DA9312}.Release|x86.Build.0 = Release|Any CPU
+		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Debug|x64.Build.0 = Debug|Any CPU
+		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Debug|x86.Build.0 = Debug|Any CPU
+		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Release|x64.ActiveCfg = Release|Any CPU
+		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Release|x64.Build.0 = Release|Any CPU
+		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Release|x86.ActiveCfg = Release|Any CPU
+		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -157,6 +193,8 @@ Global
 		{147B67BD-7C79-43FA-BF1A-1A306FD61727} = {C44B1359-DCF1-46A6-AE48-9718346701F9}
 		{ABD350AB-9E4D-4B2C-A1B8-BDA1CB1D8D85} = {C44B1359-DCF1-46A6-AE48-9718346701F9}
 		{46D8E6EE-28D3-4164-9BC1-0DEE7779659E} = {C44B1359-DCF1-46A6-AE48-9718346701F9}
+		{35785872-53E9-40DD-88E5-F1D628DA9312} = {9AA1BBF3-A03E-4752-99F9-55E23DB86702}
+		{3AA88C06-2C03-4CC6-AA7E-38ECA15FD98F} = {9AA1BBF3-A03E-4752-99F9-55E23DB86702}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {888481B6-A2B3-4D47-98B5-4FA312781DBF}
