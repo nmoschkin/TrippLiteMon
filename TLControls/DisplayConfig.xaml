@@ -5,7 +5,7 @@
     xmlns:dtcolor="clr-namespace:DataTools.ColorControls;assembly=DataTools.ColorControls"
     Title="DisplayConfig"
     Width="450"
-    Height="288"
+    Height="300"
     Background="{DynamicResource TrippLiteBlue}"
     ResizeMode="CanMinimize"
     WindowStyle="ToolWindow">
@@ -40,7 +40,7 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="48" />
             <RowDefinition Height="48" />
         </Grid.RowDefinitions>
 
