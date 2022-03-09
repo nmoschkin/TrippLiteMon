@@ -297,6 +297,8 @@
                                     <MenuItem x:Name="RevertToBig" Header="Display Large Monitor" />
                                     <Separator />
                                     <MenuItem x:Name="SysPower" Header="Open System Power Options" />
+                                    <Separator />
+                                    <MenuItem x:Name="RunStart" Header="Run On System Startup" />
                                 </ContextMenu>
                             </Button.ContextMenu>
 

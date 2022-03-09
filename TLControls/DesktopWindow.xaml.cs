@@ -5,6 +5,8 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 
+using DataTools.Scheduler;
+
 using Microsoft.VisualBasic.CompilerServices;
 
 namespace TrippLite
@@ -218,6 +220,9 @@ namespace TrippLite
             OptionsButton.Click += OptionsButton_Click;
             RevertToBig.Click += RevertToBig_Click;
             SysPower.Click += SysPower_Click;
+            RunStart.Click += RunStart_Click;
+            
+            RunStart.IsChecked = TaskTool.GetIsEnabled();
 
             _ViewModel.Initialize();
             foreach (var pr in _ViewModel.Properties)
@@ -240,6 +245,18 @@ namespace TrippLite
                         }
                 }
             }
+        }
+
+        private void RunStart_Click(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+            _ViewModel.RunOnStartup = !_ViewModel.RunOnStartup;
+
+            Dispatcher.BeginInvoke(() =>
+            {
+                RunStart.IsChecked = TaskTool.GetIsEnabled();
+            });
+
         }
 
         private void _ViewModel_ViewModelInitialized(object sender, EventArgs e)

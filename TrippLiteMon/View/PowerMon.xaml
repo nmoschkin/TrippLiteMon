@@ -287,13 +287,43 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
+                            <ColumnDefinition />
 
                         </Grid.ColumnDefinitions>
 
+                        <CheckBox
+                            x:Name="StartupCheck"
+                            Grid.Column="0"
+                            Margin="0,2,0,0"
+                            HorizontalAlignment="Right"
+                            Cursor="Hand">
+                            <CheckBox.Content>
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Margin="0,2,0,0"
+                                    HorizontalAlignment="Right"
+                                    Cursor="Hand"
+                                    FontFamily="Segoe UI"
+                                    FontSize="10"
+                                    FontStyle="Normal"
+                                    TextDecorations="Underline">
+
+                                    <TextBlock.Foreground>
+                                        <SolidColorBrush Color="Blue" />
+                                    </TextBlock.Foreground>
+
+                                    <TextBlock.Text>
+                                        Run On System Startup
+                                    </TextBlock.Text>
+                                </TextBlock>
+
+                            </CheckBox.Content>
+
+                        </CheckBox>
 
                         <TextBlock
                             x:Name="OpenCool"
-                            Grid.Column="0"
+                            Grid.Column="1"
                             Margin="0,2,0,0"
                             HorizontalAlignment="Right"
                             Cursor="Hand"
@@ -312,7 +342,7 @@
 
                         <TextBlock
                             x:Name="OpenPower"
-                            Grid.Column="1"
+                            Grid.Column="2"
                             Margin="0,2,0,0"
                             HorizontalAlignment="Right"
                             Cursor="Hand"

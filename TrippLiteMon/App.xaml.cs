@@ -1,9 +1,12 @@
-﻿using System;
+﻿using DataTools.Scheduler;
+
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Permissions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -90,6 +93,17 @@ namespace TrippLite
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            if (e.Args.Contains("/erologin"))
+            {
+                TaskTool.EnableOnStartup();
+                Environment.Exit(0);
+            }
+            else if (e.Args.Contains("/drologin"))
+            {
+                TaskTool.DisableOnStartup();
+                Environment.Exit(0);
+            }
+
             System.Windows.Forms.Application.EnableVisualStyles();
 
             if (e.Args.Contains("/reset"))

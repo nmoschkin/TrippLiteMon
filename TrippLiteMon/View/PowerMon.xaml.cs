@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DataTools.Scheduler;
+
+using System;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -7,30 +9,30 @@ namespace TrippLite
 {
     public partial class PowerMon : Window
     {
-        private TrippLiteViewModel __ViewModel;
+        private TrippLiteViewModel vm;
 
         private TrippLiteViewModel _ViewModel
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get
             {
-                return __ViewModel;
+                return vm;
             }
 
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (__ViewModel != null)
+                if (vm != null)
                 {
-                    __ViewModel.PowerStateChanged -= _ViewModel_PowerStateChanged;
-                    __ViewModel.ViewModelInitialized -= _ViewModel_ViewModelInitialized;
+                    vm.PowerStateChanged -= _ViewModel_PowerStateChanged;
+                    vm.ViewModelInitialized -= _ViewModel_ViewModelInitialized;
                 }
 
-                __ViewModel = value;
-                if (__ViewModel != null)
+                vm = value;
+                if (vm != null)
                 {
-                    __ViewModel.PowerStateChanged += _ViewModel_PowerStateChanged;
-                    __ViewModel.ViewModelInitialized += _ViewModel_ViewModelInitialized;
+                    vm.PowerStateChanged += _ViewModel_PowerStateChanged;
+                    vm.ViewModelInitialized += _ViewModel_ViewModelInitialized;
                 }
             }
         }
@@ -65,6 +67,10 @@ namespace TrippLite
             _ViewModel = ViewModel;
             OpenPower.MouseUp += OpenPower_MouseUp;
             OpenCool.MouseUp += OpenCool_MouseUp;
+            StartupCheck.IsChecked = TaskTool.GetIsEnabled();
+            StartupCheck.Click += StartupCheck_Click;
+            StartupCheck.Checked += StartupCheck_Checked;
+            StartupCheck.Unchecked += StartupCheck_Unchecked;
             double screenWidth = SystemParameters.PrimaryScreenWidth;
             double screenHeight = SystemParameters.PrimaryScreenHeight;
             double windowWidth = this.Width;
@@ -75,6 +81,28 @@ namespace TrippLite
             {
                 initVars();
             }
+        }
+
+        private void StartupCheck_Unchecked(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true; 
+
+        }
+
+        private void StartupCheck_Checked(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void StartupCheck_Click(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+            _ViewModel.RunOnStartup = !_ViewModel.RunOnStartup;
+
+            Dispatcher.BeginInvoke(() =>
+            {
+                StartupCheck.IsChecked = _ViewModel.RunOnStartup;
+            });
         }
 
         private void _ViewModel_PowerStateChanged(object sender, PowerStateChangedEventArgs e)

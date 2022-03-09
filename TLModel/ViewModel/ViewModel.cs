@@ -1,11 +1,17 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
+using System.DirectoryServices.ActiveDirectory;
+using System.IO;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+
+using DataTools.Scheduler;
 
 using Microsoft.VisualBasic.CompilerServices;
 
@@ -264,6 +270,57 @@ namespace TrippLite
             }
         }
 
+
+
+
+        public bool RunOnStartup
+        {
+            get { return (bool)GetValue(RunOnStartupProperty); }
+            set { SetValue(RunOnStartupProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for RunOnStartup.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty RunOnStartupProperty =
+            DependencyProperty.Register("RunOnStartup", typeof(bool), typeof(TrippLiteViewModel), new PropertyMetadata(TaskTool.GetIsEnabled(), OnRunOnStartupChanged));
+
+
+        protected static void OnRunOnStartupChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (sender is TrippLiteViewModel vm && ((bool)e.NewValue != TaskTool.GetIsEnabled()))
+            {
+                var b = (bool)e.NewValue;
+
+                // Launch itself as administrator
+                ProcessStartInfo proc = new ProcessStartInfo();
+                
+                proc.UseShellExecute = true;
+                proc.WorkingDirectory = Environment.CurrentDirectory;
+                proc.FileName = AppDomain.CurrentDomain.BaseDirectory + "\\" + AppDomain.CurrentDomain.FriendlyName + ".exe";
+                proc.Verb = "runas";
+
+
+                if (b)
+                {
+                    proc.Arguments = "/erologin";
+
+                }
+                else
+                {
+                    proc.Arguments = "/drologin";
+                }
+
+                try
+                {
+                    var exec = Process.Start(proc);
+                    exec?.WaitForExit();
+                }
+                catch
+                {
+                    vm.RunOnStartup = TaskTool.GetIsEnabled();
+                    return;
+                }
+            }
+        }
 
         #endregion
 
@@ -1108,5 +1165,6 @@ namespace TrippLite
 
             return e / d;
         }
+
     }
 }
