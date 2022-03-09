@@ -91,6 +91,14 @@ namespace TrippLite
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             System.Windows.Forms.Application.EnableVisualStyles();
+
+            if (e.Args.Contains("/reset"))
+            {
+                Settings.CoolWindowBounds = new System.Drawing.RectangleF(0, 0, 0, 0);
+                Settings.PrimaryWindowBounds = new System.Drawing.RectangleF(0, 0, 0, 0);
+                Settings.LastWindow = LastWindowType.Main;
+            }
+
             if (Settings.LastWindow == LastWindowType.Cool)
             {
                 SwitchToCool();

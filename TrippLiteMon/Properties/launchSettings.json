@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TrippLiteMon": {
+      "commandName": "Project",
+      "commandLineArgs": "/reset"
+    }
+  }
+}
