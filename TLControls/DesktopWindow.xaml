@@ -299,6 +299,8 @@
                                     <MenuItem x:Name="SysPower" Header="Open System Power Options" />
                                     <Separator />
                                     <MenuItem x:Name="RunStart" Header="Run On System Startup" />
+                                    <Separator />
+                                    <MenuItem x:Name="Config" Header="Settings" />
                                 </ContextMenu>
                             </Button.ContextMenu>
 

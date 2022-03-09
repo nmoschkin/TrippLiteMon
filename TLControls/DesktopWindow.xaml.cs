@@ -221,7 +221,7 @@ namespace TrippLite
             RevertToBig.Click += RevertToBig_Click;
             SysPower.Click += SysPower_Click;
             RunStart.Click += RunStart_Click;
-            
+            Config.Click += Config_Click;
             RunStart.IsChecked = TaskTool.GetIsEnabled();
 
             _ViewModel.Initialize();
@@ -245,6 +245,12 @@ namespace TrippLite
                         }
                 }
             }
+        }
+
+        private void Config_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new DisplayConfig(_ViewModel);
+            dlg.ShowDialog();
         }
 
         private void RunStart_Click(object sender, RoutedEventArgs e)

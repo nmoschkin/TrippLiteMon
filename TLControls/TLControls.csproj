@@ -25,6 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataTools\DataTools.ColorControls\DataTools.ColorControls.csproj" />
+    <ProjectReference Include="..\DataTools\DataTools.Desktop.WPF\DataTools.Desktop.WPF.csproj" />
     <ProjectReference Include="..\DataTools\DataTools.Win32\DataTools.Win32.csproj" />
     <ProjectReference Include="..\DataTools\DataTools\DataTools.csproj" />
     <ProjectReference Include="..\TLModel\TLModel.csproj" />
