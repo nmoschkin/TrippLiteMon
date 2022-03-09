@@ -13,7 +13,7 @@ using System.Windows.Controls;
 namespace TrippLite
 {
     [Serializable]
-    public partial class LoadBar 
+    public partial class LoadBar
     {
         private Size _refSize = new Size(0d, 0d);
         private double _angle = 0d;
@@ -164,11 +164,11 @@ namespace TrippLite
         // End Property
 
         /// <summary>
-    /// Returns the maximum number of sections supported for this instance.
-    /// </summary>
-    /// <value></value>
-    /// <returns></returns>
-    /// <remarks></remarks>
+        /// Returns the maximum number of sections supported for this instance.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public int MaxSections
         {
             get
@@ -178,9 +178,9 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Perform a complete recalculation of the control.
-    /// </summary>
-    /// <remarks></remarks>
+        /// Perform a complete recalculation of the control.
+        /// </summary>
+        /// <remarks></remarks>
         private void Recalculate()
         {
             if (this.DrawingArea is null)
@@ -213,10 +213,10 @@ namespace TrippLite
         // End Sub
 
         /// <summary>
-    /// Calculate only the lighted bars and backing effect.
-    /// </summary>
-    /// <param name="effectOnly"></param>
-    /// <remarks></remarks>
+        /// Calculate only the lighted bars and backing effect.
+        /// </summary>
+        /// <param name="effectOnly"></param>
+        /// <remarks></remarks>
         private void ChangeSectionsValues(bool effectOnly = false)
         {
             if (effectOnly)
@@ -226,18 +226,34 @@ namespace TrippLite
             }
             else
             {
-                int cblin = CalcBars(LoadValue, (int)Sections) - 1;
+                var cblin = CalcBars(LoadValue, (int)Sections) - 1;
                 int i;
+
                 Polygon p;
-                var loopTo1 = (int)(Sections - 1L);
-                for (i = 0; i <= loopTo1; i++)
+
+                var c = (int)(Sections - 1L);
+
+                for (i = 0; i <= c; i++)
                 {
                     p = _polyCache[i];
+
                     p.Effect = this.BackingBar.Effect;
+                    
                     if (cblin < i)
                     {
-                        if (p.Opacity != 0.33d)
+                        var diff = (double)i - cblin;
+
+                        if (diff > 0 && diff < 1)
+                        {
+                            var popp = 0.33d + (0.67 - (0.67 * diff));
+
+                            if (p.Opacity != popp)
+                                p.Opacity = popp;
+                        }
+                        else if (p.Opacity != 0.33d)
+                        {
                             p.Opacity = 0.33d;
+                        }
                     }
                     else if (p.Opacity != 1d)
                         p.Opacity = 1d;
@@ -246,9 +262,9 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Calculate and position the polygon sections, based on geometry, for the current size, position, and number of bars.
-    /// </summary>
-    /// <remarks></remarks>
+        /// Calculate and position the polygon sections, based on geometry, for the current size, position, and number of bars.
+        /// </summary>
+        /// <remarks></remarks>
         private void CalculateSections()
         {
             var s = _refSize;
@@ -267,29 +283,41 @@ namespace TrippLite
             double x = 0d;
             // ' calculate from hypoteneuse side.
             double fr = pol.Radius / wWidth;
-            int cblin = CalcBars(LoadValue, (int)Sections) - 1;
+            var cblin = CalcBars(LoadValue, (int)Sections) - 1;
+
             this.BarsArea.Children.Clear();
+
             System.Threading.Thread.Sleep(0);
-            var loopTo = (int)(Sections - 1L);
-            for (i = 0; i <= loopTo; i++)
+            
+            var c = (int)(Sections - 1L);
+            
+            for (i = 0; i <= c; i++)
             {
                 // ' fresh point collection
                 pc = new PointCollection();
                 p = _polyCache[i];
+                
                 pol.Radius = x + w;
                 pol.Radius *= fr;
+                
                 pt = PolarCoordinates.ToLinearCoordinates(pol);
+                
                 pc.Add(new Point(x, s.Height));
                 pc.Add(new Point(pt.X, s.Height));
                 pc.Add(new Point(pt.X, Math.Max(0d, wHeight - pt.Y)));
+                
                 pol.Radius = x;
                 pol.Radius *= fr;
+                
                 pt = PolarCoordinates.ToLinearCoordinates(pol);
+                
                 pc.Add(new Point(pt.X, Math.Max(0d, wHeight - pt.Y)));
                 pc.Add(new Point(pt.X, s.Height));
+                
                 p.Points = pc;
                 p.Fill = bc;
                 p.Effect = this.BackingBar.Effect;
+                
                 if (cblin < i)
                 {
                     p.Opacity = 0.33d;
@@ -306,15 +334,15 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// Calculates the number of bars that should be lit for the given value.
-    /// </summary>
-    /// <param name="value"></param>
-    /// <param name="numBars"></param>
-    /// <returns></returns>
-    /// <remarks></remarks>
-        private int CalcBars(double value, int numBars)
+        /// Calculates the number of bars that should be lit for the given value.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="numBars"></param>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        private double CalcBars(double value, int numBars)
         {
-            return (int)Math.Round(Math.Ceiling(value / (100d / numBars)));
+            return value / (100d / numBars);
         }
 
         public LoadBar(int maxSections)
@@ -353,11 +381,11 @@ namespace TrippLite
         }
 
         /// <summary>
-    /// do the obvious.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <remarks></remarks>
+        /// do the obvious.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <remarks></remarks>
         private void LoadBar_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             Recalculate();
