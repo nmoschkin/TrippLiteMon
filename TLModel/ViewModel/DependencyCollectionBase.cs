@@ -15,8 +15,8 @@ namespace TrippLite
 
     public abstract class DependencyCollectionBase<T, U> : DependencyObject, INotifyCollectionChanged, INotifyPropertyChanged, ICollection<T>, IChild<U> where T : IChild<U>
     {
-        protected Collection<T> _col = new Collection<T>();
-        protected U _Parent;
+        protected Collection<T> col = new Collection<T>();
+        protected U parent;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event NotifyCollectionChangedEventHandler CollectionChanged;
@@ -29,20 +29,20 @@ namespace TrippLite
                 return;
             }
 
-            _Parent = parent;
+            this.parent = parent;
         }
 
         public T this[int index]
         {
             get
             {
-                return _col[index];
+                return col[index];
             }
 
             set
             {
-                _col[index] = value;
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, _col[index], index));
+                col[index] = value;
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, col[index], index));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item"));
             }
         }
@@ -51,19 +51,19 @@ namespace TrippLite
         {
             get
             {
-                return _Parent;
+                return parent;
             }
 
             internal set
             {
-                _Parent = value;
+                parent = value;
             }
         }
 
         U IChild<U>.Parent
         {
-            get => _Parent;
-            set => _Parent = value;
+            get => parent;
+            set => parent = value;
         }
 
         public bool TransferItem(T item, DependencyCollectionBase<T, U> newCol)
@@ -84,45 +84,42 @@ namespace TrippLite
 
         public void Add(T item)
         {
-            _col.Add(item);
+            col.Add(item);
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
         }
 
         public void Clear()
         {
-            _col.Clear();
+            col.Clear();
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
         }
 
         public bool Contains(T item)
         {
-            return _col.Contains(item);
+            return col.Contains(item);
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            _col.CopyTo(array, arrayIndex);
+            col.CopyTo(array, arrayIndex);
         }
 
         public int Count
         {
-            get
-            {
-                int CountRet = default;
-                CountRet = _col.Count;
-                return CountRet;
-            }
+            get => col?.Count ?? 0;
         }
 
         public abstract bool IsReadOnly { get; }
 
         public bool Remove(T item)
         {
-            return _col.Remove(item);
+            return col.Remove(item);
+        
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
+
         }
 
         public IEnumerator<T> GetEnumerator()

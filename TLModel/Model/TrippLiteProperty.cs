@@ -20,17 +20,17 @@ namespace TrippLite
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private PropertyChangedEventArgs _propEvent = new PropertyChangedEventArgs("Value");
-        private TrippLiteCodes _Code;
+        private PropertyChangedEventArgs propEvent = new PropertyChangedEventArgs("Value");
+        private TrippLiteCodes propCode;
 
-        internal long _Value = -1;
+        internal long value = -1;
 
-        private bool _IsSettable;
+        private bool isSettable;
 
-        internal TrippLiteUPS _Model;
-        internal TrippLitePropertyBag _Bag;
+        internal TrippLiteUPS model;
+        internal TrippLitePropertyBag propBag;
 
-        private ushort _byteLen = 4;
+        private ushort byteLen = 4;
 
         /// <summary>
         /// Initialize a new TrippLiteProperty
@@ -40,9 +40,9 @@ namespace TrippLite
         /// <remarks></remarks>
         internal TrippLiteProperty(TrippLiteUPS owner, TrippLiteCodes c)
         {
-            _Model = owner;
-            _Code = c;
-            _byteLen = ByteLength;
+            model = owner;
+            propCode = c;
+            byteLen = ByteLength;
         }
 
         /// <summary>
@@ -69,21 +69,17 @@ namespace TrippLite
         /// <remarks></remarks>
         public TrippLiteUPS Parent
         {
-            get
-            {
-                return _Model;
-            }
-
+            get => model;
             internal set
             {
-                _Model = value;
+                model = value;
             }
         }
 
         TrippLiteUPS IChild<TrippLiteUPS>.Parent
         {
-            get => _Model;
-            set => _Model = value;
+            get => model;
+            set => model = value;
         }
 
         /// <summary>
@@ -94,10 +90,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public string NumberFormat
         {
-            get
-            {
-                return GetEnumAttrVal<NumberFormatAttribute, string, TrippLiteCodes>(_Code, "Format");
-            }
+            get => GetEnumAttrVal<NumberFormatAttribute, string, TrippLiteCodes>(propCode, "Format");
         }
 
         /// <summary>
@@ -108,10 +101,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public double Multiplier
         {
-            get
-            {
-                return GetEnumAttrVal<MultiplierAttribute, double, TrippLiteCodes>(_Code, "Value");
-            }
+            get => GetEnumAttrVal<MultiplierAttribute, double, TrippLiteCodes>(propCode, "Value");
         }
 
         /// <summary>
@@ -124,11 +114,12 @@ namespace TrippLite
         {
             get
             {
-                ushort ByteLengthRet = default;
-                ByteLengthRet = GetEnumAttrVal<ByteLengthAttribute, ushort, TrippLiteCodes>(_Code, "Length");
-                if (ByteLengthRet == 0)
-                    ByteLengthRet = 4;
-                return ByteLengthRet;
+                ushort bl = GetEnumAttrVal<ByteLengthAttribute, ushort, TrippLiteCodes>(propCode, "Length");
+
+                if (bl == 0)
+                    bl = 4;
+
+                return bl;
             }
         }
 
@@ -142,49 +133,40 @@ namespace TrippLite
         {
             get
             {
-                long ValueRet = default;
                 if (LiveInterface)
                 {
-                    _Value = GetValue();
+                    value = GetValue();
                 }
 
-                ValueRet = _Value;
-                return ValueRet;
+                return value;
             }
-
             set
             {
                 if (LiveInterface && IsSettable)
                 {
-                    switch (_byteLen)
+                    switch (byteLen)
                     {
                         case var @case when @case <= 4:
-                            {
-                                SetValue((int)value);
-                                break;
-                            }
+                            SetValue((int)value);
+                            break;
 
                         case var case1 when case1 <= 8:
-                            {
-                                SetValue(value);
-                                break;
-                            }
+                            SetValue(value);
+                            break;
 
                         default:
-                            {
-                                throw new ArgumentException("This property cannot be set that way.");
-                                return;
-                            }
+                            throw new ArgumentException("This property cannot be set that way.");
                     }
 
                     if (IsActiveProperty)
-                        PropertyChanged?.Invoke(this, _propEvent);
+                        PropertyChanged?.Invoke(this, propEvent);
                 }
-                else if (_Value != value || _Value == -1)
+                else if (this.value != value || this.value == -1)
                 {
-                    _Value = value;
+                    this.value = value;
+
                     if (IsActiveProperty)
-                        PropertyChanged?.Invoke(this, _propEvent);
+                        PropertyChanged?.Invoke(this, propEvent);
                 }
             }
         }
@@ -205,14 +187,14 @@ namespace TrippLite
         {
             get
             {
-                if (_Model is null)
+                if (model is null)
                     return false;
-                return _IsSettable;
-            }
 
+                return isSettable;
+            }
             internal set
             {
-                _IsSettable = value;
+                isSettable = value;
             }
         }
 
@@ -224,10 +206,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public string Name
         {
-            get
-            {
-                return _Code.ToString();
-            }
+            get => propCode.ToString();
         }
 
         /// <summary>
@@ -238,10 +217,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public string Description
         {
-            get
-            {
-                return GetEnumAttrVal<DescriptionAttribute, string, TrippLiteCodes>(_Code, "Description");
-            }
+            get => GetEnumAttrVal<DescriptionAttribute, string, TrippLiteCodes>(propCode, "Description");
         }
 
         /// <summary>
@@ -252,10 +228,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public MeasureUnitTypes Unit
         {
-            get
-            {
-                return GetEnumAttrVal<MeasureUnitAttribute, MeasureUnitTypes, TrippLiteCodes>(_Code, "Unit");
-            }
+            get => GetEnumAttrVal<MeasureUnitAttribute, MeasureUnitTypes, TrippLiteCodes>(propCode, "Unit");
         }
 
         /// <summary>
@@ -266,10 +239,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public TrippLiteCodes Code
         {
-            get
-            {
-                return _Code;
-            }
+            get => propCode;
         }
 
         /// <summary>
@@ -280,10 +250,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public MeasureUnit UnitInfo
         {
-            get
-            {
-                return MeasureUnit.FindUnit(Unit);
-            }
+            get => MeasureUnit.FindUnit(Unit);
         }
 
         /// <summary>
@@ -295,40 +262,46 @@ namespace TrippLite
         /// <remarks></remarks>
         public bool SetValue(byte[] value)
         {
-            bool SetValueRet = default;
-            if (IsSettable == false || value is null || value.Length != _byteLen)
+            bool res;
+
+            if (IsSettable == false || value is null || value.Length != byteLen)
                 return false;
-            var dev = DataTools.Win32.Usb.HidFeatures.OpenHid(_Model.Device);
+
+            var dev = DataTools.Win32.Usb.HidFeatures.OpenHid(model.Device);
+
             if (dev == IntPtr.Zero)
                 return false;
+
             MemPtr mm = new MemPtr();
+
             mm.Alloc(1 + value.Length);
-            mm.ByteAt(0) = (byte)_Code;
+            mm.ByteAt(0) = (byte)propCode;
 
-            SetValueRet = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)1 + value.Length);
-            DataTools.Win32.Usb.HidFeatures.CloseHid(dev);
+            res = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)1 + value.Length);
+            HidFeatures.CloseHid(dev);
 
-            if (SetValueRet)
+            if (res)
             {
                 if (value.Length >= 8)
                 {
-                    _Value = mm.LongAt(1L);
+                    this.value = mm.LongAt(1L);
                 }
                 else
                 {
-                    _Value = mm.IntAt(1L);
+                    this.value = mm.IntAt(1L);
                 }
 
                 mm.Free();
+            
                 if (IsActiveProperty)
-                    PropertyChanged?.Invoke(this, _propEvent);
+                    PropertyChanged?.Invoke(this, propEvent);
             }
             else
             {
                 mm.Free();
             }
 
-            return SetValueRet;
+            return res;
         }
 
         /// <summary>
@@ -338,29 +311,35 @@ namespace TrippLite
         /// <remarks></remarks>
         public long GetValue()
         {
-            long GetValueRet = default;
-            GetValueRet = 0L;
-            var dev = DataTools.Win32.Usb.HidFeatures.OpenHid(_Model.Device);
+            long res = 0L;
+
+            var dev = HidFeatures.OpenHid(model.Device);
+
             if (dev == IntPtr.Zero)
-                return _Value;
+                return value;
+
             MemPtr mm = new MemPtr();
-            mm.Alloc(_byteLen + 1);
-            mm.ByteAt(0) = (byte)_Code;
-            if (UsbLibHelpers.HidD_GetFeature(dev, mm.Handle, (int)_byteLen + 1))
+
+            mm.Alloc(byteLen + 1);
+            mm.ByteAt(0) = (byte)propCode;
+
+            if (UsbLibHelpers.HidD_GetFeature(dev, mm.Handle, (int)byteLen + 1))
             {
-                if (_byteLen == 8)
+                if (byteLen == 8)
                 {
-                    GetValueRet = mm.LongAtAbsolute(1L);
+                    res = mm.LongAtAbsolute(1L);
                 }
                 else
                 {
-                    GetValueRet = mm.IntAtAbsolute(1L);
+                    res = mm.IntAtAbsolute(1L);
                 }
             }
 
-            DataTools.Win32.Usb.HidFeatures.CloseHid(dev);
+            HidFeatures.CloseHid(dev);
+            
             mm.Free();
-            return GetValueRet;
+            
+            return res;
         }
 
         /// <summary>
@@ -371,31 +350,43 @@ namespace TrippLite
         /// <remarks></remarks>
         public bool SetValue(long value)
         {
-            bool SetValueRet = default;
-            if (_byteLen < 8)
+            bool res;
+
+            if (byteLen < 8)
                 return SetValue((int)value);
+
             if (IsSettable == false)
                 return false;
+
             if (Value == value)
                 return false;
-            var dev = DataTools.Win32.Usb.HidFeatures.OpenHid(_Model.Device);
+
+            var dev = HidFeatures.OpenHid(model.Device);
+
             if (dev == IntPtr.Zero)
                 return false;
+
             MemPtr mm = new MemPtr();
+            
             mm.Alloc(9L);
-            mm.ByteAt(0L) = (byte)_Code;
+            mm.ByteAt(0L) = (byte)propCode;
+            
             mm.LongAtAbsolute(1L) = value;
-            SetValueRet = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)9);
+            
+            res = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)9);
+            
             mm.Free();
-            DataTools.Win32.Usb.HidFeatures.CloseHid(dev);
-            if (SetValueRet)
+            HidFeatures.CloseHid(dev);
+            
+            if (res)
             {
-                _Value = value;
+                this.value = value;
+            
                 if (IsActiveProperty)
-                    PropertyChanged?.Invoke(this, _propEvent);
+                    PropertyChanged?.Invoke(this, propEvent);
             }
 
-            return SetValueRet;
+            return res;
         }
 
         /// <summary>
@@ -406,31 +397,44 @@ namespace TrippLite
         /// <remarks></remarks>
         public bool SetValue(int value)
         {
-            bool SetValueRet = default;
-            if (_byteLen < 4)
+            bool res;
+
+            if (byteLen < 4)
                 return SetValue((short)value);
+
             if (IsSettable == false)
                 return false;
+
             if (Value == value)
                 return false;
-            var dev = DataTools.Win32.Usb.HidFeatures.OpenHid(_Model.Device);
+
+            var dev = HidFeatures.OpenHid(model.Device);
+
             if (dev == IntPtr.Zero)
                 return false;
+
             MemPtr mm = new MemPtr();
+
             mm.Alloc(5L);
-            mm.ByteAt(0L) = (byte)_Code;
+            mm.ByteAt(0L) = (byte)propCode;
+
             mm.IntAtAbsolute(1L) = value;
-            SetValueRet = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)5);
+
+            res = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)5);
+
             mm.Free();
-            DataTools.Win32.Usb.HidFeatures.CloseHid(dev);
-            if (SetValueRet)
+
+            HidFeatures.CloseHid(dev);
+
+            if (res)
             {
-                _Value = value;
+                this.value = value;
+
                 if (IsActiveProperty)
-                    PropertyChanged?.Invoke(this, _propEvent);
+                    PropertyChanged?.Invoke(this, propEvent);
             }
 
-            return SetValueRet;
+            return res;
         }
 
         /// <summary>
@@ -441,31 +445,43 @@ namespace TrippLite
         /// <remarks></remarks>
         public bool SetValue(short value)
         {
-            bool SetValueRet = default;
-            if (_byteLen < 2)
+            bool res = default;
+
+            if (byteLen < 2)
                 return SetValue((byte)value);
+
             if (IsSettable == false)
                 return false;
+
             if (Value == value)
                 return false;
-            var dev = DataTools.Win32.Usb.HidFeatures.OpenHid(_Model.Device);
+
+            var dev = HidFeatures.OpenHid(model.Device);
+
             if (dev == IntPtr.Zero)
                 return false;
+
             MemPtr mm = new MemPtr();
+
             mm.Alloc(3L);
-            mm.ByteAt(0L) = (byte)_Code;
+            mm.ByteAt(0L) = (byte)propCode;
             mm.ShortAtAbsolute(1L) = value;
-            SetValueRet = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)3);
+
+            res = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)3);
+
             mm.Free();
-            DataTools.Win32.Usb.HidFeatures.CloseHid(dev);
-            if (SetValueRet)
+
+            HidFeatures.CloseHid(dev);
+
+            if (res)
             {
-                _Value = value;
+                this.value = value;
+
                 if (IsActiveProperty)
-                    PropertyChanged?.Invoke(this, _propEvent);
+                    PropertyChanged?.Invoke(this, propEvent);
             }
 
-            return SetValueRet;
+            return res;
         }
 
         /// <summary>
@@ -476,29 +492,40 @@ namespace TrippLite
         /// <remarks></remarks>
         public bool SetValue(byte value)
         {
-            bool SetValueRet = default;
+            bool res = default;
+
             if (IsSettable == false)
                 return false;
+
             if (Value == value)
                 return false;
-            var dev = DataTools.Win32.Usb.HidFeatures.OpenHid(_Model.Device);
+
+            var dev = HidFeatures.OpenHid(model.Device);
+
             if (dev == IntPtr.Zero)
                 return false;
+
             MemPtr mm = new MemPtr();
+
             mm.Alloc(2L);
-            mm.ByteAt(0L) = (byte)_Code;
+            mm.ByteAt(0L) = (byte)propCode;
             mm.ByteAt(1L) = value;
-            SetValueRet = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)2);
+
+            res = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)2);
+
             mm.Free();
-            DataTools.Win32.Usb.HidFeatures.CloseHid(dev);
-            if (SetValueRet)
+
+            HidFeatures.CloseHid(dev);
+
+            if (res)
             {
-                _Value = value;
+                this.value = value;
+
                 if (IsActiveProperty)
-                    PropertyChanged?.Invoke(this, _propEvent);
+                    PropertyChanged?.Invoke(this, propEvent);
             }
 
-            return SetValueRet;
+            return res;
         }
 
         /// <summary>
@@ -509,8 +536,9 @@ namespace TrippLite
         /// <remarks></remarks>
         public bool MoveTo(TrippLitePropertyBag bag)
         {
-            if (_Model is null || ReferenceEquals(bag, _Bag))
+            if (model is null || ReferenceEquals(bag, propBag))
                 return false;
+
             if (Parent.PropertyBag.Contains(this))
             {
                 if (Parent.PropertyBag.MoveTo(this, bag))
@@ -529,9 +557,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public override string ToString()
         {
-            string ToStringRet = default;
-            ToStringRet = ToString(NumberFormat);
-            return ToStringRet;
+            return ToString(NumberFormat);
         }
 
         /// <summary>
@@ -542,9 +568,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public string ToString(string numFmt)
         {
-            string ToStringRet = default;
-            ToStringRet = ToString(numFmt, false);
-            return ToStringRet;
+            return ToString(numFmt, false);
         }
 
         /// <summary>
@@ -556,9 +580,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public string ToString(string numFmt, bool suppressUnit)
         {
-            string ToStringRet = default;
-            ToStringRet = ((float)(Value * Multiplier)).ToString(numFmt) + (!suppressUnit ? " " + UnitInfo.UnitSymbol : "");
-            return ToStringRet;
+            return ((float)(Value * Multiplier)).ToString(numFmt) + (!suppressUnit ? " " + UnitInfo.UnitSymbol : "");
         }
 
         public static explicit operator double(TrippLiteProperty v)
@@ -579,7 +601,7 @@ namespace TrippLite
         internal void SignalRefresh()
         {
             if (IsActiveProperty)
-                PropertyChanged?.Invoke(this, _propEvent);
+                PropertyChanged?.Invoke(this, propEvent);
         }
 
         #region IDisposable Support
@@ -590,8 +612,8 @@ namespace TrippLite
         {
             if (!disposedValue)
             {
-                _Model = null;
-                _Bag = null;
+                model = null;
+                propBag = null;
             }
 
             disposedValue = true;
@@ -624,7 +646,7 @@ namespace TrippLite
     /// <remarks></remarks>
     public class TrippLitePropertyBag : ObservableCollection<TrippLiteProperty>, IDisposable, IChild<TrippLiteUPS>
     {
-        private TrippLiteUPS _Model;
+        private TrippLiteUPS model;
 
         /// <summary>
         /// Gets the owner TrippLiteUPS object for this property bag.
@@ -636,19 +658,19 @@ namespace TrippLite
         {
             get
             {
-                return _Model;
+                return model;
             }
 
             internal set
             {
-                _Model = value;
+                model = value;
             }
         }
 
         TrippLiteUPS IChild<TrippLiteUPS>.Parent
         {
-            get => _Model;
-            set => _Model = value;
+            get => model;
+            set => model = value;
         }
 
         public TrippLiteProperty FindProperty(TrippLiteCodes c)
@@ -679,14 +701,16 @@ namespace TrippLite
         /// <remarks></remarks>
         public TrippLitePropertyBag(TrippLiteUPS owner, bool autoPopulate) : base()
         {
-            _Model = owner;
+            model = owner;
+        
             if (autoPopulate)
             {
                 var t = GetAllEnumVals<TrippLiteCodes>();
+            
                 int i;
-                int c = t.Length - 1;
-                var loopTo = c;
-                for (i = 0; i <= loopTo; i++)
+                int c = t.Length;
+                
+                for (i = 0; i < c; i++)
                     Add(new TrippLiteProperty(owner, t[i]));
             }
         }
@@ -696,9 +720,12 @@ namespace TrippLite
             if (Contains(item) && !newBag.Contains(item))
             {
                 Remove(item);
+            
                 newBag.Add(item);
-                item._Model = newBag._Model;
-                item._Bag = newBag;
+                
+                item.model = newBag.model;
+                item.propBag = newBag;
+                
                 return true;
             }
 
@@ -724,7 +751,9 @@ namespace TrippLite
                     // TODO: dispose managed state (managed objects).
                     foreach (var x in this)
                         x.Dispose();
+                
                     Clear();
+                    
                     GC.Collect(0);
                 }
 
@@ -735,14 +764,6 @@ namespace TrippLite
             disposedValue = true;
         }
 
-        // TODO: override Finalize() only if Dispose(ByVal disposing As Boolean) above has code to free unmanaged resources.
-        // Protected Overrides Sub Finalize()
-        // ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
-        // Dispose(False)
-        // MyBase.Finalize()
-        // End Sub
-
-        // This code added by Visual Basic to correctly implement the disposable pattern.
         public void Dispose()
         {
             // Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.

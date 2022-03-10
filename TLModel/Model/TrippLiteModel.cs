@@ -28,30 +28,39 @@ namespace TrippLite
         /// <remarks></remarks>
         public TrippLiteUPS(bool connect = true)
         {
-            _Bag = new TrippLitePropertyBag(this);
+            propBag = new TrippLitePropertyBag(this);
+
             if (connect)
                 Connect();
         }
 
         protected MemPtr mm;
-        protected IntPtr _hid;
-        protected DataTools.Win32.Usb.HidDeviceInfo _Power;
-        protected long[] _Values = new long[256];
-        protected bool _conn = false;
-        protected bool _isTL = false;
-        protected PowerStates _PowerState = PowerStates.Uninitialized;
-        protected TrippLitePropertyBag _Bag;
-        protected long _buffLen = 65L;
+        protected IntPtr hHid;
+        
+        protected HidPowerDeviceInfo powerDevice;
+        
+        protected long[] values = new long[256];
+        
+        protected bool connected = false;
+        protected bool isTrippLite = false;
+        
+        protected PowerStates powerState = PowerStates.Uninitialized;
+        
+        protected TrippLitePropertyBag propBag;
+        
+        protected long bufflen = 65L;
 
         public static int DefaultRetries { get; set; } = 2;
+
         public static int DefaultRetryDelay { get; set; } = 1000;
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PowerStateChangedEventHandler PowerStateChanged;
 
         public delegate void PowerStateChangedEventHandler(object sender, PowerStateChangedEventArgs e);
 
-        #region Shared
+        #region Static
 
         /// <summary>
         /// Returns a list of all TrippLite devices.
@@ -59,11 +68,13 @@ namespace TrippLite
         /// <param name="forceRefreshCache">Whether or not to refresh the internal HID power device cache.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-        public static DataTools.Win32.Usb.HidDeviceInfo[] FindAllTrippLiteDevices(bool forceRefreshCache = false)
+        public static HidDeviceInfo[] FindAllTrippLiteDevices(bool forceRefreshCache = false)
         {
-            var lOut = new List<DataTools.Win32.Usb.HidDeviceInfo>();
-            DataTools.Win32.Usb.HidDeviceInfo[] devs;
-            devs = DataTools.Win32.Usb.HidFeatures.HidDevicesByUsage(DataTools.Win32.Usb.HidUsagePage.PowerDevice1);
+            var lOut = new List<HidDeviceInfo>();
+
+            HidDeviceInfo[] devs;
+            devs = HidFeatures.HidDevicesByUsage(HidUsagePage.PowerDevice1);
+
             if (devs is object)
             {
                 foreach (var dev in devs)
@@ -88,8 +99,10 @@ namespace TrippLite
         {
             var devs = FindAllTrippLiteDevices(forceRefreshCache);
             var l = new List<string>();
+
             foreach (var d in devs)
                 l.Add(d.SerialNumber);
+
             return l.ToArray();
         }
 
@@ -104,13 +117,13 @@ namespace TrippLite
         {
             bool do10 = win10 & SysInfo.OSInfo.IsWindows10;
 
-            var shex = new DataTools.Win32.SHELLEXECUTEINFO();
+            var shex = new SHELLEXECUTEINFO();
 
             shex.cbSize = Marshal.SizeOf(shex);
-            shex.fMask = (uint)(DataTools.Win32.User32.SEE_MASK_UNICODE | DataTools.Win32.User32.SEE_MASK_ASYNCOK | DataTools.Win32.User32.SEE_MASK_FLAG_DDEWAIT);
+            shex.fMask = (User32.SEE_MASK_UNICODE | User32.SEE_MASK_ASYNCOK | User32.SEE_MASK_FLAG_DDEWAIT);
             shex.hWnd = hwndOwner;
             shex.hInstApp = Process.GetCurrentProcess().Handle;
-            shex.nShow = DataTools.Win32.User32.SW_SHOW;
+            shex.nShow = User32.SW_SHOW;
 
             if (do10)
             {
@@ -123,7 +136,7 @@ namespace TrippLite
             }
 
             shex.lpVerb = "";
-            DataTools.Win32.User32.ShellExecuteEx(ref shex);
+            User32.ShellExecuteEx(ref shex);
         }
 
         /// <summary>
@@ -132,209 +145,74 @@ namespace TrippLite
         /// <param name="device">Optional manually-selected device.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-        public bool Connect(DataTools.Win32.Usb.HidDeviceInfo device = null)
+        public bool Connect(HidDeviceInfo? device = null)
         {
+            if (disposedValue) return false;
 
-            // ' we won't be connecting if it's already disposed.
-            if (disposedValue)
-                return false;
-            DataTools.Win32.Usb.HidDeviceInfo[] devs;
+            HidDeviceInfo[] devs;
+
             int i = 0;
+
             if (device is null)
             {
                 do
                 {
-                    devs = DataTools.Win32.Usb.HidFeatures.HidDevicesByUsage(DataTools.Win32.Usb.HidUsagePage.PowerDevice1);
-                    var devs2 = DataTools.Win32.Usb.HidFeatures.HidDevicesByUsage(DataTools.Win32.Usb.HidUsagePage.PowerDevice2);
+                    devs = HidFeatures.HidDevicesByUsage(HidUsagePage.PowerDevice1);
+
                     if (devs is object)
                     {
                         foreach (var dev in devs)
                         {
-                            if ((int)dev.Vid == 0x09AE)
+                            if (dev.Vid == 0x09AE)
                             {
-                                _Power = dev;
-                                _isTL = true;
+                                powerDevice = HidPowerDeviceInfo.CreateFromHidDevice(dev);
+                                isTrippLite = true;
+
                                 break;
                             }
                         }
 
-                        if (_Power is null)
-                            _Power = devs[0];
-                        _conn = true;
+                        if (powerDevice is null)
+                            powerDevice = HidPowerDeviceInfo.CreateFromHidDevice(devs[0]);
+
+                        connected = true;
+
                         break;
                     }
 
                     i += 1;
+
                     if (i >= DefaultRetries)
                         break;
+
                     Thread.Sleep(DefaultRetryDelay);
                 }
                 while (true);
             }
             else
             {
-                if ((int)device.Vid == 0x09AE)
+                if (device.Vid == 0x09AE)
                 {
-                    _isTL = true;
+                    isTrippLite = true;
                 }
                 else
                 {
-                    _isTL = false;
+                    isTrippLite = false;
                 }
 
-                _Power = device;
-                _conn = true;
+                powerDevice = HidPowerDeviceInfo.CreateFromHidDevice(device);
+                connected = true;
             }
 
-            i = 0;
-            if (_conn)
+            if (connected)
             {
-                _hid = DataTools.Win32.Usb.HidFeatures.OpenHid(_Power);
-                mm.AllocZero(_buffLen);
+                hHid = HidFeatures.OpenHid(powerDevice);
+                mm.AllocZero(bufflen);
             }
 
-            var result = _conn & _hid.ToInt64() > 0L;
+            var result = connected & hHid.ToInt64() > 0L;
 
-
-            if (result)
-            {
-                EnumHidUsages();
-            }
             return result;
-        }
-
-        IntPtr _preparsed;
-
-        public IEnumerable<PowerFeature> EnumHidUsages()
-        {
-            var res = UsbLibHelpers.HidD_GetPreparsedData(_hid, ref _preparsed);
-
-            if (res)
-            {
-                HidPValueCaps[] valCaps;
-
-                valCaps = UsbLibHelpers.GetValueCaps(HidPReportType.HidP_Feature, _preparsed);
-
-                UsbLibHelpers.HidD_FreePreparsedData(_preparsed);
-
-                if (res)
-                {
-                    List<PowerFeature> results = new List<PowerFeature>();
-
-                    for (int i = 0; i < valCaps.Length; i++)
-                    {
-                        var feature = new PowerFeature(valCaps[i]);
-
-                        feature.PopulateValue(_hid);
-                        results.Add(feature);
-
-                    }
-
-                    return results;
-                }
-
-
-            }
-
-            return null;
-        }
-
-        public class PowerFeature
-        {
-            public bool IsRange => ValueCaps.IsRange;
-            
-            public HidPowerUsageCode? Usage { get; private set; }
-
-            public HidPowerUsageCode LinkUsage { get; private set; }
-
-            public PowerUnitCode Unit { get; private set; }
-
-            public HidPowerUnit UnitInfo { get; private set; }
-
-            public TrippLiteCodes TLCode { get; private set; }
-
-            public HidPValueCaps ValueCaps { get; private set; }
-
-            public byte[] Value { get; private set; }
-
-            public int IntValue { get; private set; }
-
-            public short ShortValue { get; private set; }
-
-            public byte ByteValue { get; private set; }
-
-            public long LongValue { get; private set; }
-
-            private string valstr = "(none)";
-
-            public void PopulateValue(IntPtr hHid)
-            {
-
-                MemPtr mm = new MemPtr();
-
-                int fs = UnitInfo.FieldSize / 8;
-                if (fs == 3) fs = 4;
-                mm.Alloc(UnitInfo.FieldSize + 1);
-                mm.ByteAt(0) = (byte)Usage;
-
-                UsbLibHelpers.HidD_GetFeature(hHid, mm.Handle, (int)UnitInfo.FieldSize + 1);
-
-                Value = mm.ToByteArray(1, UnitInfo.FieldSize - 1);
-                
-                
-                switch (UnitInfo.FieldSize)
-                {
-                    case 8:
-                        ByteValue = mm.ByteAt(1);
-                        valstr = ByteValue.ToString();
-                        break;
-
-                    case 16:
-                        ShortValue = mm.ShortAtAbsolute(1);
-                        valstr = ShortValue.ToString();
-                        break;
-
-                    case 24:
-                        IntValue = mm.IntAtAbsolute(1);
-                        valstr = IntValue.ToString();
-                        break;
-
-                    default:
-                        throw new NotSupportedException();
-                }
-                
-                mm.Free();
-
-            }
-
-            public PowerFeature(HidPValueCaps valueCaps)
-            {
-                Unit = (PowerUnitCode)valueCaps.Units;
-
-                Usage = (HidPowerUsageCode)valueCaps.Usage;
-
-                LinkUsage = (HidPowerUsageCode)valueCaps.LinkUsage;
-
-                ValueCaps = valueCaps;
-                UnitInfo = HidPowerUnit.GetByCode(Unit);
-                TLCode = (TrippLiteCodes)((Usage) ?? LinkUsage);
-            }
-
-            static Dictionary<string, string> CodeRef = new Dictionary<string, string>();
-
-            static PowerFeature()
-            {
-                for(int i = 0; i < 255; i++)
-                {
-                    CodeRef.Add($"{(HidPowerUsageCode)i}: {i})", $"{(TrippLiteCodes)(i - 2)}: {i - 2}");
-                }
-            }
-
-            public override string ToString()
-            {
-                return $" {(int)(Usage ?? 0)}: {Usage} / {(int)LinkUsage}: {LinkUsage} / {UnitInfo.Name} / (TL Code: {TLCode}) : {valstr}";
-            }
-
         }
 
         /// <summary>
@@ -346,19 +224,16 @@ namespace TrippLite
         {
             try
             {
-                if (_preparsed != IntPtr.Zero)
-                {
-                    UsbLibHelpers.HidD_FreePreparsedData(_preparsed);
-                    _preparsed = IntPtr.Zero;
-                }
-
                 mm.Free();
-                DataTools.Win32.Usb.HidFeatures.CloseHid(_hid);
-                _hid = (IntPtr)(-1);
-                _conn = false;
-                _Power = null;
+
+                HidFeatures.CloseHid(hHid);
+
+                hHid = (IntPtr)(-1);
+
+                connected = false;
+                powerDevice = null;
             }
-            catch (Exception ex)
+            catch 
             {
                 return false;
             }
@@ -380,7 +255,7 @@ namespace TrippLite
         {
             get
             {
-                return _conn;
+                return connected;
             }
         }
 
@@ -394,16 +269,16 @@ namespace TrippLite
         {
             get
             {
-                return _PowerState;
+                return powerState;
             }
 
             protected set
             {
-                if (_PowerState != value)
+                if (powerState != value)
                 {
-                    var os = _PowerState;
-                    _PowerState = value;
-                    PowerStateChanged?.Invoke(this, new PowerStateChangedEventArgs(os, _PowerState));
+                    var os = powerState;
+                    powerState = value;
+                    PowerStateChanged?.Invoke(this, new PowerStateChangedEventArgs(os, powerState));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PowerState"));
                 }
             }
@@ -422,7 +297,7 @@ namespace TrippLite
 
                 // ' retrieve the 'Description' property (as string) of the DescriptionAttribute
                 // ' associated with the specified field of the PowerStates enumeration.
-                return GetEnumAttrVal<DescriptionAttribute, string, PowerStates>(_PowerState, "Description");
+                return GetEnumAttrVal<DescriptionAttribute, string, PowerStates>(powerState, "Description");
             }
         }
 
@@ -436,7 +311,7 @@ namespace TrippLite
         {
             get
             {
-                return GetEnumAttrVal<DetailAttribute, string, PowerStates>(_PowerState, "Detail");
+                return GetEnumAttrVal<DetailAttribute, string, PowerStates>(powerState, "Detail");
             }
         }
 
@@ -464,7 +339,7 @@ namespace TrippLite
         {
             get
             {
-                return "SMART" + _Bag.FindProperty(TrippLiteCodes.VARATING).GetValue() + "LCDx";
+                return "SMART" + propBag.FindProperty(TrippLiteCodes.VARATING).GetValue() + "LCDx";
             }
         }
 
@@ -478,7 +353,7 @@ namespace TrippLite
         {
             get
             {
-                return _Bag;
+                return propBag;
             }
         }
 
@@ -492,7 +367,7 @@ namespace TrippLite
         {
             get
             {
-                return _isTL;
+                return isTrippLite;
             }
         }
 
@@ -502,11 +377,11 @@ namespace TrippLite
         /// <value></value>
         /// <returns></returns>
         /// <remarks></remarks>
-        public DataTools.Win32.Usb.HidDeviceInfo Device
+        public HidPowerDeviceInfo Device
         {
             get
             {
-                return _Power;
+                return powerDevice;
             }
         }
 
@@ -521,9 +396,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public bool RefreshData(System.Windows.DependencyObject dep = null)
         {
-            bool RefreshDataRet = default;
-            RefreshDataRet = RefreshData(DefaultRetries, DefaultRetryDelay, dep);
-            return RefreshDataRet;
+            return RefreshData(DefaultRetries, DefaultRetryDelay, dep);
         }
 
         /// <summary>
@@ -539,7 +412,7 @@ namespace TrippLite
             int i = 0;
             do
             {
-                b = _internalRefresh(dep);
+                b = InternalRefresh(dep);
                 if (b == true)
                     return true;
                 i += 1;
@@ -560,7 +433,7 @@ namespace TrippLite
         public void SignalRefresh()
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PowerState"));
-            _Bag.SignalRefresh();
+            propBag.SignalRefresh();
         }
 
         #endregion
@@ -569,49 +442,56 @@ namespace TrippLite
 
         static int lps;
 
-        protected bool _internalRefresh(System.Windows.DependencyObject dep = null)
+        protected bool InternalRefresh(System.Windows.DependencyObject dep = null)
         {
-            if (!_conn)
+            if (!connected)
                 return false;
+
             int v;
             int ret = 0;
+
             double max;
+
             int lpsMax = 0;
+
             double min;
+
             var volt = default(double);
+
             bool involtRet = false;
-            var cex = new List<TrippLiteProperty>();
+            var activeProps = new List<TrippLiteProperty>();
+
             try
             {
-                foreach (var prop in _Bag)
+                foreach (var prop in propBag)
                 {
                     mm.LongAtAbsolute(1L) = 0L;
                     mm.ByteAt(0) = (byte)prop.Code;
-                    var res = DataTools.Win32.Usb.HidFeatures.GetHIDFeature(_hid, (int)prop.Code, (int)_buffLen);
+
+                    var res = HidFeatures.GetHIDFeature(hHid, (int)prop.Code, (int)bufflen);
+
                     if (res != null)
                     {
                         v = res.intVal;
                         switch (prop.Code)
                         {
                             case TrippLiteCodes.InputVoltage:
-                                {
-                                    volt = v * prop.Multiplier;
-                                    involtRet = true;
-                                    break;
-                                }
+                                volt = v * prop.Multiplier;
+                                involtRet = true;
+
+                                break;
 
                             case TrippLiteCodes.OutputLoad:
-                                {
-                                    if (v > 100 || v < 0)
-                                        v = (int)prop.Value;
-                                    break;
-                                }
+                                if (v > 100 || v < 0)
+                                    v = (int)prop.Value;
+
+                                break;
                         }
 
-                        if (prop._Value != v || prop._Value == -1)
+                        if (prop.value != v || prop.value == -1)
                         {
-                            prop._Value = v;
-                            cex.Add(prop);
+                            prop.value = v;
+                            activeProps.Add(prop);
                         }
                     }
                 }
@@ -629,124 +509,117 @@ namespace TrippLite
 
             if (involtRet == true)
             {
-                min = _Bag.FindProperty(TrippLiteCodes.LowVoltageTransfer).Value;
-                max = _Bag.FindProperty(TrippLiteCodes.HighVoltageTransfer).Value;
+                min = propBag.FindProperty(TrippLiteCodes.LowVoltageTransfer).Value;
+                max = propBag.FindProperty(TrippLiteCodes.HighVoltageTransfer).Value;
+
                 switch (volt)
                 {
                     case 0d:
+                        if (PowerState != PowerStates.Battery)
                         {
-                            if (PowerState != PowerStates.Battery)
+                            if (lps >= lpsMax)
                             {
-                                if (lps >= lpsMax)
+                                if (dep is object)
                                 {
-                                    if (dep is object)
-                                    {
-                                        dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.Battery);
-                                    }
-                                    else
-                                    {
-                                        PowerState = PowerStates.Battery;
-                                    }
-
-                                    lps = 0;
+                                    dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.Battery);
                                 }
-                            }
-                            else
-                            {
-                                lps += 1;
-                            }
+                                else
+                                {
+                                    PowerState = PowerStates.Battery;
+                                }
 
-                            break;
+                                lps = 0;
+                            }
                         }
+                        else
+                        {
+                            lps += 1;
+                        }
+
+                        break;
 
                     case var @case when @case <= min:
+                        if (PowerState != PowerStates.BatteryTransferLow)
                         {
-                            if (PowerState != PowerStates.BatteryTransferLow)
+                            if (lps >= lpsMax)
                             {
-                                if (lps >= lpsMax)
+                                if (dep is object)
                                 {
-                                    if (dep is object)
-                                    {
-                                        dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.BatteryTransferLow);
-                                    }
-                                    else
-                                    {
-                                        PowerState = PowerStates.BatteryTransferLow;
-                                    }
-
-                                    lps = 0;
+                                    dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.BatteryTransferLow);
                                 }
-                            }
-                            else
-                            {
-                                lps += 1;
-                            }
+                                else
+                                {
+                                    PowerState = PowerStates.BatteryTransferLow;
+                                }
 
-                            break;
+                                lps = 0;
+                            }
                         }
+                        else
+                        {
+                            lps += 1;
+                        }
+
+                        break;
 
                     case var case1 when case1 >= max:
+                        if (PowerState != PowerStates.BatteryTransferHigh)
                         {
-                            if (PowerState != PowerStates.BatteryTransferHigh)
+                            if (lps >= lpsMax)
                             {
-                                if (lps >= lpsMax)
+                                if (dep is object)
                                 {
-                                    if (dep is object)
-                                    {
-                                        dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.BatteryTransferHigh);
-                                    }
-                                    else
-                                    {
-                                        PowerState = PowerStates.BatteryTransferHigh;
-                                    }
-
-                                    lps = 0;
+                                    dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.BatteryTransferHigh);
                                 }
-                            }
-                            else
-                            {
-                                lps += 1;
-                            }
+                                else
+                                {
+                                    PowerState = PowerStates.BatteryTransferHigh;
+                                }
 
-                            break;
+                                lps = 0;
+                            }
                         }
+                        else
+                        {
+                            lps += 1;
+                        }
+
+                        break;
 
                     default:
+                        if (PowerState != PowerStates.Utility)
                         {
-                            if (PowerState != PowerStates.Utility)
+                            if (lps >= lpsMax)
                             {
-                                if (lps >= lpsMax)
+                                if (dep is object)
                                 {
-                                    if (dep is object)
-                                    {
-                                        dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.Utility);
-                                    }
-                                    else
-                                    {
-                                        PowerState = PowerStates.Utility;
-                                    }
-
-                                    lps = 0;
+                                    dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.Utility);
                                 }
-                            }
-                            else
-                            {
-                                lps += 1;
-                            }
+                                else
+                                {
+                                    PowerState = PowerStates.Utility;
+                                }
 
-                            break;
+                                lps = 0;
+                            }
                         }
+                        else
+                        {
+                            lps += 1;
+                        }
+
+                        break;
                 }
             }
 
             if (dep is object)
             {
-                foreach (var prop in cex)
+                foreach (var prop in activeProps)
                     dep.Dispatcher.BeginInvoke(() => prop.SignalRefresh());
             }
             else
             {
-                foreach (var prop in cex)
+                foreach (var prop in activeProps)
                     prop.SignalRefresh();
             }
 
@@ -789,14 +662,14 @@ namespace TrippLite
 
     public class PowerStateChangedEventArgs : EventArgs
     {
-        private PowerStates _oldState;
-        private PowerStates _newState;
+        private PowerStates oldState;
+        private PowerStates newState;
 
         public PowerStates OldState
         {
             get
             {
-                return _oldState;
+                return oldState;
             }
         }
 
@@ -804,14 +677,14 @@ namespace TrippLite
         {
             get
             {
-                return _newState;
+                return newState;
             }
         }
 
         public PowerStateChangedEventArgs(PowerStates o, PowerStates n)
         {
-            _oldState = o;
-            _newState = n;
+            oldState = o;
+            newState = n;
         }
     }
 }

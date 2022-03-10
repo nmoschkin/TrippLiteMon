@@ -13,42 +13,39 @@ using System.Windows.Media;
 
 using DataTools.Scheduler;
 
-using Microsoft.VisualBasic.CompilerServices;
-
 namespace TrippLite
 {
     public class TrippLiteViewModel : DependencyObject, INotifyPropertyChanged, IDisposable
     {
-        private bool _init = false;
-        private Thread _waitInit;
-        private TrippLiteUPS __TrippLite;
+        private bool initialized = false;
+        private Thread waitInit;
+        private TrippLiteUPS trippLite;
 
-        private TrippLiteUPS _TrippLite
+        private TrippLiteUPS SyncModel
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get
             {
-                return __TrippLite;
+                return trippLite;
             }
-
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (__TrippLite != null)
+                if (trippLite != null)
                 {
 
-                    __TrippLite.PowerStateChanged -= _TrippLite_PowerStateChanged;
+                    trippLite.PowerStateChanged -= OnPowerStateChanged;
                 }
 
-                __TrippLite = value;
-                if (__TrippLite != null)
+                trippLite = value;
+                if (trippLite != null)
                 {
-                    __TrippLite.PowerStateChanged += _TrippLite_PowerStateChanged;
+                    trippLite.PowerStateChanged += OnPowerStateChanged;
                 }
             }
         }
 
-        private bool _Running = false;
+        private bool isRunning = false;
 
         public int MaxTries { get; set; } = 100;
         public int TimerInterval { get; set; } = 200;
@@ -57,8 +54,8 @@ namespace TrippLite
         public TrippLitePropertyBagViewModel ProminentProperties { get; set; }
         public TrippLitePropertyBagViewModel LoadProperties { get; set; }
 
-        private Thread _WThread;
-        private TrippLitePropertyViewModel _lbProp;
+        private Thread wthread;
+        private TrippLitePropertyViewModel lbProp;
 
         public event ViewModelInitializedEventHandler ViewModelInitialized;
 
@@ -78,7 +75,7 @@ namespace TrippLite
         {
             get
             {
-                return LoadBarHandler.HandleLoadBarValue(Conversions.ToDouble(GetValue(LoadBarValueProperty)));
+                return LoadBarHandler.HandleLoadBarValue((double)GetValue(LoadBarValueProperty));
             }
         }
 
@@ -89,7 +86,7 @@ namespace TrippLite
                 throw new ArgumentNullException("element");
             }
 
-            return Conversions.ToDouble(element.GetValue(LoadBarValueProperty));
+            return (double)element.GetValue(LoadBarValueProperty);
         }
 
         private static readonly DependencyPropertyKey LoadBarValuePropertyKey = DependencyProperty.RegisterAttachedReadOnly("LoadBarValue", typeof(double), typeof(TrippLiteViewModel), new PropertyMetadata(null));
@@ -109,25 +106,25 @@ namespace TrippLite
                 LoadBarHandler = handler;
             }
 
-            _lbProp = prop;
-            _lbProp.IsActiveProperty = true;
-            Dispatcher.Invoke(() => LoadBarWatch(this, new PropertyChangedEventArgs("LoadBarValue")));
-            _lbProp.PropertyChanged += LoadBarWatch;
+            lbProp = prop;
+            lbProp.IsActiveProperty = true;
+            Dispatcher.Invoke(() => LoadBarWatch(this, new PropertyChangedEventArgs(nameof(LoadBarValue))));
+            lbProp.PropertyChanged += LoadBarWatch;
         }
 
         public void ClearLoadBarProperty()
         {
-            if (_lbProp is object)
+            if (lbProp is object)
             {
-                _lbProp.PropertyChanged -= LoadBarWatch;
-                _lbProp = null;
+                lbProp.PropertyChanged -= LoadBarWatch;
+                lbProp = null;
             }
         }
 
         private void LoadBarWatch(object sender, PropertyChangedEventArgs e)
         {
-            Dispatcher.BeginInvoke(new Action(() => SetValue(LoadBarValuePropertyKey, (double)_lbProp.Value)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LoadBarValue"));
+            Dispatcher.BeginInvoke(new Action(() => SetValue(LoadBarValuePropertyKey, (double)lbProp.Value)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LoadBarValue)));
         }
 
         #endregion
@@ -138,7 +135,7 @@ namespace TrippLite
         {
             get
             {
-                return Conversions.ToString(GetValue(TitleProperty));
+                return (string)GetValue(TitleProperty);
             }
         }
 
@@ -151,7 +148,7 @@ namespace TrippLite
         {
             get
             {
-                return Conversions.ToString(GetValue(SerialNumberProperty));
+                return (string)GetValue(SerialNumberProperty);
             }
         }
 
@@ -164,7 +161,7 @@ namespace TrippLite
         {
             get
             {
-                return Conversions.ToString(GetValue(ProductStringProperty));
+                return (string)GetValue(ProductStringProperty);
             }
         }
 
@@ -177,7 +174,7 @@ namespace TrippLite
         {
             get
             {
-                return Conversions.ToString(GetValue(ModelIdProperty));
+                return (string)GetValue(ModelIdProperty);
             }
         }
 
@@ -190,11 +187,11 @@ namespace TrippLite
         {
             get
             {
-                return (PowerStates)Conversions.ToInteger(GetValue(PowerStateProperty));
+                return (PowerStates)GetValue(PowerStateProperty);
             }
         }
 
-        private static readonly DependencyPropertyKey PowerStatePropertyKey = DependencyProperty.RegisterReadOnly("PowerState", typeof(PowerStates), typeof(TrippLiteViewModel), new PropertyMetadata(null));
+        private static readonly DependencyPropertyKey PowerStatePropertyKey = DependencyProperty.RegisterReadOnly("PowerState", typeof(PowerStates), typeof(TrippLiteViewModel), new PropertyMetadata(PowerStates.Uninitialized));
 
 
         public static readonly DependencyProperty PowerStateProperty = PowerStatePropertyKey.DependencyProperty;
@@ -203,7 +200,7 @@ namespace TrippLite
         {
             get
             {
-                return Conversions.ToString(GetValue(PowerStateDescriptionProperty));
+                return (string)GetValue(PowerStateDescriptionProperty);
             }
         }
 
@@ -216,7 +213,7 @@ namespace TrippLite
         {
             get
             {
-                return Conversions.ToString(GetValue(PowerStateDetailProperty));
+                return (string)GetValue(PowerStateDetailProperty);
             }
         }
 
@@ -248,30 +245,21 @@ namespace TrippLite
                     switch (PowerState)
                     {
                         case PowerStates.Utility:
-                            {
-                                return Color.FromRgb(0, 128, 0);
-                            }
+                            return Color.FromRgb(0, 128, 0);
 
                         case PowerStates.Battery:
-                            {
-                                return Color.FromRgb(128, 128, 0);
-                            }
+                            return Color.FromRgb(128, 128, 0);
 
                         default:
-                            {
-                                return Color.FromRgb(128, 0, 0);
-                            }
+                            return Color.FromRgb(128, 0, 0);
                     }
                 }
-                catch (Exception ex)
+                catch 
                 {
                     return Color.FromArgb(255, 255, 255, 255);
                 }
             }
         }
-
-
-
 
         public bool RunOnStartup
         {
@@ -346,62 +334,72 @@ namespace TrippLite
         {
 
 
-            if (_init)
+            if (initialized)
                 return false;
             try
             {
-                _TrippLite = new TrippLiteUPS(false);
-                if (_TrippLite.Connected == false)
+                SyncModel = new TrippLiteUPS(false);
+                if (SyncModel.Connected == false)
                 {
-                    _waitInit = new Thread(() =>
+                    waitInit = new Thread(() =>
                     {
-                        int i;
-                        var loopTo = MaxTries;
-                        for (i = 0; i <= loopTo; i++)
+                        for (var i = 0; i < MaxTries; i++)
                         {
                             Thread.Sleep(100);
-                            _TrippLite.Connect();
-                            if (_TrippLite is object && _TrippLite.IsTrippLite)
+                            SyncModel.Connect();
+                        
+                            if (SyncModel is object && SyncModel.IsTrippLite)
                             {
                                 Dispatcher.Invoke(() =>
                                 {
-                                    _init = true;
-                                    _internalInit();
-                                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrippLite"));
-                                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Properties"));
-                                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ProminentProperties"));
+                                    initialized = true;
+                                    
+                                    InternalInit();
+                                    
+                                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrippLite)));
+                                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Properties)));
+                                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ProminentProperties)));
+                                
                                     ViewModelInitialized?.Invoke(this, new EventArgs());
                                 });
-                                _waitInit = null;
+                            
+                                waitInit = null;
+                                
                                 return;
                             }
                         }
                     });
-                    _waitInit.SetApartmentState(ApartmentState.MTA);
-                    _waitInit.IsBackground = false;
-                    _waitInit.Start();
+                    
+                    waitInit.SetApartmentState(ApartmentState.MTA);
+                    waitInit.IsBackground = false;
+                    waitInit.Start();
+                    
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
                 return false;
             }
 
-            _init = true;
-            _internalInit();
+            initialized = true;
+            
+            InternalInit();
+            
             ViewModelInitialized?.Invoke(this, new EventArgs());
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrippLite"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrippLite)));
+            
             return true;
         }
 
-        private void _internalInit()
+        private void InternalInit()
         {
 
             // ' build the view model property collection
 
             TrippLitePropertyViewModel pl;
-            foreach (var p in _TrippLite.PropertyBag)
+
+            foreach (var p in SyncModel.PropertyBag)
             {
                 if (p.Code != TrippLiteCodes.InputVoltage && p.Code != TrippLiteCodes.OutputVoltage)
                 {
@@ -417,20 +415,26 @@ namespace TrippLite
             }
 
             PromoteToLoad(TrippLiteCodes.OutputPower);
+            
             MakeLoadBarProperty(FindProperty(TrippLiteCodes.OutputLoad));
-            this.SetValue(ProductStringPropertyKey, _TrippLite.Device.ProductString);
-            SetValue(ModelIdPropertyKey, _TrippLite.ModelId);
-            this.SetValue(SerialNumberPropertyKey, _TrippLite.Device.SerialNumber);
-            SetValue(TitlePropertyKey, _TrippLite.Title);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Properties"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ProminentProperties"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ProductString"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ModelId"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SerialNumber"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Title"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PowerState"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PowerStateDescription"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PowerStateDetail"));
+
+            SetValue(ProductStringPropertyKey, SyncModel.Device.ProductString);
+
+            SetValue(ModelIdPropertyKey, SyncModel.ModelId);
+
+            SetValue(SerialNumberPropertyKey, SyncModel.Device.SerialNumber);
+
+            SetValue(TitlePropertyKey, SyncModel.Title);
+            
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Properties)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ProminentProperties)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ProductString)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ModelId)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SerialNumber)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Title)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PowerState)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PowerStateDescription)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PowerStateDetail)));
         }
 
         #endregion
@@ -441,7 +445,7 @@ namespace TrippLite
         {
             get
             {
-                return _init;
+                return initialized;
             }
         }
 
@@ -450,7 +454,7 @@ namespace TrippLite
             get
             {
                 TrippLiteUPS TrippLiteRet = default;
-                TrippLiteRet = _TrippLite;
+                TrippLiteRet = SyncModel;
                 return TrippLiteRet;
             }
         }
@@ -473,6 +477,7 @@ namespace TrippLite
         public void PromoteToLoad(TrippLiteCodes code, bool removeFromList = false)
         {
             TrippLitePropertyViewModel pm = null;
+
             foreach (var currentPm in Properties)
             {
                 pm = currentPm;
@@ -483,43 +488,55 @@ namespace TrippLite
 
             if (pm is null)
                 return;
+
             if (removeFromList)
                 Properties.Remove(pm);
+
             LoadProperties.Add(pm);
         }
 
         public void DemoteFromLoad(TrippLiteCodes code)
         {
             TrippLitePropertyViewModel pm = null;
+
             foreach (var currentPm in ProminentProperties)
             {
                 pm = currentPm;
+
                 if (pm.Code == code)
                     break;
+
                 pm = null;
             }
 
             if (pm is null)
                 return;
+
             if (LoadProperties.Contains(pm))
                 LoadProperties.Remove(pm);
+
             Properties.Add(pm);
         }
 
         public void PromoteProperty(TrippLiteCodes code)
         {
             TrippLitePropertyViewModel pm = null;
+
             foreach (var currentPm in Properties)
             {
                 pm = currentPm;
+
                 if (pm.Code == code)
                     break;
+
                 pm = null;
             }
 
             if (pm is null)
                 return;
+
             pm.Prominent = true;
+
             Properties.Remove(pm);
             ProminentProperties.Add(pm);
         }
@@ -527,17 +544,22 @@ namespace TrippLite
         public void DemoteProperty(TrippLiteCodes code)
         {
             TrippLitePropertyViewModel pm = null;
+
             foreach (var currentPm in ProminentProperties)
             {
                 pm = currentPm;
+
                 if (pm.Code == code)
                     break;
+
                 pm = null;
             }
 
             if (pm is null)
                 return;
+
             pm.Prominent = false;
+
             ProminentProperties.Remove(pm);
             Properties.Add(pm);
         }
@@ -550,38 +572,39 @@ namespace TrippLite
 
         public bool IsTimerRunning
         {
-            get
-            {
-                bool IsTimerRunningRet = default;
-                IsTimerRunningRet = _Running;
-                return IsTimerRunningRet;
-            }
+            get => isRunning;
         }
 
         public void StopWatching()
         {
-            if (_WThread is null)
+            if (wthread is null)
                 return;
-            _Running = false;
+
+            isRunning = false;
+
             cts?.Cancel();
             cts = null;
-            _WThread = null;
+
+            wthread = null;
         }
 
         public void StartWatching()
         {
-            if (!_init)
+            if (!initialized)
                 return;
+
             long ti = TimerInterval;
-            if (_WThread is object)
+
+            if (wthread is object)
             {
                 return;
             }
 
             cts = new CancellationTokenSource();
 
-            _Running = true;
-            _WThread = new Thread(async () =>
+            isRunning = true;
+
+            wthread = new Thread(async () =>
             {
                 long tinc = 0L;
 
@@ -589,14 +612,14 @@ namespace TrippLite
 
                 do
                 {
-                    if (!_Running || Thread.CurrentThread.ThreadState == System.Threading.ThreadState.AbortRequested)
+                    if (!isRunning || Thread.CurrentThread.ThreadState == System.Threading.ThreadState.AbortRequested)
                         return;
-                    if (!_TrippLite.RefreshData(this))
+                    if (!SyncModel.RefreshData(this))
                     {
-                        _Running = false;
+                        isRunning = false;
                     }
 
-                    if (!_Running)
+                    if (!isRunning)
                     {
                         return;
                     }
@@ -618,9 +641,11 @@ namespace TrippLite
                 }
                 while (!cts?.IsCancellationRequested ?? false);
             });
-            _WThread.IsBackground = true;
-            _WThread.SetApartmentState(ApartmentState.STA);
-            _WThread.Start();
+
+            wthread.IsBackground = true;
+            wthread.SetApartmentState(ApartmentState.STA);
+
+            wthread.Start();
         }
 
         #endregion
@@ -633,15 +658,15 @@ namespace TrippLite
         {
             if (!disposedValue)
             {
-                if (_waitInit is object)
+                if (waitInit is object)
                 {
-                    _waitInit.Abort();
-                    _waitInit = null;
+                    waitInit.Abort();
+                    waitInit = null;
                 }
 
                 StopWatching();
-                _TrippLite.Dispose();
-                _TrippLite = null;
+                SyncModel.Dispose();
+                SyncModel = null;
                 if (disposing)
                 {
                     ClearLoadBarProperty();
@@ -668,19 +693,23 @@ namespace TrippLite
             GC.SuppressFinalize(this);
         }
 
-        private void _TrippLite_PowerStateChanged(object sender, PowerStateChangedEventArgs e)
+        #endregion
+
+        private void OnPowerStateChanged(object sender, PowerStateChangedEventArgs e)
         {
             Dispatcher.Invoke(() =>
             {
-                SetValue(PowerStatePropertyKey, _TrippLite.PowerState);
-                SetValue(PowerStateDescriptionPropertyKey, _TrippLite.PowerStateDescription);
-                SetValue(PowerStateDetailPropertyKey, _TrippLite.PowerStateDetail);
+                SetValue(PowerStatePropertyKey, SyncModel.PowerState);
+                SetValue(PowerStateDescriptionPropertyKey, SyncModel.PowerStateDescription);
+                SetValue(PowerStateDetailPropertyKey, SyncModel.PowerStateDetail);
                 SetValue(UtilityColorPropertyKey, UtilityColorBackground);
+                
                 PowerStateChanged?.Invoke(this, e);
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PowerState"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PowerStateDescription"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PowerStateDetail"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UtilityColor"));
+        
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PowerState)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PowerStateDescription)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PowerStateDetail)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UtilityColor)));
             });
         }
     }
@@ -693,37 +722,40 @@ namespace TrippLite
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private TrippLiteProperty __Prop;
+        private TrippLiteProperty prop;
 
-        private TrippLiteProperty _Prop
+        private TrippLiteProperty PropSync
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get
             {
-                return __Prop;
+                return prop;
             }
 
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (__Prop != null)
+                if (prop != null)
                 {
-                    __Prop.PropertyChanged -= _Prop_PropertyChanged;
+                    prop.PropertyChanged -= _Prop_PropertyChanged;
                 }
 
-                __Prop = value;
-                if (__Prop != null)
+                prop = value;
+                if (prop != null)
                 {
-                    __Prop.PropertyChanged += _Prop_PropertyChanged;
+                    prop.PropertyChanged += _Prop_PropertyChanged;
                 }
             }
         }
 
-        private bool _Changed;
-        private bool _Prominent;
-        private TrippLiteViewModel _Owner;
-        private string _DisplayValue = null;
-        private PropertyChangedEventArgs _DispEvent = new PropertyChangedEventArgs("DisplayValue");
+        private bool changed;
+        private bool isProminent;
+
+        private TrippLiteViewModel owner;
+
+        private string displayValue = null;
+
+        private PropertyChangedEventArgs dispEvent = new PropertyChangedEventArgs(nameof(DisplayValue));
 
         /// <summary>
         /// Creates a new object with the specified base object and owner.
@@ -738,14 +770,15 @@ namespace TrippLite
                 throw new ArgumentException();
             }
 
-            _Owner = owner;
-            _Prop = p;
-            if (_Prop._Value == -1)
+            this.owner = owner;
+            PropSync = p;
+
+            if (PropSync.value == -1)
             {
-                _Prop._Value = 0L;
+                PropSync.value = 0L;
             }
 
-            _DisplayValue = _Prop.ToString(_Prop.NumberFormat, true);
+            displayValue = PropSync.ToString(PropSync.NumberFormat, true);
         }
 
         /// <summary>
@@ -758,19 +791,18 @@ namespace TrippLite
         {
             get
             {
-                return _Owner;
+                return owner;
             }
-
             internal set
             {
-                _Owner = value;
+                owner = value;
             }
         }
 
         TrippLiteViewModel IChild<TrippLiteViewModel>.Parent
         {
-            get => _Owner;
-            set => _Owner = value;
+            get => owner;
+            set => owner = value;
         }
 
         /// <summary>
@@ -783,12 +815,12 @@ namespace TrippLite
         {
             get
             {
-                return _Prop.IsActiveProperty;
+                return PropSync.IsActiveProperty;
             }
-
             set
             {
-                _Prop.IsActiveProperty = value;
+                PropSync.IsActiveProperty = value;
+
                 if (value)
                     SetDisplayValue();
             }
@@ -804,12 +836,11 @@ namespace TrippLite
         {
             get
             {
-                return _Prominent;
+                return isProminent;
             }
-
             internal set
             {
-                _Prominent = value;
+                isProminent = value;
             }
         }
 
@@ -823,7 +854,7 @@ namespace TrippLite
         {
             get
             {
-                return _Prop.Value;
+                return PropSync.Value;
             }
         }
 
@@ -837,7 +868,7 @@ namespace TrippLite
         {
             get
             {
-                return _Prop.Code;
+                return PropSync.Code;
             }
         }
 
@@ -851,7 +882,7 @@ namespace TrippLite
         {
             get
             {
-                return _Prop.Description;
+                return PropSync.Description;
             }
         }
 
@@ -865,7 +896,7 @@ namespace TrippLite
         {
             get
             {
-                return _DisplayValue;
+                return displayValue;
             }
         }
 
@@ -875,13 +906,13 @@ namespace TrippLite
         /// <remarks></remarks>
         public void SetDisplayValue()
         {
-            if (_Prominent)
+            if (isProminent)
             {
-                _DisplayValue = _Prop.ToString(_Prop.NumberFormat, true);
+                displayValue = PropSync.ToString(PropSync.NumberFormat, true);
             }
             else
             {
-                _DisplayValue = _Prop.ToString();
+                displayValue = PropSync.ToString();
             }
         }
 
@@ -892,18 +923,16 @@ namespace TrippLite
         /// <remarks></remarks>
         public override string ToString()
         {
-            return _DisplayValue;
+            return displayValue;
         }
 
         private void _Prop_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (!_Prop.IsActiveProperty)
+            if (!PropSync.IsActiveProperty)
                 return;
             SetDisplayValue();
-            PropertyChanged?.Invoke(this, _DispEvent);
+            PropertyChanged?.Invoke(this, dispEvent);
         }
-
-        #endregion
 
         #region IDisposable Support
         private bool disposedValue; // To detect redundant calls
@@ -913,7 +942,7 @@ namespace TrippLite
         {
             if (!disposedValue)
             {
-                _Prop.Dispose();
+                PropSync.Dispose();
             }
 
             disposedValue = true;
@@ -939,22 +968,22 @@ namespace TrippLite
 
         public static explicit operator ulong(TrippLitePropertyViewModel val)
         {
-            return (ulong)val._Prop._Value;
+            return (ulong)val.PropSync.value;
         }
 
         public static implicit operator long(TrippLitePropertyViewModel val)
         {
-            return val._Prop._Value;
+            return val.PropSync.value;
         }
 
         public static explicit operator uint(TrippLitePropertyViewModel val)
         {
-            return (uint)val._Prop._Value;
+            return (uint)val.PropSync.value;
         }
 
         public static explicit operator int(TrippLitePropertyViewModel val)
         {
-            return (int)val._Prop._Value;
+            return (int)val.PropSync.value;
         }
 
         #endregion
@@ -989,8 +1018,6 @@ namespace TrippLite
 
     public class LoadBarPropertyHandler
     {
-
-
         /// <summary>
         /// Creates a new object with the specified get and set minimum and maximum value delegate functions and optional intial value.
         /// </summary>
@@ -1001,18 +1028,14 @@ namespace TrippLite
         /// <param name="value">The optional initial value.</param>
         /// <remarks></remarks>
         public LoadBarPropertyHandler(GetMinimumValue getMinFunc, SetMinimumValue setMinFunc, GetMaximumValue getMaxFunc, SetMaximumValue setMaxFunc, double value = 0d)
-
-
         {
-            _getMin = new GetMinimumValue(() => _min);
-            _getMax = new GetMaximumValue(() => _max);
-            _setMin = new SetMinimumValue((v) => _min = v);
-            _setMax = new SetMaximumValue((v) => _max = v);
-            _setMax = setMaxFunc;
-            _getMax = getMaxFunc;
-            _setMin = setMinFunc;
-            _getMin = getMinFunc;
-            _Value = value;
+            setMax = setMaxFunc;
+            getMax = getMaxFunc;
+
+            setMin = setMinFunc;
+            getMin = getMinFunc;
+
+            this.value = value;
         }
 
         /// <summary>
@@ -1024,23 +1047,26 @@ namespace TrippLite
         /// <remarks></remarks>
         public LoadBarPropertyHandler(double minVal, double maxVal, double value)
         {
-            _getMin = new GetMinimumValue(() => _min);
-            _getMax = new GetMaximumValue(() => _max);
-            _setMin = new SetMinimumValue((v) => _min = v);
-            _setMax = new SetMaximumValue((v) => _max = v);
+            getMin = new GetMinimumValue(() => min);
+            getMax = new GetMaximumValue(() => max);
+
+            setMin = new SetMinimumValue((v) => min = v);
+            setMax = new SetMaximumValue((v) => max = v);
+
             MinValue = minVal;
             MaxValue = maxVal;
+
             if (value < minVal || value > maxVal)
             {
                 throw new ArgumentOutOfRangeException("Value cannot be less than minVal or greater than maxVal");
             }
 
-            _Value = value;
+            this.value = value;
         }
 
-        private double _Value;
-        private double _min;
-        private double _max;
+        private double value;
+        private double min;
+        private double max;
 
         public delegate double GetMinimumValue();
 
@@ -1050,10 +1076,10 @@ namespace TrippLite
 
         public delegate void SetMaximumValue(double v);
 
-        private GetMinimumValue _getMin;
-        private GetMaximumValue _getMax;
-        private SetMinimumValue _setMin;
-        private SetMaximumValue _setMax;
+        private GetMinimumValue getMin;
+        private GetMaximumValue getMax;
+        private SetMinimumValue setMin;
+        private SetMaximumValue setMax;
 
         /// <summary>
         /// Creates a new object with the specified minimum and maximum values.
@@ -1075,12 +1101,11 @@ namespace TrippLite
         {
             get
             {
-                return _getMin();
+                return getMin();
             }
-
             internal set
             {
-                _setMin(value);
+                setMin(value);
             }
         }
 
@@ -1094,12 +1119,11 @@ namespace TrippLite
         {
             get
             {
-                return _getMax();
+                return getMax();
             }
-
             internal set
             {
-                _setMax(value);
+                setMax(value);
             }
         }
 
@@ -1113,9 +1137,8 @@ namespace TrippLite
         {
             get
             {
-                return _Value;
+                return value;
             }
-
             internal set
             {
 
@@ -1133,7 +1156,7 @@ namespace TrippLite
                     value = MaxValue;
                 }
 
-                _Value = value;
+                this.value = value;
             }
         }
 
@@ -1145,7 +1168,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public double HandleLoadBarValue(double v)
         {
-            _Value = v;
+            value = v;
             return HandleLoadBarValue();
         }
 
@@ -1158,6 +1181,7 @@ namespace TrippLite
         {
             double d = MaxValue - MinValue;
             double e = Value - MinValue;
+ 
             if (d < 0d)
             {
                 throw new InvalidConstraintException("Maximum value is less than minimum value.");

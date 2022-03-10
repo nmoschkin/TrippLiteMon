@@ -10,8 +10,6 @@
 
 using System.Diagnostics;
 
-using Microsoft.VisualBasic;
-
 namespace TrippLite.My.Resources
 {
 
@@ -25,7 +23,6 @@ namespace TrippLite.My.Resources
     [System.CodeDom.Compiler.GeneratedCode("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [DebuggerNonUserCode()]
     [System.Runtime.CompilerServices.CompilerGenerated()]
-    [HideModuleName()]
     internal static class Resources
     {
         private static System.Resources.ResourceManager resourceMan;

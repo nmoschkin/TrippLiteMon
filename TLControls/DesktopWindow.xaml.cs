@@ -7,8 +7,6 @@ using System.Windows.Input;
 
 using DataTools.Scheduler;
 
-using Microsoft.VisualBasic.CompilerServices;
-
 namespace TrippLite
 {
     public partial class DesktopWindow
@@ -65,7 +63,7 @@ namespace TrippLite
         {
             get
             {
-                return Conversions.ToString(this.GetValue(ModelProperty));
+                return (string)this.GetValue(ModelProperty);
             }
         }
 

@@ -29,7 +29,9 @@ namespace TrippLite
         public static U GetEnumAttrVal<T, U, V>(V o, string valueName, BindingFlags b = BindingFlags.Public | BindingFlags.Static) where T : Attribute
         {
             T da;
+            
             var fi = o.GetType().GetFields(b);
+
             foreach (var fe in fi)
             {
                 if ((o.ToString() ?? "") == (fe.GetValue(o).ToString() ?? ""))
@@ -49,10 +51,12 @@ namespace TrippLite
         public static List<KeyValuePair<T, string>> GetAllDescriptions<T>(T o, BindingFlags b = BindingFlags.Public | BindingFlags.Static)
         {
             DescriptionAttribute da;
+            
             var fi = o.GetType().GetFields(b);
-            int c = 0;
             var l = new List<KeyValuePair<T, string>>();
+            
             KeyValuePair<T, string> kv;
+            
             foreach (var fe in fi)
             {
                 da = (DescriptionAttribute)fe.GetCustomAttribute(typeof(DescriptionAttribute));
@@ -69,13 +73,16 @@ namespace TrippLite
         public static List<KeyValuePair<T, string>> GetAllSymbols<T>(T o, BindingFlags b = BindingFlags.Public | BindingFlags.Static)
         {
             UnitSymbolAttribute da;
+            
             var fi = o.GetType().GetFields(b);
-            int c = 0;
             var l = new List<KeyValuePair<T, string>>();
+            
             KeyValuePair<T, string> kv;
+            
             foreach (var fe in fi)
             {
                 da = (UnitSymbolAttribute)fe.GetCustomAttribute(typeof(UnitSymbolAttribute));
+            
                 if (da is object)
                 {
                     kv = new KeyValuePair<T, string>((T)fe.GetValue(o), da.Symbol);
@@ -89,10 +96,13 @@ namespace TrippLite
         public static List<KeyValuePair<T, double>> GetAllMeasureUnits<T>(T o, BindingFlags b = BindingFlags.Public | BindingFlags.Static)
         {
             MeasureUnitAttribute da;
+
             var fi = o.GetType().GetFields(b);
-            int c = 0;
+
             var l = new List<KeyValuePair<T, double>>();
+
             KeyValuePair<T, double> kv;
+
             foreach (var fe in fi)
             {
                 da = (MeasureUnitAttribute)fe.GetCustomAttribute(typeof(MeasureUnitAttribute));
@@ -109,10 +119,13 @@ namespace TrippLite
         public static List<KeyValuePair<T, double>> GetAllMultipliers<T>(T o, BindingFlags b = BindingFlags.Public | BindingFlags.Static)
         {
             MultiplierAttribute da;
+
             var fi = o.GetType().GetFields(b);
-            int c = 0;
+
             var l = new List<KeyValuePair<T, double>>();
+
             KeyValuePair<T, double> kv;
+
             foreach (var fe in fi)
             {
                 da = (MultiplierAttribute)fe.GetCustomAttribute(typeof(MultiplierAttribute));
@@ -129,9 +142,13 @@ namespace TrippLite
         public static T[] GetAllEnumVals<T>()
         {
             var fi = typeof(T).GetFields(BindingFlags.Public | BindingFlags.Static);
+
             T[] x;
+
             int i = 0;
+
             x = new T[fi.Length];
+
             foreach (var fe in fi)
             {
                 x[i] = (T)fe.GetValue(x[i]);
@@ -152,19 +169,19 @@ namespace TrippLite
     /// <remarks></remarks>
     public class DetailAttribute : Attribute
     {
-        private string _Detail;
+        private string detail;
 
         public string Detail
         {
             get
             {
-                return _Detail;
+                return detail;
             }
         }
 
         public DetailAttribute(string detail)
         {
-            _Detail = detail;
+            this.detail = detail;
         }
     }
 
@@ -174,13 +191,13 @@ namespace TrippLite
     /// <remarks></remarks>
     public class ByteLengthAttribute : Attribute
     {
-        private ushort _Length = 4;
+        private ushort length = 4;
 
         public ushort Length
         {
             get
             {
-                return _Length;
+                return length;
             }
         }
 
@@ -190,7 +207,7 @@ namespace TrippLite
 
         public ByteLengthAttribute(ushort value)
         {
-            _Length = value;
+            length = value;
         }
     }
 
@@ -200,26 +217,21 @@ namespace TrippLite
     /// <remarks></remarks>
     public class MultiplierAttribute : Attribute
     {
-        private double _Value = 1.0d;
+        private double value = 1.0d;
 
         public double Value
         {
-            get
-            {
-                double ValueRet = default;
-                ValueRet = _Value;
-                return ValueRet;
-            }
+            get => value;
         }
 
         public MultiplierAttribute(double Value)
         {
-            _Value = Value;
+            value = Value;
         }
 
         public MultiplierAttribute()
         {
-            _Value = Value;
+            value = Value;
         }
     }
 
@@ -229,19 +241,16 @@ namespace TrippLite
     /// <remarks></remarks>
     public class MeasureUnitAttribute : Attribute
     {
-        private MeasureUnitTypes _Unit;
+        private MeasureUnitTypes unit;
 
         public MeasureUnitTypes Unit
         {
-            get
-            {
-                return _Unit;
-            }
+            get => unit;
         }
 
         public MeasureUnitAttribute(MeasureUnitTypes Unit)
         {
-            _Unit = Unit;
+            unit = Unit;
         }
     }
 
@@ -251,19 +260,19 @@ namespace TrippLite
     /// <remarks></remarks>
     public class UnitSymbolAttribute : Attribute
     {
-        private string _Symbol;
+        private string symbol;
 
         public string Symbol
         {
             get
             {
-                return _Symbol;
+                return symbol;
             }
         }
 
-        public UnitSymbolAttribute(string Symbol)
+        public UnitSymbolAttribute(string symbol)
         {
-            _Symbol = Symbol;
+            this.symbol = symbol;
         }
     }
 
@@ -273,24 +282,24 @@ namespace TrippLite
     /// <remarks></remarks>
     public class NumberFormatAttribute : Attribute
     {
-        private string _Format;
+        private string format;
 
         public string Format
         {
             get
             {
-                return _Format;
+                return format;
             }
         }
 
-        public NumberFormatAttribute(string Format)
+        public NumberFormatAttribute(string format)
         {
-            _Format = Format;
+            this.format = format;
         }
 
         public NumberFormatAttribute()
         {
-            _Format = "0.0";
+            format = "0.0";
         }
     }
 
@@ -541,14 +550,15 @@ namespace TrippLite
     /// <remarks></remarks>
     public class MeasureUnit
     {
-        protected string _UnitSymbol;
-        protected string _Name;
-        protected MeasureUnitTypes _UnitType;
-        protected static Collection<MeasureUnit> _Units;
+        protected string unitSymbol;
+        protected string name;
+        protected MeasureUnitTypes unitType;
+
+        protected static Collection<MeasureUnit> units;
 
         public static MeasureUnit FindUnit(MeasureUnitTypes t)
         {
-            foreach (var mu in _Units)
+            foreach (var mu in units)
             {
                 if (mu.UnitType == t)
                     return mu;
@@ -559,40 +569,52 @@ namespace TrippLite
 
         protected MeasureUnit(MeasureUnitTypes unit, string name, string symbol)
         {
-            _UnitSymbol = symbol;
-            _UnitType = unit;
-            _Name = name;
+            unitSymbol = symbol;
+            unitType = unit;
+
+            this.name = name;
         }
 
         static MeasureUnit()
         {
-            _Units = new Collection<MeasureUnit>();
+            units = new Collection<MeasureUnit>();
             var fi = typeof(MeasureUnitTypes).GetFields(BindingFlags.Public | BindingFlags.Static);
+
             MeasureUnit mu;
             var mt = MeasureUnitTypes.Amp;
+
             var kvc = GetAllDescriptions<MeasureUnitTypes>(MeasureUnitTypes.Amp);
             var mvc = GetAllSymbols<MeasureUnitTypes>(MeasureUnitTypes.Amp);
+
             int i = 0;
-            int c = kvc.Count - 1;
+
+            int c = kvc.Count;
+
             KeyValuePair<MeasureUnitTypes, string> kv;
+
             int d;
+
             if (mvc is null)
                 d = -1;
             else
                 d = 0;
+
             string sym;
             string desc;
-            var loopTo = c;
-            for (i = 0; i <= loopTo; i++)
+                        
+            for (i = 0; i < c; i++)
             {
                 kv = kvc[i];
                 sym = "";
+
                 if (d != -1)
                 {
                     if (mvc[d].Key == kvc[i].Key)
                     {
                         sym = mvc[d].Value;
+
                         d += 1;
+
                         if (d >= mvc.Count)
                             d = -1;
                     }
@@ -600,48 +622,36 @@ namespace TrippLite
 
                 desc = kvc[i].Value;
                 mt = kv.Key;
+
                 mu = new MeasureUnit(mt, desc, sym);
-                _Units.Add(mu);
+
+                units.Add(mu);
             }
         }
 
         public static Collection<MeasureUnit> Units
         {
-            get
-            {
-                return _Units;
-            }
+            get => units;
         }
 
         public string UnitSymbol
         {
-            get
-            {
-                return _UnitSymbol;
-            }
+            get => unitSymbol;
         }
 
         public string Name
         {
-            get
-            {
-                return _Name;
-            }
+            get => name;
         }
 
         public MeasureUnitTypes UnitType
         {
-            get
-            {
-                return _UnitType;
-            }
+            get => unitType;
         }
 
         public override string ToString()
         {
-            string ToStringRet = default;
-            ToStringRet = Name;
-            return ToStringRet;
+            return Name ?? base.ToString();
         }
     }
 }

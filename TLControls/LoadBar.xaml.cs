@@ -7,7 +7,6 @@ using System.Windows.Shapes;
 
 using DataTools.MathTools.PolarMath;
 
-using Microsoft.VisualBasic.CompilerServices;
 using System.Windows.Controls;
 
 namespace TrippLite
@@ -55,7 +54,7 @@ namespace TrippLite
                 throw new ArgumentNullException("element");
             }
 
-            return Conversions.ToDouble(element.GetValue(LoadValueProperty));
+            return (double)element.GetValue(LoadValueProperty);
         }
 
         public static void SetLoadValue(DependencyObject element, double value)
