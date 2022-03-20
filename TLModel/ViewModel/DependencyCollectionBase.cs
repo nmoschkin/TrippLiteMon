@@ -8,11 +8,6 @@ using System.Windows;
 
 namespace TrippLite
 {
-    public interface IChild<T>
-    {
-        T Parent { get; set; }
-    }
-
     public abstract class DependencyCollectionBase<T, U> : DependencyObject, INotifyCollectionChanged, INotifyPropertyChanged, ICollection<T>, IChild<U> where T : IChild<U>
     {
         protected Collection<T> col = new Collection<T>();
@@ -174,7 +169,6 @@ namespace TrippLite
             pos = -1;
         }
 
-        #region IDisposable Support
         private bool disposedValue; // To detect redundant calls
 
         // IDisposable
@@ -210,7 +204,6 @@ namespace TrippLite
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        #endregion
 
     }
 }

@@ -16,4 +16,8 @@
     <ProjectReference Include="..\DataTools\DataTools\DataTools.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Property Bag\" />
+  </ItemGroup>
+
 </Project>

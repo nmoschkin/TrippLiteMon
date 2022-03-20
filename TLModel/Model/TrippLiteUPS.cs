@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -15,9 +15,6 @@ using DataTools.Win32.Usb;
 
 namespace TrippLite
 {
-
-    #region TrippLite
-
     public class TrippLiteUPS : System.Runtime.ConstrainedExecution.CriticalFinalizerObject, INotifyPropertyChanged, IDisposable
     {
 
@@ -59,8 +56,6 @@ namespace TrippLite
         public event PowerStateChangedEventHandler PowerStateChanged;
 
         public delegate void PowerStateChangedEventHandler(object sender, PowerStateChangedEventArgs e);
-
-        #region Static
 
         /// <summary>
         /// Returns a list of all TrippLite devices.
@@ -241,10 +236,6 @@ namespace TrippLite
             return true;
         }
 
-        #endregion
-
-        #region Public Properties
-
         /// <summary>
         /// Gets a value indicating whether or not the current object is connected to a battery.
         /// </summary>
@@ -385,10 +376,6 @@ namespace TrippLite
             }
         }
 
-        #endregion
-
-        #region Public Methods
-
         /// <summary>
         /// Refresh the data from the device, using the default number of tries and the default delay.
         /// </summary>
@@ -435,10 +422,6 @@ namespace TrippLite
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PowerState"));
             propBag.SignalRefresh();
         }
-
-        #endregion
-
-        #region Protected Methods
 
         static int lps;
 
@@ -626,9 +609,6 @@ namespace TrippLite
             return true;
         }
 
-        #endregion
-
-        #region IDisposable Support
         private bool disposedValue; // To detect redundant calls
 
         // IDisposable
@@ -652,40 +632,6 @@ namespace TrippLite
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        #endregion
 
-    }
-
-    #endregion
-
-    #region PowerStateChangedEventArgs
-
-    public class PowerStateChangedEventArgs : EventArgs
-    {
-        private PowerStates oldState;
-        private PowerStates newState;
-
-        public PowerStates OldState
-        {
-            get
-            {
-                return oldState;
-            }
-        }
-
-        public PowerStates NewState
-        {
-            get
-            {
-                return newState;
-            }
-        }
-
-        public PowerStateChangedEventArgs(PowerStates o, PowerStates n)
-        {
-            oldState = o;
-            newState = n;
-        }
     }
 }
-#endregion
