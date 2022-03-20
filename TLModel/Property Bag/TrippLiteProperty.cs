@@ -309,33 +309,7 @@ namespace TrippLite
         public long GetValue()
         {
             long res = 0L;
-
-            var dev = HidFeatures.OpenHid(model.Device);
-
-            if (dev == IntPtr.Zero)
-                return value;
-
-            MemPtr mm = new MemPtr();
-
-            mm.Alloc(byteLen + 1);
-            mm.ByteAt(0) = (byte)propCode;
-
-            if (UsbLibHelpers.HidD_GetFeature(dev, mm.Handle, (int)byteLen + 1))
-            {
-                if (byteLen == 8)
-                {
-                    res = mm.LongAtAbsolute(1L);
-                }
-                else
-                {
-                    res = mm.IntAtAbsolute(1L);
-                }
-            }
-
-            HidFeatures.CloseHid(dev);
-            
-            mm.Free();
-            
+            model.Device.HidGetFeature(propCode, out res);                      
             return res;
         }
 
@@ -347,34 +321,8 @@ namespace TrippLite
         /// <remarks></remarks>
         public bool SetValue(long value)
         {
-            bool res;
+            var res = model.Device.HidSetFeature(propCode, value);
 
-            if (byteLen < 8)
-                return SetValue((int)value);
-
-            if (IsSettable == false)
-                return false;
-
-            if (Value == value)
-                return false;
-
-            var dev = HidFeatures.OpenHid(model.Device);
-
-            if (dev == IntPtr.Zero)
-                return false;
-
-            MemPtr mm = new MemPtr();
-            
-            mm.Alloc(9L);
-            mm.ByteAt(0L) = (byte)propCode;
-            
-            mm.LongAtAbsolute(1L) = value;
-            
-            res = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)9);
-            
-            mm.Free();
-            HidFeatures.CloseHid(dev);
-            
             if (res)
             {
                 this.value = value;
@@ -394,34 +342,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public bool SetValue(int value)
         {
-            bool res;
-
-            if (byteLen < 4)
-                return SetValue((short)value);
-
-            if (IsSettable == false)
-                return false;
-
-            if (Value == value)
-                return false;
-
-            var dev = HidFeatures.OpenHid(model.Device);
-
-            if (dev == IntPtr.Zero)
-                return false;
-
-            MemPtr mm = new MemPtr();
-
-            mm.Alloc(5L);
-            mm.ByteAt(0L) = (byte)propCode;
-
-            mm.IntAtAbsolute(1L) = value;
-
-            res = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)5);
-
-            mm.Free();
-
-            HidFeatures.CloseHid(dev);
+            var res = model.Device.HidSetFeature(propCode, value);
 
             if (res)
             {
@@ -442,33 +363,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public bool SetValue(short value)
         {
-            bool res = default;
-
-            if (byteLen < 2)
-                return SetValue((byte)value);
-
-            if (IsSettable == false)
-                return false;
-
-            if (Value == value)
-                return false;
-
-            var dev = HidFeatures.OpenHid(model.Device);
-
-            if (dev == IntPtr.Zero)
-                return false;
-
-            MemPtr mm = new MemPtr();
-
-            mm.Alloc(3L);
-            mm.ByteAt(0L) = (byte)propCode;
-            mm.ShortAtAbsolute(1L) = value;
-
-            res = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)3);
-
-            mm.Free();
-
-            HidFeatures.CloseHid(dev);
+            var res = model.Device.HidSetFeature(propCode, value);
 
             if (res)
             {
@@ -489,30 +384,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public bool SetValue(byte value)
         {
-            bool res = default;
-
-            if (IsSettable == false)
-                return false;
-
-            if (Value == value)
-                return false;
-
-            var dev = HidFeatures.OpenHid(model.Device);
-
-            if (dev == IntPtr.Zero)
-                return false;
-
-            MemPtr mm = new MemPtr();
-
-            mm.Alloc(2L);
-            mm.ByteAt(0L) = (byte)propCode;
-            mm.ByteAt(1L) = value;
-
-            res = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)2);
-
-            mm.Free();
-
-            HidFeatures.CloseHid(dev);
+            var res = model.Device.HidSetFeature(propCode, value);
 
             if (res)
             {

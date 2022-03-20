@@ -1,11 +1,15 @@
+using DataTools.Win32.Usb;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 using static TrippLite.TrippLiteCodeUtility;
+using DataTools.Win32;
 
 namespace TrippLite
 {
@@ -13,8 +17,31 @@ namespace TrippLite
     /// Represents feature command codes that can be sent to a Tripp Lite Smart battery.
     /// </summary>
     /// <remarks></remarks>
-    public enum TrippLiteCodes : byte
+    public struct TrippLiteCodes 
     {
+        private byte value;
+
+        public static void Initialize(HidDeviceInfo deviceInfo)
+        {
+            var mapper = new FieldMapper(deviceInfo);
+
+            fields = typeof(TrippLiteCodes).GetFields(BindingFlags.Public | BindingFlags.Static);
+
+            mapper.MapField(out VARATING, 0x43);
+            mapper.MapField(out NominalBatteryVoltage, 0x40, 0x12);
+            mapper.MapField(out LowVoltageTransfer, 0x53);
+            mapper.MapField(out HighVoltageTransfer, 0x54);
+            mapper.MapField(out InputFrequency, 0x32, 0x1a);
+            mapper.MapField(out OutputFrequency, 0x32, 0x1c);
+            mapper.MapField(out InputVoltage, 0x30, 0x1a);
+            mapper.MapField(out OutputVoltage, 0x30, 0x1c);
+            mapper.MapField(out OutputCurrent, 0x31);
+            mapper.MapField(out OutputPower, 0x34);
+            mapper.MapField(out OutputLoad, 0x35);
+            mapper.MapField(out TimeRemaining, 0x68, 1);
+            mapper.MapField(out BatteryVoltage, 0x30, 0x12);
+            mapper.MapField(out ChargeRemaining, 0x66, 1);
+        }
 
         /// <summary>
         /// VA RATING
@@ -24,7 +51,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Volt)]
         [NumberFormat("0")]
         [ByteLength()]
-        VARATING = 0x3,
+        public static TrippLiteCodes VARATING;
 
         /// <summary>
         /// Nominal Battery Voltage
@@ -34,7 +61,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Volt)]
         [NumberFormat("0")]
         [ByteLength()]
-        NominalBatteryVoltage = 0x4,
+        public static TrippLiteCodes NominalBatteryVoltage;
 
         /// <summary>
         /// Low Voltage Transfer
@@ -44,7 +71,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Volt)]
         [NumberFormat("0")]
         [ByteLength()]
-        LowVoltageTransfer = 0x6,
+        public static TrippLiteCodes LowVoltageTransfer;
 
         /// <summary>
         /// High Voltage Transfer
@@ -54,7 +81,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Volt)]
         [NumberFormat("0")]
         [ByteLength()]
-        HighVoltageTransfer = 0x9,
+        public static TrippLiteCodes HighVoltageTransfer;
 
         /// <summary>
         /// Input Frequency
@@ -64,7 +91,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Hertz)]
         [NumberFormat()]
         [ByteLength()]
-        InputFrequency = 0x19,
+        public static TrippLiteCodes InputFrequency;
 
         /// <summary>
         /// Output Frequency
@@ -74,7 +101,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Hertz)]
         [NumberFormat()]
         [ByteLength()]
-        OutputFrequency = 0x1C,
+        public static TrippLiteCodes OutputFrequency;
 
         /// <summary>
         /// Input Voltage
@@ -84,7 +111,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Volt)]
         [NumberFormat("000.0")]
         [ByteLength()]
-        InputVoltage = 0x31,
+        public static TrippLiteCodes InputVoltage;
 
         /// <summary>
         /// Output Voltage
@@ -94,7 +121,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Volt)]
         [NumberFormat("000.0")]
         [ByteLength()]
-        OutputVoltage = 0x1B,
+        public static TrippLiteCodes OutputVoltage;
 
         /// <summary>
         /// Output Current
@@ -104,7 +131,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Amp)]
         [NumberFormat()]
         [ByteLength()]
-        OutputCurrent = 0x46,
+        public static TrippLiteCodes OutputCurrent;
 
         /// <summary>
         /// Output Power
@@ -114,7 +141,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Watt)]
         [NumberFormat("0")]
         [ByteLength()]
-        OutputPower = 0x47,
+        public static TrippLiteCodes OutputPower;
 
         /// <summary>
         /// Output Load
@@ -124,7 +151,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Percent)]
         [NumberFormat("0")]
         [ByteLength()]
-        OutputLoad = 0x1E,
+        public static TrippLiteCodes OutputLoad;
 
         /// <summary>
         /// Seconds Remaining Power
@@ -134,7 +161,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Time)]
         [NumberFormat()]
         [ByteLength()]
-        TimeRemaining = 0x35,
+        public static TrippLiteCodes TimeRemaining;
 
         /// <summary>
         /// Seconds Remaining Power
@@ -144,7 +171,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Volt)]
         [NumberFormat()]
         [ByteLength()]
-        BatteryVoltage = 0x20,
+        public static TrippLiteCodes BatteryVoltage;
 
         /// <summary>
         /// Charge Remaining
@@ -154,6 +181,141 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Percent)]
         [NumberFormat("0")]
         [ByteLength()]
-        ChargeRemaining = 0x34
+        public static TrippLiteCodes ChargeRemaining;
+
+        static FieldInfo[] fields;
+
+        public override string ToString()
+        {
+            foreach (var fi in fields)
+            {
+                TrippLiteCodes? b = (TrippLiteCodes?)fi.GetValue(null);
+                if (b == value)
+                {
+                    return fi.Name;
+                }                
+            }   
+
+            return value.ToString();
+        }
+
+        public static implicit operator byte(TrippLiteCodes val)
+        {
+            return val.value;
+        }
+
+        public static implicit operator int(TrippLiteCodes val)
+        {
+            return val.value;
+        }
+
+        public static implicit operator short(TrippLiteCodes val)
+        {
+            return val.value;
+        }
+
+        public static implicit operator TrippLiteCodes(byte value)
+        {
+            return new TrippLiteCodes()
+            {
+                value = value
+            };
+        }
+
+    }
+
+    public class FieldMapper
+    {
+
+        bool initialized;
+        HidPowerDeviceInfo deviceInfo;
+        public bool Initialized => initialized;
+
+        public HidPowerDeviceInfo DeviceInfo => deviceInfo;
+
+        public FieldMapper(HidDeviceInfo hidDevice)
+        {
+            this.initialized = false;
+            
+            if (hidDevice is HidPowerDeviceInfo hpd)
+            {
+                this.deviceInfo = hpd;
+            }
+            else
+            {
+                this.deviceInfo = HidPowerDeviceInfo.CreateFromHidDevice(hidDevice);
+            }
+        }
+
+        public void Initialize()
+        {
+            if (deviceInfo == null)
+            {
+                this.initialized = false;
+                return;
+            }
+
+            this.initialized = true;
+        }
+
+        public void MapField(out TrippLiteCodes value, byte code, byte collection = 0x0)
+        {
+            value = 0;
+            HidPValueCaps? caps = null;
+
+            //var features = deviceInfo.GetFeatureValues(HidUsageType.CL | HidUsageType.CA | HidUsageType.CP, HidUsageType.DV | HidUsageType.SV);
+
+            caps = deviceInfo.FeatureValueCaps.Where((fv) =>
+            {
+                if (fv.Usage == code)
+                {
+                    if (collection == 0 || (fv.LinkCollection == collection) || (fv.LinkUsage == collection))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }).FirstOrDefault();
+
+            if (caps == null)
+            {
+                caps = deviceInfo.InputValueCaps.Where((fv) =>
+                {
+                    if (fv.Usage == code)
+                    {
+                        if (collection == 0 || (fv.LinkCollection == collection) || (fv.LinkUsage == collection))
+                        {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }).FirstOrDefault();
+
+                if (caps == null)
+                {
+                    caps = deviceInfo.OutputValueCaps.Where((fv) =>
+                    {
+                        if (fv.Usage == code)
+                        {
+                            if (collection == 0 || (fv.LinkCollection == collection) || (fv.LinkUsage == collection))
+                            {
+                                return true;
+                            }
+                        }
+
+                        return false;
+                    }).FirstOrDefault();
+
+                }
+
+            }
+
+            if (caps != null)
+            {
+                value = caps.Value.ReportID;
+            }
+        }
     }
 }

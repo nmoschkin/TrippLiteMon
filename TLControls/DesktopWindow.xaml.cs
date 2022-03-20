@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -183,22 +184,17 @@ namespace TrippLite
 
             foreach (var pr in _ViewModel.Properties)
             {
-                switch (pr.Code)
+                if (new[] { TrippLiteCodes.InputVoltage,
+                    TrippLiteCodes.OutputVoltage,
+                    TrippLiteCodes.OutputLoad,
+                    TrippLiteCodes.OutputPower,
+                    TrippLiteCodes.OutputCurrent }.Contains(pr.Code))
                 {
-                    case TrippLiteCodes.InputVoltage:
-                    case TrippLiteCodes.OutputVoltage:
-                    case TrippLiteCodes.OutputLoad:
-                    case TrippLiteCodes.OutputPower:
-                    case TrippLiteCodes.OutputCurrent:
-                        {
-                            break;
-                        }
-
-                    default:
-                        {
-                            pr.IsActiveProperty = false;
-                            break;
-                        }
+                    continue;
+                }
+                else
+                {
+                    pr.IsActiveProperty = false;
                 }
             }
         }
@@ -223,24 +219,20 @@ namespace TrippLite
             RunStart.IsChecked = TaskTool.GetIsEnabled();
 
             _ViewModel.Initialize();
+
             foreach (var pr in _ViewModel.Properties)
             {
-                switch (pr.Code)
+                if (new[] { TrippLiteCodes.InputVoltage,
+                    TrippLiteCodes.OutputVoltage,
+                    TrippLiteCodes.OutputLoad,
+                    TrippLiteCodes.OutputPower,
+                    TrippLiteCodes.OutputCurrent }.Contains(pr.Code))
                 {
-                    case TrippLiteCodes.InputVoltage:
-                    case TrippLiteCodes.OutputVoltage:
-                    case TrippLiteCodes.OutputLoad:
-                    case TrippLiteCodes.OutputPower:
-                    case TrippLiteCodes.OutputCurrent:
-                        {
-                            break;
-                        }
-
-                    default:
-                        {
-                            pr.IsActiveProperty = false;
-                            break;
-                        }
+                    continue;
+                }
+                else
+                {
+                    pr.IsActiveProperty = false;
                 }
             }
         }
@@ -266,23 +258,19 @@ namespace TrippLite
         private void _ViewModel_ViewModelInitialized(object sender, EventArgs e)
         {
             this.DataContext = ViewModel;
+
+
             foreach (var dc in _ViewModel.TrippLite.PropertyBag)
             {
-                switch (dc.Code)
+                if (new[] { TrippLiteCodes.InputVoltage, TrippLiteCodes.OutputVoltage }.Contains(dc.Code))
                 {
-                    case TrippLiteCodes.InputVoltage:
-                    case TrippLiteCodes.OutputVoltage:
-                        {
-                            continue;
-                            break;
-                        }
-
-                    default:
-                        {
-                            DisplayCodes.Add(dc.Code);
-                            break;
-                        }
+                    continue;
                 }
+                else
+                {
+                    DisplayCodes.Add(dc.Code);
+                }
+
             }
 
             _ViewModel.TrippLite.RefreshData();

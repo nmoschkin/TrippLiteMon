@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Linq;
 
 namespace TrippLite
 {
@@ -192,20 +193,13 @@ namespace TrippLite
             this.DataContext = ViewModel;
             foreach (var dc in _ViewModel.TrippLite.PropertyBag)
             {
-                switch (dc.Code)
+                if (new[] { TrippLiteCodes.InputVoltage, TrippLiteCodes.OutputVoltage }.Contains(dc.Code))
                 {
-                    case TrippLiteCodes.InputVoltage:
-                    case TrippLiteCodes.OutputVoltage:
-                        {
-                            continue;
-                            break;
-                        }
-
-                    default:
-                        {
-                            DisplayCodes.Add(dc.Code);
-                            break;
-                        }
+                    continue;
+                }
+                else
+                {
+                    DisplayCodes.Add(dc.Code);
                 }
             }
 

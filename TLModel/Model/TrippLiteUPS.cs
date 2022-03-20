@@ -25,8 +25,6 @@ namespace TrippLite
         /// <remarks></remarks>
         public TrippLiteUPS(bool connect = true)
         {
-            propBag = new TrippLitePropertyBag(this);
-
             if (connect)
                 Connect();
         }
@@ -170,6 +168,9 @@ namespace TrippLite
                         if (powerDevice is null)
                             powerDevice = HidPowerDeviceInfo.CreateFromHidDevice(devs[0]);
 
+                        TrippLiteCodes.Initialize(powerDevice);
+                        propBag = new TrippLitePropertyBag(this);
+
                         connected = true;
 
                         break;
@@ -227,6 +228,7 @@ namespace TrippLite
 
                 connected = false;
                 powerDevice = null;
+                propBag = null;                
             }
             catch 
             {
@@ -456,27 +458,25 @@ namespace TrippLite
                     if (res != null)
                     {
                         v = res.intVal;
-                        switch (prop.Code)
+                        if (prop.Code == TrippLiteCodes.InputVoltage)
                         {
-                            case TrippLiteCodes.InputVoltage:
-                                volt = v * prop.Multiplier;
-                                involtRet = true;
+                            volt = v * prop.Multiplier;
+                            involtRet = true;
 
-                                break;
-
-                            case TrippLiteCodes.OutputLoad:
-                                if (v > 100 || v < 0)
-                                    v = (int)prop.Value;
-
-                                break;
                         }
-
+                        else if (prop.Code == TrippLiteCodes.OutputLoad)
+                        {
+                            if (v > 100 || v < 0)
+                                v = (int)prop.Value;
+                        }
+                        
                         if (prop.value != v || prop.value == -1)
                         {
                             prop.value = v;
                             activeProps.Add(prop);
                         }
                     }
+                    
                 }
             }
             catch (ThreadAbortException thx)
