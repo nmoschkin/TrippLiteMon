@@ -346,6 +346,7 @@
     <Color x:Key="TrippLiteBlueColor">#19589b</Color>
 
     <Color x:Key="ShadowColor">#606060</Color>
+    <Color x:Key="TrippLiteLcdColor">#FF79BBFF</Color>
 
     <SolidColorBrush x:Key="TrippLiteLcd" Color="#FF79BBFF" />
 

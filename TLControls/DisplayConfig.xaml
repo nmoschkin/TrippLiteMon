@@ -4,130 +4,220 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:dtcolor="clr-namespace:DataTools.ColorControls;assembly=DataTools.ColorControls"
     Title="DisplayConfig"
-    Width="450"
-    Height="300"
-    Background="{DynamicResource TrippLiteBlue}"
+    Width="850"
+    Height="500"
+    Background="{DynamicResource TrippLiteDimGray}"
     ResizeMode="CanMinimize"
     WindowStyle="ToolWindow">
 
     <Window.Resources>
 
+        <DataTemplate x:Key="PowerTypeTemplate">
+            <Label
+                Margin="4,2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Background="White"
+                Content="{Binding}"
+                FontFamily="Calibri"
+                FontSize="12"
+                Foreground="Black" />
+        </DataTemplate>
+
         <Style x:Key="PropLabelStyle" TargetType="Label">
             <Style.Setters>
-                <Setter Property="Foreground" Value="White" />
-                <Setter Property="HorizontalAlignment" Value="Right" />
-                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Foreground" Value="#303030" />
+                <Setter Property="Background" Value="{StaticResource TrippLiteLcd}" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="FontFamily" Value="Calibri" />
+                <Setter Property="VerticalAlignment" Value="Stretch" />
             </Style.Setters>
         </Style>
 
-        <Style TargetType="Button">
+        <Style x:Key="PropButtonStyle" TargetType="Button">
+            <Style.Setters>
+
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="Background" Value="{StaticResource TrippLiteBlue}" />
+                <Setter Property="FontFamily" Value="Calibri" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="VerticalAlignment" Value="Stretch" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}" BorderThickness="0">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+
+            </Style.Setters>
+            <Style.Triggers>
+
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation
+                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                    To="{StaticResource TrippLiteLcdColor}"
+                                    Duration="0:0:0.25" />
+                                <ColorAnimation
+                                    Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                    To="#3c3c3c"
+                                    Duration="0:0:0.25" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation
+                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                    To="{StaticResource TrippLiteBlueColor}"
+                                    Duration="0:0:0.25" />
+                                <ColorAnimation
+                                    Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                    To="White"
+                                    Duration="0:0:0.25" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+
+                <EventTrigger RoutedEvent="Click">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+
+                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)" Duration="0:0:0.25">
+                                    <LinearColorKeyFrame KeyTime="0:0:0.125" Value="{StaticResource TrippLiteGrayColor}" />
+                                    <LinearColorKeyFrame KeyTime="0:0:0.25" Value="{StaticResource TrippLiteLcdColor}" />
+                                </ColorAnimationUsingKeyFrames>
+
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+
+            </Style.Triggers>
+
+        </Style>
+
+        <Style x:Key="NavButtons" TargetType="Button">
             <Setter Property="BorderBrush" Value="{x:Null}" />
             <Setter Property="Background" Value="{StaticResource LcdRadial}" />
+            <Setter Property="FontFamily" Value="Calibri" />
 
         </Style>
 
         <Style TargetType="ComboBox">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="Calibri" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="White" />
             <Setter Property="Margin" Value="8,6" />
-
         </Style>
     </Window.Resources>
 
-    <Grid Margin="4,4,4,4">
-
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition Height="48" />
-            <RowDefinition Height="48" />
-        </Grid.RowDefinitions>
-
+    <Grid Margin="0">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-
-        <Label
-            Grid.Row="0"
+        <Grid
             Grid.Column="0"
-            Style="{StaticResource PropLabelStyle}">
-            Configure State:
-        </Label>
+            Margin="0"
+            Background="{StaticResource TrippLiteBlue}">
 
-        <ComboBox
-            x:Name="ConfigureStates"
-            Grid.Row="0"
-            Grid.Column="1">
-            <ComboBoxItem>Utility Power</ComboBoxItem>
-            <ComboBoxItem>Battery Power / Blackout</ComboBoxItem>
-            <ComboBoxItem>Utility Power / Brownout</ComboBoxItem>
-            <ComboBoxItem>Utility Power / Surge</ComboBoxItem>
-        </ComboBox>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="48" />
+                <RowDefinition Height="48" />
+                <RowDefinition Height="48" />
+                <RowDefinition Height="48" />
+                <RowDefinition Height="48" />
+                <RowDefinition Height="48" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
 
-        <Label
-            Grid.Row="1"
-            Grid.Column="0"
-            Style="{StaticResource PropLabelStyle}">
-            Left-Hand Property:
-        </Label>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
 
-        <ComboBox
-            x:Name="LHProp"
-            Grid.Row="1"
-            Grid.Column="1" />
 
-        <Label
-            Grid.Row="2"
-            Grid.Column="0"
-            Style="{StaticResource PropLabelStyle}">
-            Left-Hand Load Bar:
-        </Label>
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                Style="{StaticResource PropLabelStyle}">
+                Configure State
+            </Label>
 
-        <ComboBox
-            x:Name="LHLoadBar"
-            Grid.Row="2"
-            Grid.Column="1" />
 
-        <Label
-            Grid.Row="3"
-            Grid.Column="0"
-            Style="{StaticResource PropLabelStyle}">
-            Right-Hand Property 1:
-        </Label>
+            <Button
+                Grid.Row="1"
+                Grid.Column="0"
+                Style="{StaticResource PropButtonStyle}">
+                Left-Hand Property
+            </Button>
 
-        <ComboBox
-            x:Name="RHProp1"
-            Grid.Row="3"
-            Grid.Column="1" />
+            <Button
+                Grid.Row="2"
+                Grid.Column="0"
+                Style="{StaticResource PropButtonStyle}">
+                Left-Hand Load Bar
+            </Button>
 
-        <Label
-            Grid.Row="4"
-            Grid.Column="0"
-            Style="{StaticResource PropLabelStyle}">
-            Right-Hand Property 2:
-        </Label>
 
-        <ComboBox
-            x:Name="RHProp2"
-            Grid.Row="4"
-            Grid.Column="1" />
+            <Button
+                Grid.Row="3"
+                Grid.Column="0"
+                Style="{StaticResource PropButtonStyle}">
+                Right-Hand Property 1
+            </Button>
 
-        <Label
-            Grid.Row="5"
-            Grid.Column="0"
-            Style="{StaticResource PropLabelStyle}">
-            Cool Window Colors:
-        </Label>
 
-        <dtcolor:ExtendedColorDropDown
-            Grid.Row="5"
-            Grid.Column="1"
-            Margin="8,6" />
+            <Button
+                Grid.Row="4"
+                Grid.Column="0"
+                Style="{StaticResource PropButtonStyle}">
+                Right-Hand Property 2
+            </Button>
 
-        <Grid Grid.Row="6" Grid.Column="1">
+
+            <Button
+                Grid.Row="5"
+                Grid.Column="0"
+                Style="{StaticResource PropButtonStyle}">
+                Cool Window Colors
+            </Button>
+
+
+
+        </Grid>
+
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="48" />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -136,33 +226,68 @@
 
             </Grid.ColumnDefinitions>
 
-            <Button
-                x:Name="CancelButton"
-                Grid.Column="0"
-                Width="64"
-                Height="24">
-                Cancel
-            </Button>
+            <ComboBox
+                Grid.ColumnSpan="3"
+                Margin="8,10"
+                HorizontalAlignment="Stretch"
+                Background="Blue"
+                FontFamily="Calibri"
+                ItemTemplate="{StaticResource PowerTypeTemplate}"
+                SelectedIndex="0">
 
-            <Button
-                x:Name="ApplyButton"
+                <ComboBoxItem>A/C Power</ComboBoxItem>
+                <ComboBoxItem>Battery Power (Blackout)</ComboBoxItem>
+                <ComboBoxItem>Battery Power (Brownout)</ComboBoxItem>
+                <ComboBoxItem>Battery Power (Surge)</ComboBoxItem>
+            </ComboBox>
+
+            <Grid
+                Grid.Row="4"
                 Grid.Column="1"
-                Width="64"
-                Height="24">
-                Apply
-            </Button>
+                Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    x:Name="CancelButton"
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    Width="64"
+                    Height="24"
+                    Margin="8"
+                    Style="{StaticResource NavButtons}">
+                    Cancel
+                </Button>
+
+                <Button
+                    x:Name="ApplyButton"
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    Width="64"
+                    Height="24"
+                    Style="{StaticResource NavButtons}">
+                    Apply
+                </Button>
 
 
-            <Button
-                x:Name="OKButton"
-                Grid.Column="2"
-                Width="64"
-                Height="24">
-                OK
-            </Button>
+                <Button
+                    x:Name="OKButton"
+                    Grid.Row="4"
+                    Grid.Column="2"
+                    Width="64"
+                    Height="24"
+                    Style="{StaticResource NavButtons}">
+                    OK
+                </Button>
 
+
+            </Grid>
         </Grid>
 
-
     </Grid>
+
+
 </Window>

@@ -80,7 +80,6 @@ namespace TrippLite
 
                 return str ?? "";
             }
-
             set
             {
                 var key = Registry.CurrentUser.CreateSubKey(TrippLiteMonKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);

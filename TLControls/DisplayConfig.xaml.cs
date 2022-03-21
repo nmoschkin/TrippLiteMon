@@ -25,8 +25,8 @@ namespace TrippLite
 
 
         public DisplayConfig(TrippLiteViewModel m)
-        {
-            this.InitializeComponent();
+        {            
+            this.InitializeComponent();            
             ViewModel = m;
         }
     }
