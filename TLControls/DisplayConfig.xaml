@@ -7,8 +7,7 @@
     Width="850"
     Height="500"
     Background="{DynamicResource TrippLiteDimGray}"
-    ResizeMode="CanMinimize"
-    WindowStyle="ToolWindow">
+    ResizeMode="CanMinimize">
 
     <Window.Resources>
 
