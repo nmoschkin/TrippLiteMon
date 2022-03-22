@@ -387,4 +387,200 @@
     <ImageSource x:Key="WindowMoveImage">pack://application:,,,/TLControls;component/Resources/move-512.png</ImageSource>
     <ImageSource x:Key="WindowCloseImage">pack://application:,,,/TLControls;component/Resources/icon_close.png</ImageSource>
 
+
+
+    <Style x:Key="DefaultHeaderStyle" TargetType="Label">
+
+        <Style.Setters>
+
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Background" Value="{StaticResource TrippLiteBlue}" />
+            <Setter Property="FontFamily" Value="Calibri" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Label}">
+                        <Border
+                            Width="150"
+                            Height="48"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+        </Style.Setters>
+        <Style.Triggers>
+
+            <EventTrigger RoutedEvent="MouseEnter">
+                <EventTrigger.Actions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                                Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)"
+                                To="{StaticResource TrippLiteLcdColor}"
+                                Duration="0:0:0.25" />
+                            <ColorAnimation
+                                Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)"
+                                To="#3c3c3c"
+                                Duration="0:0:0.25" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger.Actions>
+            </EventTrigger>
+
+            <EventTrigger RoutedEvent="MouseLeave">
+                <EventTrigger.Actions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                                Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)"
+                                To="{StaticResource TrippLiteBlueColor}"
+                                Duration="0:0:0.25" />
+                            <ColorAnimation
+                                Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)"
+                                To="White"
+                                Duration="0:0:0.25" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger.Actions>
+            </EventTrigger>
+
+            <EventTrigger RoutedEvent="MouseDown">
+                <EventTrigger.Actions>
+                    <BeginStoryboard>
+                        <Storyboard>
+
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)" Duration="0:0:0.25">
+                                <LinearColorKeyFrame KeyTime="0:0:0.125" Value="{StaticResource TrippLiteGrayColor}" />
+                            </ColorAnimationUsingKeyFrames>
+
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger.Actions>
+            </EventTrigger>
+
+            <EventTrigger RoutedEvent="MouseUp">
+                <EventTrigger.Actions>
+                    <BeginStoryboard>
+                        <Storyboard>
+
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)" Duration="0:0:0.25">
+                                <LinearColorKeyFrame KeyTime="0:0:0.25" Value="{StaticResource TrippLiteLcdColor}" />
+                            </ColorAnimationUsingKeyFrames>
+
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger.Actions>
+            </EventTrigger>
+
+
+        </Style.Triggers>
+
+    </Style>
+
+
+    <Style x:Key="DefaultSelectedHeaderStyle" TargetType="Label">
+
+        <Style.Setters>
+
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Background" Value="{StaticResource TrippLiteLcd}" />
+            <Setter Property="FontFamily" Value="Calibri" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Label}">
+                        <Border
+                            Width="150"
+                            Height="48"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+        </Style.Setters>
+        <Style.Triggers>
+
+            <EventTrigger RoutedEvent="MouseEnter">
+                <EventTrigger.Actions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                                Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)"
+                                To="{StaticResource TrippLiteLcdColor}"
+                                Duration="0:0:0.25" />
+                            <ColorAnimation
+                                Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)"
+                                To="#3c3c3c"
+                                Duration="0:0:0.25" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger.Actions>
+            </EventTrigger>
+
+            <EventTrigger RoutedEvent="MouseLeave">
+                <EventTrigger.Actions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                                Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)"
+                                To="{StaticResource TrippLiteLcdColor}"
+                                Duration="0:0:0.25" />
+                            <ColorAnimation
+                                Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)"
+                                To="#3c3c3c"
+                                Duration="0:0:0.25" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger.Actions>
+            </EventTrigger>
+
+            <EventTrigger RoutedEvent="MouseDown">
+                <EventTrigger.Actions>
+                    <BeginStoryboard>
+                        <Storyboard>
+
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)" Duration="0:0:0.25">
+                                <LinearColorKeyFrame KeyTime="0:0:0.125" Value="{StaticResource TrippLiteGrayColor}" />
+                            </ColorAnimationUsingKeyFrames>
+
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger.Actions>
+            </EventTrigger>
+
+            <EventTrigger RoutedEvent="MouseUp">
+                <EventTrigger.Actions>
+                    <BeginStoryboard>
+                        <Storyboard>
+
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)" Duration="0:0:0.25">
+                                <LinearColorKeyFrame KeyTime="0:0:0.25" Value="{StaticResource TrippLiteLcdColor}" />
+                            </ColorAnimationUsingKeyFrames>
+
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger.Actions>
+            </EventTrigger>
+
+
+        </Style.Triggers>
+
+    </Style>
+
+
+
+
 </ResourceDictionary>
