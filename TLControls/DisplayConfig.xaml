@@ -186,9 +186,11 @@
         </Grid>
 
         <local:QuickTabs
+            x:Name="Tabs"
             Grid.Row="1"
             Grid.ColumnSpan="2"
             Margin="0,0,8,0"
+            TabSelectionChanged="QuickTabs_TabSelectionChanged"
             TabsPosition="Left">
 
             <local:QuickTabs.Items>
@@ -259,6 +261,7 @@
                 Width="64"
                 Height="24"
                 Margin="16,8"
+                Click="ApplyButton_Click"
                 Style="{StaticResource NavButtons}">
                 Apply
             </Button>
