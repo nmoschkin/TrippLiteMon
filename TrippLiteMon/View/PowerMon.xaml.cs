@@ -11,7 +11,7 @@ namespace TrippLite
     {
         private TrippLiteViewModel vm;
 
-        private TrippLiteViewModel _ViewModel
+        public TrippLiteViewModel ViewModel
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get
@@ -24,15 +24,15 @@ namespace TrippLite
             {
                 if (vm != null)
                 {
-                    vm.PowerStateChanged -= _ViewModel_PowerStateChanged;
-                    vm.ViewModelInitialized -= _ViewModel_ViewModelInitialized;
+                    vm.PowerStateChanged -= OnPowerStateChanged;
+                    vm.ViewModelInitialized -= OnViewModelInitialized;
                 }
 
                 vm = value;
                 if (vm != null)
                 {
-                    vm.PowerStateChanged += _ViewModel_PowerStateChanged;
-                    vm.ViewModelInitialized += _ViewModel_ViewModelInitialized;
+                    vm.PowerStateChanged += OnPowerStateChanged;
+                    vm.ViewModelInitialized += OnViewModelInitialized;
                 }
             }
         }
@@ -41,43 +41,38 @@ namespace TrippLite
 
         public delegate void OpenCoolWindowEventHandler(object sender, EventArgs e);
 
-        public TrippLiteViewModel ViewModel
-        {
-            get
-            {
-                TrippLiteViewModel ViewModelRet = default;
-                ViewModelRet = this.Monitor.ViewModel;
-                return ViewModelRet;
-            }
-        }
-
         public TrippLiteUPS TrippLite
         {
             get
             {
-                TrippLiteUPS TrippLiteRet = default;
-                TrippLiteRet = this.Monitor.TrippLite;
-                return TrippLiteRet;
+                return Monitor.TrippLite;
             }
         }
 
         public PowerMon()
         {
             this.InitializeComponent();
-            _ViewModel = ViewModel;
-            OpenPower.MouseUp += OpenPower_MouseUp;
-            OpenCool.MouseUp += OpenCool_MouseUp;
+            
+            ViewModel = Monitor.ViewModel;
+            
+            OpenPower.MouseUp += OpenPowerClick;
+            OpenCool.MouseUp += OpenCoolClick;
+            
             StartupCheck.IsChecked = TaskTool.GetIsEnabled();
+
             StartupCheck.Click += StartupCheck_Click;
             StartupCheck.Checked += StartupCheck_Checked;
             StartupCheck.Unchecked += StartupCheck_Unchecked;
+            
             double screenWidth = SystemParameters.PrimaryScreenWidth;
             double screenHeight = SystemParameters.PrimaryScreenHeight;
             double windowWidth = this.Width;
             double windowHeight = this.Height;
+
             this.Left = screenWidth / 2d - windowWidth / 2d;
             this.Top = screenHeight / 2d - windowHeight / 2d;
-            if (_ViewModel.Initialized)
+
+            if (ViewModel.Initialized)
             {
                 initVars();
             }
@@ -97,43 +92,43 @@ namespace TrippLite
         private void StartupCheck_Click(object sender, RoutedEventArgs e)
         {
             e.Handled = true;
-            _ViewModel.RunOnStartup = !_ViewModel.RunOnStartup;
+            ViewModel.RunOnStartup = !ViewModel.RunOnStartup;
 
             Dispatcher.BeginInvoke(() =>
             {
-                StartupCheck.IsChecked = _ViewModel.RunOnStartup;
+                StartupCheck.IsChecked = ViewModel.RunOnStartup;
             });
         }
 
-        private void _ViewModel_PowerStateChanged(object sender, PowerStateChangedEventArgs e)
+        private void OnPowerStateChanged(object sender, PowerStateChangedEventArgs e)
         {
             if (e.NewState == PowerStates.Utility)
             {
-                _ViewModel.MakeLoadBarProperty(_ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.OutputLoad));
+                ViewModel.MakeLoadBarProperty(ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.OutputLoad));
             }
             else
             {
-                _ViewModel.MakeLoadBarProperty(_ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.ChargeRemaining));
+                ViewModel.MakeLoadBarProperty(ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.ChargeRemaining));
             }
         }
 
-        private void _ViewModel_ViewModelInitialized(object sender, EventArgs e)
+        private void OnViewModelInitialized(object sender, EventArgs e)
         {
             initVars();
         }
 
         private void initVars()
         {
-            this.DataContext = ViewModel;
+            DataContext = ViewModel;
         }
 
-        private void OpenPower_MouseUp(object sender, MouseButtonEventArgs e)
+        private void OpenPowerClick(object sender, MouseButtonEventArgs e)
         {
             var h = new System.Windows.Interop.WindowInteropHelper(this);
             TrippLiteUPS.OpenSystemPowerOptions(h.Handle);
         }
 
-        private void OpenCool_MouseUp(object sender, MouseButtonEventArgs e)
+        private void OpenCoolClick(object sender, MouseButtonEventArgs e)
         {
             OpenCoolWindow?.Invoke(this, new EventArgs());
         }

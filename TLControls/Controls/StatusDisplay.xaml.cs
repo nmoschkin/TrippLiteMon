@@ -10,45 +10,33 @@ namespace TrippLite
 {
     public partial class StatusDisplay
     {
-        private TrippLiteViewModel __ViewModel;
 
-        private TrippLiteViewModel _ViewModel
+        private TrippLiteViewModel vm;
+
+        public TrippLiteViewModel ViewModel
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
-            get
-            {
-                return __ViewModel;
-            }
+            get => vm;
 
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (__ViewModel != null)
+                if (vm != null)
                 {
-                    __ViewModel.ViewModelInitialized -= _ViewModel_ViewModelInitialized;
+                    vm.ViewModelInitialized -= OnViewModelInitialized;
+                }
+                
+                vm = value;
+                this.DataContext = vm;
+
+                if (!vm.Initialized)
+                {
+                    vm.ViewModelInitialized += OnViewModelInitialized;
                 }
 
-                __ViewModel = value;
-                if (__ViewModel != null)
-                {
-                    __ViewModel.ViewModelInitialized += _ViewModel_ViewModelInitialized;
-                }
+
             }
         }
-
-        public TrippLiteViewModel ViewModel
-        {
-            get
-            {
-                return (TrippLiteViewModel)this.GetValue(ViewModelProperty);
-            }
-        }
-
-        private static readonly DependencyPropertyKey ViewModelPropertyKey = DependencyProperty.RegisterReadOnly("ViewModel", typeof(TrippLiteViewModel), typeof(StatusDisplay), new PropertyMetadata(new PropertyChangedCallback((sender, e) => { return; })));
-
-
-
-        public static readonly DependencyProperty ViewModelProperty = ViewModelPropertyKey.DependencyProperty;
 
         [Browsable(true)]
         [Category("Layout")]
@@ -57,14 +45,11 @@ namespace TrippLite
         {
             get
             {
-                Thickness ItemSpacingRet = default;
-                ItemSpacingRet = StatusDisplay.GetItemSpacing(this);
-                return ItemSpacingRet;
+                return GetItemSpacing(this);
             }
-
             set
             {
-                StatusDisplay.SetItemSpacing(this, value);
+                SetItemSpacing(this, value);
             }
         }
 
@@ -96,14 +81,11 @@ namespace TrippLite
         {
             get
             {
-                ObservableCollection<TrippLiteCodes> DisplayCodesRet = default;
-                DisplayCodesRet = StatusDisplay.GetDisplayCodes(this);
-                return DisplayCodesRet;
+                return GetDisplayCodes(this);
             }
-
             set
             {
-                StatusDisplay.SetDisplayCodes(this, value);
+                SetDisplayCodes(this, value);
             }
         }
 
@@ -127,9 +109,7 @@ namespace TrippLite
             element.SetValue(DisplayCodesProperty, value);
         }
 
-        public static readonly DependencyProperty DisplayCodesProperty = DependencyProperty.RegisterAttached("DisplayCodes", typeof(ObservableCollection<TrippLiteCodes>), typeof(StatusDisplay), new PropertyMetadata(PropertyChanged));
-
-
+        public static readonly DependencyProperty DisplayCodesProperty = DependencyProperty.RegisterAttached("DisplayCodes", typeof(ObservableCollection<TrippLiteCodes>), typeof(StatusDisplay), new PropertyMetadata(new ObservableCollection<TrippLiteCodes>(), PropertyChanged));
 
         private static void PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -139,9 +119,7 @@ namespace TrippLite
         {
             get
             {
-                TrippLiteUPS TrippLiteRet = default;
-                TrippLiteRet = _ViewModel.TrippLite;
-                return TrippLiteRet;
+                return vm.TrippLite;
             }
         }
 
@@ -154,44 +132,41 @@ namespace TrippLite
 
             set
             {
-                this.SetValue(DisplayViewProperty, value);
+                SetValue(DisplayViewProperty, value);
             }
         }
 
-        public static readonly DependencyProperty DisplayViewProperty = DependencyProperty.Register("DisplayView", typeof(StatusDisplayViews), typeof(StatusDisplay), new PropertyMetadata(null));
-
-
+        public static readonly DependencyProperty DisplayViewProperty = DependencyProperty.Register("DisplayView", typeof(StatusDisplayViews), typeof(StatusDisplay), new PropertyMetadata(StatusDisplayViews.Medium));
 
         public StatusDisplay()
         {
-            DisplayView = StatusDisplayViews.Medium;
-            DisplayCodes = new ObservableCollection<TrippLiteCodes>();
-            _ViewModel = new TrippLiteViewModel();
-            this.SetValue(ViewModelPropertyKey, _ViewModel);
-            _ViewModel.Initialize();
-            DataContext = _ViewModel;
-            // This call is required by the designer.
+            ViewModel = new TrippLiteViewModel();
+            vm.Initialize();
+
+            DataContext = vm;
             this.InitializeComponent();
         }
-
-        private int _rc = 0;
-        private int _cc = 0;
 
         private UIElement CreateItem(TrippLitePropertyViewModel prop, DataTemplate t)
         {
             StackPanel gr;
+
             gr = new StackPanel();
+
             gr.Children.Add((UIElement)t.LoadContent());
             gr.HorizontalAlignment = HorizontalAlignment.Left;
+
             gr.DataContext = prop;
             gr.Margin = ItemSpacing;
+
             return gr;
         }
 
-        private void _ViewModel_ViewModelInitialized(object sender, EventArgs e)
+        private void OnViewModelInitialized(object sender, EventArgs e)
         {
-            this.DataContext = ViewModel;
-            foreach (var dc in _ViewModel.TrippLite.PropertyBag)
+            this.DataContext = vm;
+
+            foreach (var dc in vm.TrippLite.PropertyBag)
             {
                 if (new[] { TrippLiteCodes.InputVoltage, TrippLiteCodes.OutputVoltage }.Contains(dc.Code))
                 {
@@ -205,21 +180,20 @@ namespace TrippLite
 
             if (DesignerProperties.GetIsInDesignMode(this) == true)
             {
-                _ViewModel.TrippLite.RefreshData();
+                vm.TrippLite.RefreshData();
             }
             else
             {
-                _ViewModel.StartWatching();
+                vm.StartWatching();
             }
         }
 
         private void StatusDisplay_Unloaded(object sender, RoutedEventArgs e)
         {
-            if (_ViewModel is object)
+            if (vm is object)
             {
-                _ViewModel.Dispose();
-                this.SetValue(ViewModelPropertyKey, null);
-                _ViewModel = null;
+                vm.Dispose();
+                vm = null;
             }
         }
     }

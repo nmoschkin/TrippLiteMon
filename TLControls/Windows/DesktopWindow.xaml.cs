@@ -12,30 +12,28 @@ namespace TrippLite
 {
     public partial class DesktopWindow
     {
-        private TrippLiteViewModel __ViewModel;
+        private TrippLiteViewModel vm;
 
-        private TrippLiteViewModel _ViewModel
+        public TrippLiteViewModel ViewModel
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
-            get
-            {
-                return __ViewModel;
-            }
-
+            get => vm;
+            
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (__ViewModel != null)
+                if (vm != null)
                 {
-                    __ViewModel.ViewModelInitialized -= _ViewModel_ViewModelInitialized;
-                    __ViewModel.PowerStateChanged -= _ViewModel_PowerStateChanged;
+                    vm.ViewModelInitialized -= OnViewModelInitialized;
+                    vm.PowerStateChanged -= OnPowerStateChanged;
                 }
 
-                __ViewModel = value;
-                if (__ViewModel != null)
+                vm = value;
+
+                if (vm != null)
                 {
-                    __ViewModel.ViewModelInitialized += _ViewModel_ViewModelInitialized;
-                    __ViewModel.PowerStateChanged += _ViewModel_PowerStateChanged;
+                    vm.ViewModelInitialized += OnViewModelInitialized;
+                    vm.PowerStateChanged += OnPowerStateChanged;
                 }
             }
         }
@@ -43,22 +41,6 @@ namespace TrippLite
         public event OpenMainWindowEventHandler OpenMainWindow;
 
         public delegate void OpenMainWindowEventHandler(object sender, EventArgs e);
-
-        public TrippLiteViewModel ViewModel
-        {
-            get
-            {
-                return (TrippLiteViewModel)this.GetValue(ViewModelProperty);
-            }
-
-            internal set
-            {
-                this.SetValue(ViewModelProperty, value);
-                _ViewModel = value;
-            }
-        }
-
-        public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register("ViewModel", typeof(TrippLiteViewModel), typeof(DesktopWindow), new PropertyMetadata(null));
 
         public string ModelId
         {
@@ -157,7 +139,7 @@ namespace TrippLite
             get
             {
                 TrippLiteUPS TrippLiteRet = default;
-                TrippLiteRet = _ViewModel.TrippLite;
+                TrippLiteRet = ViewModel.TrippLite;
                 return TrippLiteRet;
             }
         }
@@ -166,23 +148,23 @@ namespace TrippLite
         {
             DisplayCodes = new ObservableCollection<TrippLiteCodes>();
             ViewModel = vm;
-            _ViewModel = vm;
+            ViewModel = vm;
 
             // This call is required by the designer.
             this.InitializeComponent();
 
             // Add any initialization after the InitializeComponent() call.
 
-            if (_ViewModel.Initialized == false)
+            if (ViewModel.Initialized == false)
             {
-                _ViewModel.Initialize();
+                ViewModel.Initialize();
             }
             else
             {
                 this.DataContext = ViewModel;
             }
 
-            foreach (var pr in _ViewModel.Properties)
+            foreach (var pr in ViewModel.Properties)
             {
                 if (new[] { TrippLiteCodes.InputVoltage,
                     TrippLiteCodes.OutputVoltage,
@@ -206,9 +188,11 @@ namespace TrippLite
             this.InitializeComponent();
 
             CloseButton.Click += CloseButton_Click;
+
             MoveButton.PreviewMouseLeftButtonDown += MoveButton_PreviewMouseLeftButtonDown;
             MoveButton.PreviewMouseLeftButtonUp += MoveButton_PreviewMouseLeftButtonUp;
             MoveButton.PreviewMouseMove += MoveButton_PreviewMouseMove;
+
             this.Unloaded += DesktopWindow_Unloaded;
 
             OptionsButton.Click += OptionsButton_Click;
@@ -216,11 +200,12 @@ namespace TrippLite
             SysPower.Click += SysPower_Click;
             RunStart.Click += RunStart_Click;
             Config.Click += Config_Click;
+
             RunStart.IsChecked = TaskTool.GetIsEnabled();
 
-            _ViewModel.Initialize();
+            ViewModel.Initialize();
 
-            foreach (var pr in _ViewModel.Properties)
+            foreach (var pr in ViewModel.Properties)
             {
                 if (new[] { TrippLiteCodes.InputVoltage,
                     TrippLiteCodes.OutputVoltage,
@@ -239,14 +224,14 @@ namespace TrippLite
 
         private void Config_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new DisplayConfig(_ViewModel);
+            var dlg = new DisplayConfig(ViewModel);
             dlg.ShowDialog();
         }
 
         private void RunStart_Click(object sender, RoutedEventArgs e)
         {
             e.Handled = true;
-            _ViewModel.RunOnStartup = !_ViewModel.RunOnStartup;
+            ViewModel.RunOnStartup = !ViewModel.RunOnStartup;
 
             Dispatcher.BeginInvoke(() =>
             {
@@ -255,12 +240,12 @@ namespace TrippLite
 
         }
 
-        private void _ViewModel_ViewModelInitialized(object sender, EventArgs e)
+        private void OnViewModelInitialized(object sender, EventArgs e)
         {
             this.DataContext = ViewModel;
 
 
-            foreach (var dc in _ViewModel.TrippLite.PropertyBag)
+            foreach (var dc in ViewModel.TrippLite.PropertyBag)
             {
                 if (new[] { TrippLiteCodes.InputVoltage, TrippLiteCodes.OutputVoltage }.Contains(dc.Code))
                 {
@@ -273,18 +258,18 @@ namespace TrippLite
 
             }
 
-            _ViewModel.TrippLite.RefreshData();
-            this.SetValue(ModelPropertyKey, _ViewModel.ModelId);
+            ViewModel.TrippLite.RefreshData();
+            this.SetValue(ModelPropertyKey, ViewModel.ModelId);
             if (DesignerProperties.GetIsInDesignMode(this) == false)
             {
-                _ViewModel.StartWatching();
+                ViewModel.StartWatching();
             }
 
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            _ViewModel.StopWatching();
+            ViewModel.StopWatching();
             this.Close();
         }
 
@@ -331,11 +316,10 @@ namespace TrippLite
 
         private void DesktopWindow_Unloaded(object sender, RoutedEventArgs e)
         {
-            if (_ViewModel is object)
+            if (ViewModel is object)
             {
-                _ViewModel.Dispose();
-                this.SetValue(ViewModelProperty, null);
-                _ViewModel = null;
+                ViewModel.Dispose();
+                ViewModel = null;
             }
         }
 
@@ -351,19 +335,19 @@ namespace TrippLite
                 return;
             if (psu == true)
             {
-                _ViewModel.MakeLoadBarProperty(_ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.ChargeRemaining));
-                _ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.OutputLoad).IsActiveProperty = false;
+                ViewModel.MakeLoadBarProperty(ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.ChargeRemaining));
+                ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.OutputLoad).IsActiveProperty = false;
                 psuA.psu = true;
             }
             else
             {
-                _ViewModel.MakeLoadBarProperty(_ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.OutputLoad));
-                _ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.ChargeRemaining).IsActiveProperty = false;
+                ViewModel.MakeLoadBarProperty(ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.OutputLoad));
+                ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.ChargeRemaining).IsActiveProperty = false;
                 psuA.psu = false;
             }
         }
 
-        private void _ViewModel_PowerStateChanged(object sender, PowerStateChangedEventArgs e)
+        private void OnPowerStateChanged(object sender, PowerStateChangedEventArgs e)
         {
             if (e.NewState == PowerStates.Utility)
             {
