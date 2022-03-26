@@ -101,7 +101,7 @@ namespace TrippLite
             return false;
         }
 
-        internal void SignalRefresh()
+        public void SignalRefresh()
         {
             foreach (var p in this)
                 p.SignalRefresh();
