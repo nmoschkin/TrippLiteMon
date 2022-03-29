@@ -30,7 +30,6 @@ namespace TrippLite
         }
 
         protected MemPtr mm;
-        protected IntPtr hHid;
         
         protected HidPowerDeviceInfo powerDevice;
         
@@ -202,11 +201,11 @@ namespace TrippLite
 
             if (connected)
             {
-                hHid = HidFeatures.OpenHid(powerDevice);
+                powerDevice.OpenHid();
                 mm.AllocZero(bufflen);
             }
 
-            var result = connected & hHid.ToInt64() > 0L;
+            var result = connected & powerDevice.IsHidOpen;
 
             return result;
         }
@@ -221,10 +220,7 @@ namespace TrippLite
             try
             {
                 mm.Free();
-
-                HidFeatures.CloseHid(hHid);
-
-                hHid = (IntPtr)(-1);
+                powerDevice?.CloseHid();
 
                 connected = false;
                 powerDevice = null;
@@ -432,8 +428,6 @@ namespace TrippLite
             if (!connected)
                 return false;
 
-            int v;
-            int ret = 0;
 
             double max;
 
@@ -453,11 +447,10 @@ namespace TrippLite
                     mm.LongAtAbsolute(1L) = 0L;
                     mm.ByteAt(0) = (byte)prop.Code;
 
-                    var res = HidFeatures.GetHIDFeature(hHid, (int)prop.Code, (int)bufflen);
+                    var res = powerDevice.HidGetFeature((byte)prop.Code, out int v);
 
-                    if (res != null)
+                    if (res)
                     {
-                        v = res.intVal;
                         if (prop.Code == TrippLiteCodes.InputVoltage)
                         {
                             volt = v * prop.Multiplier;

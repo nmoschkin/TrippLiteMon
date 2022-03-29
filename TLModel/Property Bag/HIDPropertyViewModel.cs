@@ -46,6 +46,7 @@ namespace TrippLite.Property_Bag
             var result = new Dictionary<string, HIDPropertyViewModel>();
 
 
+
             return result;
         }
 
