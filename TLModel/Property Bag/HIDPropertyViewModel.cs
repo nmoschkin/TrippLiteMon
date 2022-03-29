@@ -9,24 +9,24 @@ using DataTools.Win32.Usb;
 
 namespace TrippLite.Property_Bag
 {
-    public class HIDBatteryProperty : ObservableBase
+    public class HIDPropertyViewModel : ObservableBase
     {
 
-        HidPowerDeviceInfo? powerDev;
+        HidDeviceInfo? powerDev;
 
-        HidPowerUsageInfo? usageInfo;
+        HidUsageInfo? usageInfo;
 
         public string PropertyName
         {
             get => usageInfo?.UsageTypeDescription ?? "";
         }
 
-        public HidPowerDeviceInfo? PowerDevice
+        public HidDeviceInfo? PowerDevice
         {
             get => powerDev;
         }
 
-        public HidPowerUsageInfo? PowerUsageInfo
+        public HidUsageInfo? UsageInfo
         {
             get => usageInfo;
             set
@@ -35,14 +35,19 @@ namespace TrippLite.Property_Bag
             }
         }
 
-        public HIDBatteryProperty(HidPowerDeviceInfo powerDevice, HidPowerUsageInfo usage)
+        public HIDPropertyViewModel(HidDeviceInfo powerDevice, HidUsageInfo usage)
         {
             powerDev = powerDevice;
             usageInfo = usage;
         }
 
+        public static Dictionary<string, HIDPropertyViewModel> QueryDevice(HidDeviceInfo device)
+        {
+            var result = new Dictionary<string, HIDPropertyViewModel>();
 
 
+            return result;
+        }
 
 
     }

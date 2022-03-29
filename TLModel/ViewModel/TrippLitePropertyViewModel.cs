@@ -17,7 +17,7 @@ namespace TrippLite
     /// The object that represents the TrippLite property ViewModel
     /// </summary>
     /// <remarks></remarks>
-    public class TrippLitePropertyViewModel : INotifyPropertyChanged, IDisposable, IChild<TrippLiteViewModel>
+    public class TrippLitePropertyViewModel : INotifyPropertyChanged, IDisposable, IChildOf<TrippLiteViewModel>
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -98,7 +98,7 @@ namespace TrippLite
             }
         }
 
-        TrippLiteViewModel IChild<TrippLiteViewModel>.Parent
+        TrippLiteViewModel IChildOf<TrippLiteViewModel>.Parent
         {
             get => owner;
             set => owner = value;

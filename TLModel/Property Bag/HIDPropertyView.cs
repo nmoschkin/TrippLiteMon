@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TrippLite
+namespace TrippLite.Property_Bag
 {
-    public interface IChild<T>
+    internal class HIDPropertyView
     {
-        T Parent { get; set; }
     }
-
 }

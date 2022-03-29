@@ -13,7 +13,7 @@ namespace TrippLite
     /// Encapsulates a USB HID feature property for a Tripp Lite Smart Battery.
     /// </summary>
     /// <remarks></remarks>
-    public sealed class TrippLiteProperty : INotifyPropertyChanged, IDisposable, IChild<TrippLiteUPS>
+    public sealed class TrippLiteProperty : INotifyPropertyChanged, IDisposable, IChildOf<TrippLiteUPS>
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -73,7 +73,7 @@ namespace TrippLite
             }
         }
 
-        TrippLiteUPS IChild<TrippLiteUPS>.Parent
+        TrippLiteUPS IChildOf<TrippLiteUPS>.Parent
         {
             get => model;
             set => model = value;

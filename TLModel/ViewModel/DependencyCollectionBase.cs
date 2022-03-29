@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace TrippLite
 {
-    public abstract class DependencyCollectionBase<T, U> : DependencyObject, INotifyCollectionChanged, INotifyPropertyChanged, ICollection<T>, IChild<U> where T : IChild<U>
+    public abstract class DependencyCollectionBase<T, U> : DependencyObject, INotifyCollectionChanged, INotifyPropertyChanged, ICollection<T>, IChildOf<U> where T : IChildOf<U>
     {
         protected Collection<T> col = new Collection<T>();
         protected U parent;
@@ -55,7 +55,7 @@ namespace TrippLite
             }
         }
 
-        U IChild<U>.Parent
+        U IChildOf<U>.Parent
         {
             get => parent;
             set => parent = value;
@@ -130,7 +130,7 @@ namespace TrippLite
         public IEnumerator GetEnumerator1() => GetEnumerator();
     }
 
-    public sealed class DependencyCollectionBaseEnumerator<T, U> : IEnumerator<T> where T : IChild<U>
+    public sealed class DependencyCollectionBaseEnumerator<T, U> : IEnumerator<T> where T : IChildOf<U>
     {
         private DependencyCollectionBase<T, U> subj;
         private int pos = -1;
