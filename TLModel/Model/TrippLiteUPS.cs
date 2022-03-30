@@ -109,26 +109,15 @@ namespace TrippLite
         {
             bool do10 = win10 & SysInfo.OSInfo.IsWindows10;
 
-            var shex = new SHELLEXECUTEINFO();
-
-            shex.cbSize = Marshal.SizeOf(shex);
-            shex.fMask = (User32.SEE_MASK_UNICODE | User32.SEE_MASK_ASYNCOK | User32.SEE_MASK_FLAG_DDEWAIT);
-            shex.hWnd = hwndOwner;
-            shex.hInstApp = Process.GetCurrentProcess().Handle;
-            shex.nShow = User32.SW_SHOW;
-
             if (do10)
             {
-                shex.lpFile = "ms-settings:powersleep";
+                ShellExecuteHelper.Execute("ms-settings:powersleep", "", "");
             }
             else
             {
-                shex.lpDirectory = @"::{26EE0668-A00A-44D7-9371-BEB064C98683}\0";
-                shex.lpFile = @"::{26EE0668-A00A-44D7-9371-BEB064C98683}\0\::{025A5937-A6BE-4686-A844-36FE4BEC8B6D}";
+                ShellExecuteHelper.Execute(@"::{26EE0668-A00A-44D7-9371-BEB064C98683}\0\::{025A5937-A6BE-4686-A844-36FE4BEC8B6D}", "", @"::{26EE0668-A00A-44D7-9371-BEB064C98683}\0");
             }
 
-            shex.lpVerb = "";
-            User32.ShellExecuteEx(ref shex);
         }
 
         /// <summary>
