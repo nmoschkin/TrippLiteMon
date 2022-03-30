@@ -1,3 +1,6 @@
 [submodule "DataTools"]
 	path = DataTools
 	url = https://github.com/nmoschkin/DataTools.git
+[submodule "MessageBoxEx"]
+	path = MessageBoxEx
+	url = https://github.com/nmoschkin/MessageBoxEx.git
