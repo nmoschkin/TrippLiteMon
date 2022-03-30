@@ -11,10 +11,14 @@ using System.Runtime.InteropServices;
 using static TrippLite.TrippLiteCodeUtility;
 using DataTools.Win32;
 using DataTools.Win32.Usb;
-
+using System.IO;
+using DataTools.MessageBoxEx;
+using TrippLite.Model;
 
 namespace TrippLite
 {
+    public delegate void PowerStateChangedEventHandler(object sender, PowerStateChangedEventArgs e);
+
     public class TrippLiteUPS : System.Runtime.ConstrainedExecution.CriticalFinalizerObject, INotifyPropertyChanged, IDisposable
     {
 
@@ -26,7 +30,22 @@ namespace TrippLite
         public TrippLiteUPS(bool connect = true)
         {
             if (connect)
-                Connect();
+            {
+                try
+                {
+                    Connect();
+                }
+                catch(Exception ex)
+                {
+                    MessageBoxEx.Show(
+                        $"Error Opening HID Battery: {ex.Message}", 
+                        "Initialization Failure", 
+                        MessageBoxExType.OK, 
+                        MessageBoxExIcons.Exclamation);
+                }
+
+            }
+
         }
 
         protected MemPtr mm;
@@ -48,11 +67,11 @@ namespace TrippLite
 
         public static int DefaultRetryDelay { get; set; } = 1000;
 
+        protected PowerStateSignal? stateMonitor = null;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        public event PowerStateChangedEventHandler PowerStateChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public event PowerStateChangedEventHandler? PowerStateChanged;
 
-        public delegate void PowerStateChangedEventHandler(object sender, PowerStateChangedEventArgs e);
 
         /// <summary>
         /// Returns a list of all TrippLite devices.
@@ -129,6 +148,7 @@ namespace TrippLite
         public bool Connect(HidDeviceInfo? device = null)
         {
             if (disposedValue) return false;
+            if (connected) return true;
 
             HidDeviceInfo[] devs;
 
@@ -190,13 +210,24 @@ namespace TrippLite
 
             if (connected)
             {
-                powerDevice.OpenHid();
+                connected &= powerDevice.OpenHid();
                 mm.AllocZero(bufflen);
             }
 
             var result = connected & powerDevice.IsHidOpen;
 
+            if (!connected) throw new FileLoadException("Could not connect to the Hid battery.");
+
+            stateMonitor = new PowerStateSignal(powerDevice);
+            stateMonitor.PowerStateChanged += StateMonitor_PowerStateChanged;
+        
             return result;
+        }
+
+        private void StateMonitor_PowerStateChanged(object? sender, PowerStateChangedEventArgs e)
+        {
+            PowerState = e.NewState;
+            PowerStateChanged?.Invoke(this, e);
         }
 
         /// <summary>
@@ -209,8 +240,12 @@ namespace TrippLite
             try
             {
                 mm.Free();
-                powerDevice?.CloseHid();
 
+                stateMonitor.PowerStateChanged -= StateMonitor_PowerStateChanged;
+                powerDevice?.CloseHid();
+                stateMonitor?.Dispose();
+
+                stateMonitor = null;
                 connected = false;
                 powerDevice = null;
                 propBag = null;                
@@ -417,7 +452,6 @@ namespace TrippLite
             if (!connected)
                 return false;
 
-
             double max;
 
             int lpsMax = 0;
@@ -461,121 +495,122 @@ namespace TrippLite
                     
                 }
             }
-            catch (ThreadAbortException thx)
+            catch (ThreadAbortException)
             {
                 return false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
-                // '
-                // ' Check for power failure
             };
 
-            if (involtRet == true)
-            {
-                min = propBag.FindProperty(TrippLiteCodes.LowVoltageTransfer).Value;
-                max = propBag.FindProperty(TrippLiteCodes.HighVoltageTransfer).Value;
+            
+            stateMonitor.DeterminePowerState();
 
-                switch (volt)
-                {
-                    case 0d:
-                        if (PowerState != PowerStates.Battery)
-                        {
-                            if (lps >= lpsMax)
-                            {
-                                if (dep is object)
-                                {
-                                    dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.Battery);
-                                }
-                                else
-                                {
-                                    PowerState = PowerStates.Battery;
-                                }
+            //if (involtRet == true)
+            //{
+            //    min = propBag.FindProperty(TrippLiteCodes.LowVoltageTransfer).Value;
+            //    max = propBag.FindProperty(TrippLiteCodes.HighVoltageTransfer).Value;
 
-                                lps = 0;
-                            }
-                        }
-                        else
-                        {
-                            lps += 1;
-                        }
+            //    switch (volt)
+            //    {
+            //        case 0d:
+            //            if (PowerState != PowerStates.Battery)
+            //            {
+            //                if (lps >= lpsMax)
+            //                {
+            //                    if (dep is object)
+            //                    {
+            //                        dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.Battery);
+            //                    }
+            //                    else
+            //                    {
+            //                        PowerState = PowerStates.Battery;
+            //                    }
 
-                        break;
+            //                    lps = 0;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                lps += 1;
+            //            }
 
-                    case var @case when @case <= min:
-                        if (PowerState != PowerStates.BatteryTransferLow)
-                        {
-                            if (lps >= lpsMax)
-                            {
-                                if (dep is object)
-                                {
-                                    dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.BatteryTransferLow);
-                                }
-                                else
-                                {
-                                    PowerState = PowerStates.BatteryTransferLow;
-                                }
+            //            break;
 
-                                lps = 0;
-                            }
-                        }
-                        else
-                        {
-                            lps += 1;
-                        }
+            //        case var @case when @case <= min:
+            //            if (PowerState != PowerStates.BatteryTransferLow)
+            //            {
+            //                if (lps >= lpsMax)
+            //                {
+            //                    if (dep is object)
+            //                    {
+            //                        dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.BatteryTransferLow);
+            //                    }
+            //                    else
+            //                    {
+            //                        PowerState = PowerStates.BatteryTransferLow;
+            //                    }
 
-                        break;
+            //                    lps = 0;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                lps += 1;
+            //            }
 
-                    case var case1 when case1 >= max:
-                        if (PowerState != PowerStates.BatteryTransferHigh)
-                        {
-                            if (lps >= lpsMax)
-                            {
-                                if (dep is object)
-                                {
-                                    dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.BatteryTransferHigh);
-                                }
-                                else
-                                {
-                                    PowerState = PowerStates.BatteryTransferHigh;
-                                }
+            //            break;
 
-                                lps = 0;
-                            }
-                        }
-                        else
-                        {
-                            lps += 1;
-                        }
+            //        case var case1 when case1 >= max:
+            //            if (PowerState != PowerStates.BatteryTransferHigh)
+            //            {
+            //                if (lps >= lpsMax)
+            //                {
+            //                    if (dep is object)
+            //                    {
+            //                        dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.BatteryTransferHigh);
+            //                    }
+            //                    else
+            //                    {
+            //                        PowerState = PowerStates.BatteryTransferHigh;
+            //                    }
 
-                        break;
+            //                    lps = 0;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                lps += 1;
+            //            }
 
-                    default:
-                        if (PowerState != PowerStates.Utility)
-                        {
-                            if (lps >= lpsMax)
-                            {
-                                if (dep is object)
-                                {
-                                    dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.Utility);
-                                }
-                                else
-                                {
-                                    PowerState = PowerStates.Utility;
-                                }
+            //            break;
 
-                                lps = 0;
-                            }
-                        }
-                        else
-                        {
-                            lps += 1;
-                        }
+            //        default:
+            //            if (PowerState != PowerStates.Utility)
+            //            {
+            //                if (lps >= lpsMax)
+            //                {
+            //                    if (dep is object)
+            //                    {
+            //                        dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.Utility);
+            //                    }
+            //                    else
+            //                    {
+            //                        PowerState = PowerStates.Utility;
+            //                    }
 
-                        break;
-                }
-            }
+            //                    lps = 0;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                lps += 1;
+            //            }
+
+            //            break;
+            //    }
+            //}
 
             if (dep is object)
             {

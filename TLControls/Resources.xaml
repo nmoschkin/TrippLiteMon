@@ -1,16 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <SolidColorBrush x:Key="TrippLiteErrorDark" Color="DarkRed" />
-    <SolidColorBrush x:Key="TrippLiteWarnDark" Color="DarkOrange" />
-    <SolidColorBrush x:Key="TrippLiteOKDark" Color="DarkGreen" />
-
-    <SolidColorBrush x:Key="TrippLiteError" Color="Red" />
-    <SolidColorBrush x:Key="TrippLiteWarn" Color="Orange" />
-    <SolidColorBrush x:Key="TrippLiteOK" Color="Green" />
-
-    <SolidColorBrush x:Key="TrippLiteErrorLight" Color="LightCoral" />
-    <SolidColorBrush x:Key="TrippLiteWarnLight" Color="LightGoldenrodYellow" />
-    <SolidColorBrush x:Key="TrippLiteLight" Color="LightGreen" />
+    <ImageSource x:Key="TrippLiteLogo">pack://application:,,,/TLControls;component/Resources/TrippLiteLogo.png</ImageSource>
+    <ImageSource x:Key="Smart1500LCDT">pack://application:,,,/TLControls;component/Resources/TrippLiteSmart1500LCDT.png</ImageSource>
+    <ImageSource x:Key="CmdLeft">pack://application:,,,/TLControls;component/Resources/cmdleftb.png</ImageSource>
+    <ImageSource x:Key="CmdRight">pack://application:,,,/TLControls;component/Resources/cmdrightb.png</ImageSource>
+    <ImageSource x:Key="WindowOptionsImage">pack://application:,,,/TLControls;component/Resources/gear.png</ImageSource>
+    <ImageSource x:Key="WindowMoveImage">pack://application:,,,/TLControls;component/Resources/move-512.png</ImageSource>
+    <ImageSource x:Key="WindowCloseImage">pack://application:,,,/TLControls;component/Resources/icon_close.png</ImageSource>
 
     <Color x:Key="TrippLiteErrorDarkColor">DarkRed</Color>
     <Color x:Key="TrippLiteWarnDarkColor">DarkOrange</Color>
@@ -23,6 +19,82 @@
     <Color x:Key="TrippLiteErrorLightColor">LightCoral</Color>
     <Color x:Key="TrippLiteWarnLightColor">LightGoldenrodYellow</Color>
     <Color x:Key="TrippLiteLightColor">LightGreen</Color>
+
+    <Color x:Key="TrippLiteGrayColor">#e8ebf0</Color>
+    <Color x:Key="TrippLiteDimGrayColor">#c0c0c0</Color>
+    <Color x:Key="TrippLiteBlueColor">#19589b</Color>
+    <Color x:Key="TrippLiteLcdColor">#FF79BBFF</Color>
+
+    <Color x:Key="ShadowColor">#606060</Color>
+
+    <SolidColorBrush x:Key="TrippLiteErrorDark" Color="DarkRed" />
+    <SolidColorBrush x:Key="TrippLiteWarnDark" Color="DarkOrange" />
+    <SolidColorBrush x:Key="TrippLiteOKDark" Color="DarkGreen" />
+
+    <SolidColorBrush x:Key="TrippLiteError" Color="Red" />
+    <SolidColorBrush x:Key="TrippLiteWarn" Color="Orange" />
+    <SolidColorBrush x:Key="TrippLiteOK" Color="Green" />
+
+    <SolidColorBrush x:Key="TrippLiteErrorLight" Color="LightCoral" />
+    <SolidColorBrush x:Key="TrippLiteWarnLight" Color="LightGoldenrodYellow" />
+    <SolidColorBrush x:Key="TrippLiteLight" Color="LightGreen" />
+
+    <SolidColorBrush x:Key="TrippLiteBlue" Color="#19589b" />
+    <SolidColorBrush x:Key="TrippLiteGray" Color="#e8ebf0" />
+    <SolidColorBrush x:Key="TrippLiteDimGray" Color="#c0c0c0" />
+
+    <SolidColorBrush x:Key="TrippLiteLcd" Color="#FF79BBFF" />
+    <SolidColorBrush x:Key="TrippLiteLcdTrans" Color="#7F79BBFF" />
+    <SolidColorBrush
+        x:Key="TrippLiteLcdType"
+        x:Name="TrippLiteLcdType"
+        Color="#FFD4E7FB" />
+
+    <LinearGradientBrush x:Key="BlueGradient" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="White" />
+        <GradientStop Offset="1" Color="#FF62D9EC" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="TrippLiteBlueGradientMirror" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Offset="0" Color="#19589b" />
+        <GradientStop Offset="0.5" Color="#5999e1" />
+        <GradientStop Offset="1" Color="#19589b" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="TrippLiteBlueGradient" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Offset="0" Color="#19589b" />
+        <GradientStop Offset="1" Color="#5999e1" />
+    </LinearGradientBrush>
+
+    <RadialGradientBrush x:Key="LcdRadial" RadiusX="1" RadiusY="1">
+        <GradientStop Offset="1" Color="#FF79BBFF" />
+        <GradientStop Offset="0.8" Color="#FF79BBFF" />
+        <GradientStop Offset="0" Color="#ffaeeeff" />
+    </RadialGradientBrush>
+
+    <LinearGradientBrush x:Key="TrippLiteBackGradient" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Offset="0" Color="#e8ebf0" />
+        <GradientStop Offset="1" Color="#303030" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="TrippLitePenGradient" Opacity="0.75" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#e8ebf0" />
+        <GradientStop Offset="0.5" Color="#eeeeee" />
+        <GradientStop Offset="1" Color="#303030" />
+    </LinearGradientBrush>
+
+    <RadialGradientBrush x:Key="TrippLiteBlueRadial" RadiusX="1" RadiusY="1">
+        <GradientStop Offset="0" Color="#7f19589b" />
+        <GradientStop Offset="0.5" Color="#7f5999e1" />
+        <GradientStop Offset="1" Color="#7f19589b" />
+    </RadialGradientBrush>
+
+    <Pen
+        x:Key="BorderPen"
+        Brush="{DynamicResource TrippLitePenGradient}"
+        Thickness="1.5" />
+
+
 
     <Style x:Key="NormalPropertyHeadline" TargetType="{x:Type TextBlock}">
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -305,90 +377,6 @@
     </DataTemplate>
 
 
-
-
-    <Style TargetType="{x:Type ListViewItem}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-    </Style>
-
-    <LinearGradientBrush x:Key="BlueGradient" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Offset="0" Color="White" />
-        <GradientStop Offset="1" Color="#FF62D9EC" />
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="TrippLiteBlueGradientMirror" StartPoint="0,0.5" EndPoint="1,0.5">
-        <GradientStop Offset="0" Color="#19589b" />
-        <GradientStop Offset="0.5" Color="#5999e1" />
-        <GradientStop Offset="1" Color="#19589b" />
-    </LinearGradientBrush>
-
-    <RadialGradientBrush x:Key="TrippLiteBlueRadial" RadiusX="1" RadiusY="1">
-        <GradientStop Offset="0" Color="#7f19589b" />
-        <GradientStop Offset="0.5" Color="#7f5999e1" />
-        <GradientStop Offset="1" Color="#7f19589b" />
-    </RadialGradientBrush>
-
-    <LinearGradientBrush x:Key="TrippLiteBlueGradient" StartPoint="0,0.5" EndPoint="1,0.5">
-        <GradientStop Offset="0" Color="#19589b" />
-        <GradientStop Offset="1" Color="#5999e1" />
-    </LinearGradientBrush>
-
-    <SolidColorBrush x:Key="TrippLiteBlue" Color="#19589b" />
-
-    <SolidColorBrush x:Key="TrippLiteGray" Color="#e8ebf0" />
-
-    <SolidColorBrush x:Key="TrippLiteDimGray" Color="#c0c0c0" />
-
-    <Color x:Key="TrippLiteGrayColor">#e8ebf0</Color>
-
-    <Color x:Key="TrippLiteDimGrayColor">#c0c0c0</Color>
-
-    <Color x:Key="TrippLiteBlueColor">#19589b</Color>
-
-    <Color x:Key="ShadowColor">#606060</Color>
-    <Color x:Key="TrippLiteLcdColor">#FF79BBFF</Color>
-
-    <SolidColorBrush x:Key="TrippLiteLcd" Color="#FF79BBFF" />
-
-    <SolidColorBrush x:Key="TrippLiteLcdTrans" Color="#7F79BBFF" />
-
-    <SolidColorBrush
-        x:Key="TrippLiteLcdType"
-        x:Name="TrippLiteLcdType"
-        Color="#FFD4E7FB" />
-
-    <RadialGradientBrush x:Key="LcdRadial" RadiusX="1" RadiusY="1">
-        <GradientStop Offset="1" Color="#FF79BBFF" />
-        <GradientStop Offset="0.8" Color="#FF79BBFF" />
-        <GradientStop Offset="0" Color="#ffaeeeff" />
-    </RadialGradientBrush>
-
-    <LinearGradientBrush x:Key="TrippLiteBackGradient" StartPoint="0,0.5" EndPoint="1,0.5">
-        <GradientStop Offset="0" Color="#e8ebf0" />
-        <GradientStop Offset="1" Color="#303030" />
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="TrippLitePenGradient" Opacity="0.75" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Offset="0" Color="#e8ebf0" />
-        <GradientStop Offset="0.5" Color="#eeeeee" />
-        <GradientStop Offset="1" Color="#303030" />
-    </LinearGradientBrush>
-
-    <Pen
-        x:Key="BorderPen"
-        Brush="{DynamicResource TrippLitePenGradient}"
-        Thickness="1.5" />
-
-    <ImageSource x:Key="TrippLiteLogo">pack://application:,,,/TLControls;component/Resources/TrippLiteLogo.png</ImageSource>
-    <ImageSource x:Key="Smart1500LCDT">pack://application:,,,/TLControls;component/Resources/TrippLiteSmart1500LCDT.png</ImageSource>
-    <ImageSource x:Key="CmdLeft">pack://application:,,,/TLControls;component/Resources/cmdleftb.png</ImageSource>
-    <ImageSource x:Key="CmdRight">pack://application:,,,/TLControls;component/Resources/cmdrightb.png</ImageSource>
-    <ImageSource x:Key="WindowOptionsImage">pack://application:,,,/TLControls;component/Resources/gear.png</ImageSource>
-    <ImageSource x:Key="WindowMoveImage">pack://application:,,,/TLControls;component/Resources/move-512.png</ImageSource>
-    <ImageSource x:Key="WindowCloseImage">pack://application:,,,/TLControls;component/Resources/icon_close.png</ImageSource>
-
-
-
     <Style x:Key="DefaultHeaderStyle" TargetType="Label">
 
         <Style.Setters>
@@ -579,6 +567,19 @@
         </Style.Triggers>
 
     </Style>
+
+    <Style TargetType="Button">
+        <Setter Property="BorderBrush" Value="{x:Null}" />
+        <Setter Property="Background" Value="{StaticResource LcdRadial}" />
+        <Setter Property="FontFamily" Value="Calibri" />
+
+    </Style>
+
+
+    <Style TargetType="{x:Type ListViewItem}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+    </Style>
+
 
 
 

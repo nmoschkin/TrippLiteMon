@@ -15,6 +15,7 @@
     <ProjectReference Include="..\DataTools\DataTools.Win32.Usb\DataTools.Win32.Usb.csproj" />
     <ProjectReference Include="..\DataTools\DataTools.Win32\DataTools.Win32.csproj" />
     <ProjectReference Include="..\DataTools\DataTools\DataTools.csproj" />
+    <ProjectReference Include="..\MessageBoxEx\MessageBoxEx5\MessageBoxEx5.csproj" />
   </ItemGroup>
 
   <ItemGroup>

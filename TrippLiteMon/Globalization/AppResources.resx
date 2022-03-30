@@ -1,0 +1,453 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Abort" xml:space="preserve">
+    <value>Abort</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="ACPower" xml:space="preserve">
+    <value>A/C Power</value>
+  </data>
+  <data name="Alarm" xml:space="preserve">
+    <value>Alarm</value>
+  </data>
+  <data name="Alert" xml:space="preserve">
+    <value>Alert</value>
+  </data>
+  <data name="Amp" xml:space="preserve">
+    <value>Amp</value>
+  </data>
+  <data name="Amperage" xml:space="preserve">
+    <value>Amperage</value>
+  </data>
+  <data name="Amps" xml:space="preserve">
+    <value>Amps</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="AppShortTitle" xml:space="preserve">
+    <value>BatteryMon</value>
+  </data>
+  <data name="AppTitle" xml:space="preserve">
+    <value>Battery Device Monitor</value>
+  </data>
+  <data name="AvailableProperties" xml:space="preserve">
+    <value>Available Properties</value>
+  </data>
+  <data name="BackColor" xml:space="preserve">
+    <value>Background Color</value>
+  </data>
+  <data name="BackgroundSettings" xml:space="preserve">
+    <value>Background Settings</value>
+  </data>
+  <data name="BatteryDevice" xml:space="preserve">
+    <value>Battery Device</value>
+  </data>
+  <data name="BatteryDevices" xml:space="preserve">
+    <value>Battery Devices</value>
+  </data>
+  <data name="BatteryPower" xml:space="preserve">
+    <value>Battery Power</value>
+  </data>
+  <data name="Blackout" xml:space="preserve">
+    <value>Blackout</value>
+  </data>
+  <data name="Bold" xml:space="preserve">
+    <value>Bold</value>
+  </data>
+  <data name="BrownOut" xml:space="preserve">
+    <value>Brown Out</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Celsius" xml:space="preserve">
+    <value>Celsius</value>
+  </data>
+  <data name="Charge" xml:space="preserve">
+    <value>Charge</value>
+  </data>
+  <data name="ChargeRemaining" xml:space="preserve">
+    <value>Charge Remaining</value>
+  </data>
+  <data name="Charging" xml:space="preserve">
+    <value>Charging</value>
+  </data>
+  <data name="ChoosePowerSystem" xml:space="preserve">
+    <value>Choose Power System</value>
+  </data>
+  <data name="ChoosePowerSystems" xml:space="preserve">
+    <value>Choose Power Systems</value>
+  </data>
+  <data name="ClickDragMove" xml:space="preserve">
+    <value>Press and hold here to drag and move the window.</value>
+  </data>
+  <data name="CollectionType" xml:space="preserve">
+    <value>Collection Type</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="CoolWindowColors" xml:space="preserve">
+    <value>Cool Window Colors</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Create New ...</value>
+  </data>
+  <data name="CriticalFailQuitMessage" xml:space="preserve">
+    <value>The application has encountered a critical failure and will now terminate.</value>
+  </data>
+  <data name="CriticalFailure" xml:space="preserve">
+    <value>Critical Failure</value>
+  </data>
+  <data name="CurrentPowerSystemStatus" xml:space="preserve">
+    <value>Current Power System Status</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Device" xml:space="preserve">
+    <value>Device</value>
+  </data>
+  <data name="Devices" xml:space="preserve">
+    <value>Devices</value>
+  </data>
+  <data name="Discharging" xml:space="preserve">
+    <value>Discharging</value>
+  </data>
+  <data name="DynamicProperties" xml:space="preserve">
+    <value>Dynamic Properties</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="Fahrenheit" xml:space="preserve">
+    <value>Fahrenheit</value>
+  </data>
+  <data name="Font" xml:space="preserve">
+    <value>Font</value>
+  </data>
+  <data name="FontFamily" xml:space="preserve">
+    <value>Font Family</value>
+  </data>
+  <data name="FontSize" xml:space="preserve">
+    <value>Font Size</value>
+  </data>
+  <data name="ForeColor" xml:space="preserve">
+    <value>Foreground Color</value>
+  </data>
+  <data name="ForegroundSettings" xml:space="preserve">
+    <value>Foreground Settings</value>
+  </data>
+  <data name="GitHubLink" xml:space="preserve">
+    <value>https://github.com/nmoschkin/BatteryMon</value>
+  </data>
+  <data name="HaveIssuesText" xml:space="preserve">
+    <value>If you have a bug to report, or any other issue, please reach out to me via the GitHub repository page.</value>
+  </data>
+  <data name="Hertz" xml:space="preserve">
+    <value>Hertz</value>
+  </data>
+  <data name="HID" xml:space="preserve">
+    <value>HID</value>
+  </data>
+  <data name="HIDUsagePage" xml:space="preserve">
+    <value>HID Usage Page</value>
+  </data>
+  <data name="HIDUsagePages" xml:space="preserve">
+    <value>HID Usage Pages</value>
+  </data>
+  <data name="HID_Long" xml:space="preserve">
+    <value>Human Interface Device</value>
+  </data>
+  <data name="Italic" xml:space="preserve">
+    <value>Italic</value>
+  </data>
+  <data name="Kelvin" xml:space="preserve">
+    <value>Kelvin</value>
+  </data>
+  <data name="LeftMeter" xml:space="preserve">
+    <value>Left Side Meter</value>
+  </data>
+  <data name="LeftSideProperty" xml:space="preserve">
+    <value>Left Side Property</value>
+  </data>
+  <data name="Load" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="MainsStatus" xml:space="preserve">
+    <value>Mains Status</value>
+  </data>
+  <data name="Menu" xml:space="preserve">
+    <value>Menu</value>
+  </data>
+  <data name="NotPrimary" xml:space="preserve">
+    <value>Not Primary</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Opacity" xml:space="preserve">
+    <value>Opacity</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="OpenCoolWindow" xml:space="preserve">
+    <value>Open Cool Window</value>
+  </data>
+  <data name="OpenMainWindow" xml:space="preserve">
+    <value>Open Desktop Window</value>
+  </data>
+  <data name="OpenSystemPowerSettings" xml:space="preserve">
+    <value>Open System Power Settings</value>
+  </data>
+  <data name="PercentRemaining" xml:space="preserve">
+    <value>Percent Remaining</value>
+  </data>
+  <data name="PowerDevice" xml:space="preserve">
+    <value>Power Device</value>
+  </data>
+  <data name="PowerDevices" xml:space="preserve">
+    <value>Power Devices</value>
+  </data>
+  <data name="PowerSystemFailure" xml:space="preserve">
+    <value>Power System Failure</value>
+  </data>
+  <data name="Primary" xml:space="preserve">
+    <value>Primary</value>
+  </data>
+  <data name="ReportBugs" xml:space="preserve">
+    <value>ReportBugs</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Retry</value>
+  </data>
+  <data name="RightPropertyBottom" xml:space="preserve">
+    <value>Bottom Right Property</value>
+  </data>
+  <data name="RightPropertyTop" xml:space="preserve">
+    <value>Upper Right Property</value>
+  </data>
+  <data name="RunOnLogin" xml:space="preserve">
+    <value>Run On Startup</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Save As ...</value>
+  </data>
+  <data name="SelectAlarmMode" xml:space="preserve">
+    <value>Select Alarm Mode</value>
+  </data>
+  <data name="SelectBatteries_Long" xml:space="preserve">
+    <value>Please select one or more power devices from the list.</value>
+  </data>
+  <data name="SelectBattery_Long" xml:space="preserve">
+    <value>Please select a power device from the list.</value>
+  </data>
+  <data name="SelectMany" xml:space="preserve">
+    <value>Select Multiple</value>
+  </data>
+  <data name="SelectOne" xml:space="preserve">
+    <value>Select Only One</value>
+  </data>
+  <data name="Sensor" xml:space="preserve">
+    <value>Sensor</value>
+  </data>
+  <data name="SensorData" xml:space="preserve">
+    <value>Sensor Data</value>
+  </data>
+  <data name="SensorReadings" xml:space="preserve">
+    <value>Sensor Readings</value>
+  </data>
+  <data name="Sensors" xml:space="preserve">
+    <value>Sensors</value>
+  </data>
+  <data name="SetDefault" xml:space="preserve">
+    <value>Set As Default</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="ShowPowerDevices" xml:space="preserve">
+    <value>Show Power Devices</value>
+  </data>
+  <data name="Shutdown" xml:space="preserve">
+    <value>Shutdown</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Surge" xml:space="preserve">
+    <value>Surge</value>
+  </data>
+  <data name="Temperature" xml:space="preserve">
+    <value>Temperature</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="TestCompletedFailed" xml:space="preserve">
+    <value>Test Completed and Failed</value>
+  </data>
+  <data name="TestCompletedPassed" xml:space="preserve">
+    <value>Test Completed and Passed</value>
+  </data>
+  <data name="Testing" xml:space="preserve">
+    <value>Testing</value>
+  </data>
+  <data name="TextColor" xml:space="preserve">
+    <value>Text Color</value>
+  </data>
+  <data name="TextSettings" xml:space="preserve">
+    <value>Text Settings</value>
+  </data>
+  <data name="TimeRemaining" xml:space="preserve">
+    <value>Time Remaining</value>
+  </data>
+  <data name="UPS" xml:space="preserve">
+    <value>UPS</value>
+  </data>
+  <data name="UPS_Long" xml:space="preserve">
+    <value>Uninterruptable Power Supply</value>
+  </data>
+  <data name="Volt" xml:space="preserve">
+    <value>Volt</value>
+  </data>
+  <data name="Voltage" xml:space="preserve">
+    <value>Voltage</value>
+  </data>
+  <data name="Volts" xml:space="preserve">
+    <value>Volts</value>
+  </data>
+  <data name="Watt" xml:space="preserve">
+    <value>Watt</value>
+  </data>
+  <data name="Watts" xml:space="preserve">
+    <value>Watts</value>
+  </data>
+  <data name="XDevices" xml:space="preserve">
+    <value>{0} Devices</value>
+  </data>
+</root>

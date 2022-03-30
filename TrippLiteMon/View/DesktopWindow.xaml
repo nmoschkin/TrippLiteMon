@@ -2,7 +2,7 @@
     x:Class="TrippLite.DesktopWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:TrippLite"
+    xmlns:local="clr-namespace:TrippLite;assembly=TLControls"
     Title="DesktopWindow"
     Width="240"
     Height="138"

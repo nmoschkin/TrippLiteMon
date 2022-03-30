@@ -27,62 +27,64 @@ namespace TrippLite
             this.Startup += Application_Startup;
         }
 
-        private PowerMon __Main;
+        private string[] deviceIds;
 
-        private PowerMon _Main
+
+        private PowerMon mainBigWindow;
+
+        internal PowerMon PowerMonWindow
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get
             {
-                return __Main;
+                return mainBigWindow;
             }
-
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (__Main != null)
+                if (mainBigWindow != null)
                 {
-                    __Main.OpenCoolWindow -= _Main_OpenCoolWindow;
-                    __Main.LocationChanged -= _Main_LocationChanged;
-                    __Main.SizeChanged -= _Main_SizeChanged;
+                    mainBigWindow.OpenCoolWindow -= OnRequestOpenCoolWindow;
+                    mainBigWindow.LocationChanged -= OnMainWindowLocationChanged;
+                    mainBigWindow.SizeChanged -= OnMainWindowSizeChanged;
                 }
 
-                __Main = value;
-                if (__Main != null)
+                mainBigWindow = value;
+
+                if (mainBigWindow != null)
                 {
-                    __Main.OpenCoolWindow += _Main_OpenCoolWindow;
-                    __Main.LocationChanged += _Main_LocationChanged;
-                    __Main.SizeChanged += _Main_SizeChanged;
+                    mainBigWindow.OpenCoolWindow += OnRequestOpenCoolWindow;
+                    mainBigWindow.LocationChanged += OnMainWindowLocationChanged;
+                    mainBigWindow.SizeChanged += OnMainWindowSizeChanged;
                 }
             }
         }
 
-        private DesktopWindow __Cool;
+        private DesktopWindow mainCoolWindow;
 
-        private DesktopWindow _Cool
+        internal DesktopWindow CoolWindow
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get
             {
-                return __Cool;
+                return mainCoolWindow;
             }
-
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (__Cool != null)
+                if (mainCoolWindow != null)
                 {
-                    __Cool.OpenMainWindow -= _Cool_OpenMainWindow;
-                    __Cool.LocationChanged -= _Cool_LocationChanged;
-                    __Cool.SizeChanged -= _Cool_SizeChanged;
+                    mainCoolWindow.OpenMainWindow -= OnRequestOpenMainWindow;
+                    mainCoolWindow.LocationChanged -= OnCoolWindowLocationChanged;
+                    mainCoolWindow.SizeChanged -= OnCoolWindowSizeChanged;
                 }
 
-                __Cool = value;
-                if (__Cool != null)
+                mainCoolWindow = value;
+                if (mainCoolWindow != null)
                 {
-                    __Cool.OpenMainWindow += _Cool_OpenMainWindow;
-                    __Cool.LocationChanged += _Cool_LocationChanged;
-                    __Cool.SizeChanged += _Cool_SizeChanged;
+                    mainCoolWindow.OpenMainWindow += OnRequestOpenMainWindow;
+                    mainCoolWindow.LocationChanged += OnCoolWindowLocationChanged;
+                    mainCoolWindow.SizeChanged += OnCoolWindowSizeChanged;
                 }
             }
         }
@@ -111,7 +113,20 @@ namespace TrippLite
                 Settings.CoolWindowBounds = new System.Drawing.RectangleF(0, 0, 0, 0);
                 Settings.PrimaryWindowBounds = new System.Drawing.RectangleF(0, 0, 0, 0);
                 Settings.LastWindow = LastWindowType.Main;
+                Settings.PowerDevices = new string[0];
             }
+
+            deviceIds = Settings.PowerDevices;
+
+            //if (deviceIds == null || deviceIds.Length == 0)
+            //{
+            //    var picker = new BatteryPicker();
+
+            //    picker.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            //    picker.ShowDialog();
+
+
+            //}
 
             if (Settings.LastWindow == LastWindowType.Cool)
             {
@@ -126,21 +141,21 @@ namespace TrippLite
         private void SwitchToMain()
         {
             var rcM = Settings.PrimaryWindowBounds;
-            _Main = new PowerMon();
-            _Main.Show();
+            PowerMonWindow = new PowerMon();
+            PowerMonWindow.Show();
             Settings.LastWindow = LastWindowType.Main;
-            if (_Cool is object)
+            if (CoolWindow is object)
             {
-                _Cool.ViewModel.StopWatching();
-                _Cool.Close();
-                _Cool.ViewModel.Dispose();
-                _Cool = null;
+                CoolWindow.ViewModel.StopWatching();
+                CoolWindow.Close();
+                CoolWindow.ViewModel.Dispose();
+                CoolWindow = null;
             }
 
             if (rcM.Width != 0f && rcM.Height != 0f)
             {
-                _Main.Left = rcM.Left;
-                _Main.Top = rcM.Top;
+                PowerMonWindow.Left = rcM.Left;
+                PowerMonWindow.Top = rcM.Top;
                 // _Main.Width = rcM.Width
                 // _Main.Height = rcM.Height
             }
@@ -152,57 +167,61 @@ namespace TrippLite
         private void SwitchToCool()
         {
             var rcC = Settings.CoolWindowBounds;
-            _Cool = new DesktopWindow();
-            _Cool.Show();
+
+            CoolWindow = new DesktopWindow();
+            CoolWindow.Show();
+
             Settings.LastWindow = LastWindowType.Cool;
-            if (_Main is object)
+
+            if (PowerMonWindow is object)
             {
-                _Main.ViewModel.StopWatching();
-                _Main.Close();
-                _Main.ViewModel.Dispose();
-                _Main = null;
+                PowerMonWindow.ViewModel.StopWatching();
+                PowerMonWindow.Close();
+                PowerMonWindow.ViewModel.Dispose();
+                PowerMonWindow = null;
             }
 
             if (rcC.Width != 0f && rcC.Height != 0f)
             {
-                _Cool.Left = rcC.Left;
-                _Cool.Top = rcC.Top;
+                CoolWindow.Left = rcC.Left;
+                CoolWindow.Top = rcC.Top;
                 // _Cool.Width = rcC.Width
                 // _Cool.Height = rcC.Height
             }
 
             System.Threading.Thread.Sleep(100);
+
             GC.Collect(2);
         }
 
-        private void _Cool_OpenMainWindow(object sender, EventArgs e)
+        private void OnRequestOpenMainWindow(object sender, EventArgs e)
         {
             SwitchToMain();
         }
 
-        private void _Main_OpenCoolWindow(object sender, EventArgs e)
+        private void OnRequestOpenCoolWindow(object sender, EventArgs e)
         {
             SwitchToCool();
         }
 
-        private void _Cool_LocationChanged(object sender, EventArgs e)
+        private void OnCoolWindowLocationChanged(object sender, EventArgs e)
         {
-            Settings.CoolWindowBounds = new System.Drawing.RectangleF((float)_Cool.Left, (float)_Cool.Top, (float)_Cool.Width, (float)_Cool.Height);
+            Settings.CoolWindowBounds = new System.Drawing.RectangleF((float)CoolWindow.Left, (float)CoolWindow.Top, (float)CoolWindow.Width, (float)CoolWindow.Height);
         }
 
-        private void _Cool_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void OnCoolWindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Settings.CoolWindowBounds = new System.Drawing.RectangleF((float)_Cool.Left, (float)_Cool.Top, (float)_Cool.Width, (float)_Cool.Height);
+            Settings.CoolWindowBounds = new System.Drawing.RectangleF((float)CoolWindow.Left, (float)CoolWindow.Top, (float)CoolWindow.Width, (float)CoolWindow.Height);
         }
 
-        private void _Main_LocationChanged(object sender, EventArgs e)
+        private void OnMainWindowLocationChanged(object sender, EventArgs e)
         {
-            Settings.PrimaryWindowBounds = new System.Drawing.RectangleF((float)_Main.Left, (float)_Main.Top, (float)_Main.Width, (float)_Main.Height);
+            Settings.PrimaryWindowBounds = new System.Drawing.RectangleF((float)PowerMonWindow.Left, (float)PowerMonWindow.Top, (float)PowerMonWindow.Width, (float)PowerMonWindow.Height);
         }
 
-        private void _Main_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void OnMainWindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Settings.PrimaryWindowBounds = new System.Drawing.RectangleF((float)_Main.Left, (float)_Main.Top, (float)_Main.Width, (float)_Main.Height);
+            Settings.PrimaryWindowBounds = new System.Drawing.RectangleF((float)PowerMonWindow.Left, (float)PowerMonWindow.Top, (float)PowerMonWindow.Width, (float)PowerMonWindow.Height);
         }
     }
 }

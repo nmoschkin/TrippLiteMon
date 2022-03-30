@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
+using DataTools.MessageBoxEx;
 using DataTools.Scheduler;
 
 namespace TrippLite
@@ -325,15 +326,26 @@ namespace TrippLite
             try
             {
                 SyncModel = new TrippLiteUPS(false);
-                if (SyncModel.Connected == false)
+                if (SyncModel != null && SyncModel.Connected == false)
                 {
                     waitInit = new Thread(() =>
                     {
                         for (var i = 0; i < MaxTries; i++)
                         {
                             Thread.Sleep(100);
-                            SyncModel.Connect();
-                        
+                            try
+                            {
+                                SyncModel.Connect();
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBoxEx.Show(
+                                    $"Error Opening HID Battery: {ex.Message}",
+                                    "Initialization Failure",
+                                    MessageBoxExType.OK,
+                                    MessageBoxExIcons.Exclamation);
+                            }
+
                             if (SyncModel is object && SyncModel.IsTrippLite)
                             {
                                 Dispatcher.Invoke(() =>
