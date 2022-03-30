@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using TrippLite.ViewModel;
+
 namespace TrippLite
 {
     /// <summary>
@@ -19,9 +21,13 @@ namespace TrippLite
     /// </summary>
     public partial class BatteryPicker : Window
     {
+
+        private BatteryPickerViewModel vm;
         public BatteryPicker()
         {
             InitializeComponent();
+            vm = new BatteryPickerViewModel();
+            DataContext = vm;
         }
     }
 }

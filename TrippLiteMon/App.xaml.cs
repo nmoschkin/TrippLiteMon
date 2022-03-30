@@ -27,7 +27,7 @@ namespace TrippLite
             this.Startup += Application_Startup;
         }
 
-        private string[] deviceIds;
+        private PowerDeviceIdEntry[] deviceIds;
 
 
         private PowerMon mainBigWindow;
@@ -113,20 +113,18 @@ namespace TrippLite
                 Settings.CoolWindowBounds = new System.Drawing.RectangleF(0, 0, 0, 0);
                 Settings.PrimaryWindowBounds = new System.Drawing.RectangleF(0, 0, 0, 0);
                 Settings.LastWindow = LastWindowType.Main;
-                Settings.PowerDevices = new string[0];
+                Settings.PowerDevices = new PowerDeviceIdEntry[0];
             }
 
             deviceIds = Settings.PowerDevices;
 
-            //if (deviceIds == null || deviceIds.Length == 0)
-            //{
-            //    var picker = new BatteryPicker();
+            if (deviceIds == null || deviceIds.Length == 0)
+            {
+                var picker = new BatteryPicker();
 
-            //    picker.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            //    picker.ShowDialog();
-
-
-            //}
+                picker.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                picker.ShowDialog();
+            }
 
             if (Settings.LastWindow == LastWindowType.Cool)
             {

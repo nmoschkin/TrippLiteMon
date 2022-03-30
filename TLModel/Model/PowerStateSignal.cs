@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TrippLite.Model
+namespace TrippLite
 {
     public class PowerStateSignal : ObservableBase, IDisposable
     {

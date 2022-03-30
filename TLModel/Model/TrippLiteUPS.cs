@@ -13,7 +13,6 @@ using DataTools.Win32;
 using DataTools.Win32.Usb;
 using System.IO;
 using DataTools.MessageBoxEx;
-using TrippLite.Model;
 
 namespace TrippLite
 {

@@ -170,14 +170,14 @@ namespace TrippLite
         }
 
 
-        public static string[] PowerDevices
+        public static PowerDeviceIdEntry[] PowerDevices
         {
             get
             {
                 RegistryKey key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + @"\PowerDevices", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
                 string[] entries = key.GetValueNames();
 
-                List<string> recents = new List<string>();
+                List<PowerDeviceIdEntry> recents = new List<PowerDeviceIdEntry>();
 
                 int idx;
                 int ncount = 0;
@@ -194,7 +194,7 @@ namespace TrippLite
                         if (key.GetValue(entry) is string rfObj)
                         {
                             gcount++;
-                            recents.Add(rfObj);
+                            recents.Add(PowerDeviceIdEntry.Parse(rfObj));
                         }
                     }
                 }
@@ -211,7 +211,7 @@ namespace TrippLite
             }
         }
 
-        private static void SetPowerDeviceIdList(string[] deviceIds)
+        private static void SetPowerDeviceIdList(PowerDeviceIdEntry[] deviceIds)
         {
             RegistryKey key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + @"\PowerDevices", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
             string[] values = key.GetValueNames();
@@ -233,7 +233,7 @@ namespace TrippLite
 
             for (i = 0; i <= c - 1; i++)
             {
-                if (deviceIds[i] == null) continue;
+                if (!deviceIds[i].Enabled) continue;
                 key.SetValue(n++.ToString(), deviceIds[i].ToString(), RegistryValueKind.String);
             }
 
@@ -241,6 +241,8 @@ namespace TrippLite
         }
 
     }
+
+
     #endregion
 
 
