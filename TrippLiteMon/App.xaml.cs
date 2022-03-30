@@ -26,9 +26,7 @@ namespace TrippLite
             this.SessionEnding += Application_SessionEnding;
             this.Startup += Application_Startup;
         }
-
-        private PowerDeviceIdEntry[] deviceIds;
-
+                
 
         private PowerMon mainBigWindow;
 
@@ -115,17 +113,7 @@ namespace TrippLite
                 Settings.LastWindow = LastWindowType.Main;
                 Settings.PowerDevices = new PowerDeviceIdEntry[0];
             }
-
-            deviceIds = Settings.PowerDevices;
-
-            if (deviceIds == null || deviceIds.Length == 0)
-            {
-                var picker = new BatteryPicker();
-
-                picker.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                picker.ShowDialog();
-            }
-
+            
             if (Settings.LastWindow == LastWindowType.Cool)
             {
                 SwitchToCool();
@@ -134,6 +122,14 @@ namespace TrippLite
             {
                 SwitchToMain();
             }
+        }
+
+        internal void ShowBatteryPicker()
+        {
+            var picker = new BatteryPicker();
+
+            picker.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            picker.ShowDialog();
         }
 
         private void SwitchToMain()

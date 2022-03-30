@@ -1,20 +1,34 @@
 ﻿using DataTools.Observable;
+using DataTools.Win32.Usb;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace TrippLite
 {
     /// <summary>
     /// Represents a Power Device Registry Entry
     /// </summary>
-    public class PowerDeviceIdEntry : ObservableBase
+    public class PowerDeviceIdEntry : ObservableBase, ICloneable
     {
         string name;
         bool enabled;
+        BitmapSource? icon;
+
+        public HidDeviceInfo? Source { get; set; } = null;
+
+        public BitmapSource? Icon
+        {
+            get => icon;
+            set
+            {
+                SetProperty(ref icon, value);
+            }
+        }
 
         /// <summary>
         /// Gets or sets the friendly name of the device.
@@ -105,6 +119,18 @@ namespace TrippLite
             }
             else throw new ArgumentException("String could not be parsed.");
         }
+
+        object ICloneable.Clone()
+        {
+            return MemberwiseClone();
+        }
+
+        public PowerDeviceIdEntry Clone()
+        {
+            return (PowerDeviceIdEntry)MemberwiseClone();
+        }
+
+
     }
 
 }

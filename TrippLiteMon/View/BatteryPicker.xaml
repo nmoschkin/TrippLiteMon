@@ -11,18 +11,89 @@
 
     <Window.Resources>
 
-        <DataTemplate x:Key="PowerTypeTemplate">
-            <Label
-                Margin="4,2"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Stretch"
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
-                Background="White"
-                Content="{Binding}"
-                FontFamily="Calibri"
-                FontSize="12"
-                Foreground="Black" />
+        <DataTemplate x:Key="PowerDeviceTemplate">
+            <Grid
+                Height="64"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <CheckBox
+                    Grid.Row="0"
+                    Grid.RowSpan="3"
+                    Grid.Column="0"
+                    Margin="8"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    IsChecked="{Binding Enabled}" />
+
+                <Image
+                    Grid.RowSpan="3"
+                    Grid.Column="1"
+                    Width="48"
+                    Height="48"
+                    Margin="4"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Source="{Binding Icon}" />
+
+                <TextBox
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Margin="4,2"
+                    Padding="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Bottom"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    FontFamily="Calibri"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="Black"
+                    Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Margin="4,0"
+                    Padding="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Top"
+                    Content="{Binding Source.HidManufacturer}"
+                    FontFamily="Calibri"
+                    FontSize="12"
+                    Foreground="DimGray" />
+
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    Margin="4,2"
+                    Padding="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Top"
+                    Content="{Binding Source.SerialNumber}"
+                    FontFamily="Calibri"
+                    FontSize="12"
+                    Foreground="DimGray" />
+
+            </Grid>
         </DataTemplate>
 
         <Style x:Key="PropLabelStyle" TargetType="Label">
@@ -87,7 +158,14 @@
             BorderBrush="{StaticResource TrippLiteGray}"
             BorderThickness="1">
 
-            <ListView x:Name="Batteries" BorderThickness="0" />
+            <ListView
+                x:Name="Batteries"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                BorderThickness="0"
+                ItemTemplate="{StaticResource PowerDeviceTemplate}"
+                ItemsSource="{Binding DeviceIds}"
+                SelectedItem="{Binding SelectedItem}" />
 
         </Border>
 
@@ -108,7 +186,8 @@
                 Grid.Column="1"
                 Width="64"
                 Height="24"
-                Margin="8,8">
+                Margin="8,8"
+                Click="CancelButton_Click">
                 Cancel
             </Button>
 
@@ -127,7 +206,8 @@
                 Grid.Column="2"
                 Width="64"
                 Height="24"
-                Margin="8,8">
+                Margin="8,8"
+                Click="OKButton_Click">
                 OK
             </Button>
 

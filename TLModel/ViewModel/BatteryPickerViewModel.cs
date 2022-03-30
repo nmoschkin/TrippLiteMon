@@ -1,4 +1,5 @@
-﻿using DataTools.Observable;
+﻿using DataTools.Desktop;
+using DataTools.Observable;
 using DataTools.Win32.Usb;
 
 using System;
@@ -15,6 +16,8 @@ namespace TrippLite.ViewModel
         private ObservableCollection<HidPowerDeviceInfo> devices;
         private ObservableCollection<PowerDeviceIdEntry> deviceIds;
 
+        private PowerDeviceIdEntry? selectedItem;
+
         public BatteryPickerViewModel()
         {
             devices = new ObservableCollection<HidPowerDeviceInfo>();
@@ -25,7 +28,7 @@ namespace TrippLite.ViewModel
             foreach (var hid in hids)
             {
                 devices.Add(HidPowerDeviceInfo.CreateFromHidDevice(hid));
-                deviceIds.Add(new PowerDeviceIdEntry(hid.ProductString, hid.DevicePath));
+                deviceIds.Add(new PowerDeviceIdEntry(hid.ProductString, hid.DevicePath, hids.Length == 1) { Source = hid, Icon = BitmapTools.MakeWPFImage(hid.DeviceIcon) });
             }
         }
 
@@ -44,7 +47,10 @@ namespace TrippLite.ViewModel
                 {
                     if (deviceIds[i].DevicePath == entry.DevicePath)
                     {
+                        entry.Source = deviceIds[i].Source;
+                        entry.Icon = deviceIds[i].Icon;
                         deviceIds[i] = entry;
+
                         break;
                     }
                 }        
@@ -94,11 +100,7 @@ namespace TrippLite.ViewModel
             {
                 if (deviceIds[i].DevicePath == devicePath)
                 {
-                    var entry = deviceIds[i];
-
-                    entry.Enabled = enabled;
-                    deviceIds[i] = entry;
-
+                    deviceIds[i].Enabled = enabled;
                     return;
                 }
             }
@@ -120,6 +122,12 @@ namespace TrippLite.ViewModel
             {
                 SetProperty(ref devices, value);
             }
+        }
+
+        public PowerDeviceIdEntry? SelectedItem
+        {
+            get => selectedItem;
+            set => SetProperty(ref selectedItem, value);
         }
     }
 }
