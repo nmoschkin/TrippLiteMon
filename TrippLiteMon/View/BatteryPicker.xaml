@@ -207,7 +207,8 @@
                 Width="64"
                 Height="24"
                 Margin="8,8"
-                Click="OKButton_Click">
+                Click="OKButton_Click"
+                IsEnabled="{Binding OneSelected}">
                 OK
             </Button>
 

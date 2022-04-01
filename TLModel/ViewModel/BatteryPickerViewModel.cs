@@ -8,33 +8,68 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace TrippLite.ViewModel
 {
     public class BatteryPickerViewModel : ObservableBase
     {
-        private ObservableCollection<HidPowerDeviceInfo> devices;
         private ObservableCollection<PowerDeviceIdEntry> deviceIds;
 
         private PowerDeviceIdEntry? selectedItem;
 
-        public BatteryPickerViewModel()
+        private bool oneSelected;
+        private bool selMulti = false;
+
+        public BatteryPickerViewModel(bool multiSelect) : this()
         {
-            devices = new ObservableCollection<HidPowerDeviceInfo>();
+            MultiSelect = multiSelect;
+        }
+
+        public BatteryPickerViewModel() 
+        {
             deviceIds = new ObservableCollection<PowerDeviceIdEntry>();
 
             var hids = HidDeviceInfo.EnumerateHidDevices(false, new[] { HidUsagePage.PowerDevice1, HidUsagePage.PowerDevice2 });
 
             foreach (var hid in hids)
             {
-                devices.Add(HidPowerDeviceInfo.CreateFromHidDevice(hid));
-                deviceIds.Add(new PowerDeviceIdEntry(hid.ProductString, hid.DevicePath, hids.Length == 1) { Source = hid, Icon = BitmapTools.MakeWPFImage(hid.DeviceIcon) });
+                var newDev = new PowerDeviceIdEntry(hid.ProductString, hid.DevicePath, hids.Length == 1) { Source = hid, Parent = this };
+                deviceIds.Add(newDev);
+            }
+
+            CheckState();
+        }
+       
+        protected internal void CheckState(PowerDeviceIdEntry? item = null)
+        {
+            OneSelected = ((deviceIds.Count((o) => o.Enabled)) > 0);
+
+            if (item != null && item.Enabled && !selMulti)
+            {
+                int i, c = deviceIds.Count;
+
+                for (i = 0; i < c; i++)
+                {
+                    if (item.DevicePath != deviceIds[i].DevicePath)
+                    {
+                        deviceIds[i].Enabled = false;
+                    }
+                    else if (deviceIds[i].Enabled != true)
+                    {
+                        deviceIds[i].Enabled = true;
+                    }
+                }
             }
         }
 
-        public IList<PowerDeviceIdEntry> GetEnabled(bool enabled = true)
+        public bool OneSelected
         {
-            return deviceIds.Where((d) => d.Enabled == enabled).ToArray();
+            get => oneSelected;
+            set
+            {
+                SetProperty(ref oneSelected, value);
+            }
         }
 
         public void SetEnabled(IList<PowerDeviceIdEntry> entries)
@@ -48,18 +83,41 @@ namespace TrippLite.ViewModel
                     if (deviceIds[i].DevicePath == entry.DevicePath)
                     {
                         entry.Source = deviceIds[i].Source;
-                        entry.Icon = deviceIds[i].Icon;
-                        deviceIds[i] = entry;
+                        entry.Parent = this;
 
-                        break;
+                        deviceIds[i] = entry;
                     }
                 }        
             }
+
+            CheckState();
         }
+
 
         public void SetEnabled(PowerDeviceIdEntry entry)
         {
             SetEnabled(new[] { entry });    
+        }
+
+        public void SetEnabled(string devicePath, bool enabled)
+        {
+            int i, c = deviceIds.Count;
+
+            for (i = 0; i < c; i++)
+            {
+                if (deviceIds[i].DevicePath == devicePath)
+                {
+                    deviceIds[i].Enabled = enabled;
+
+                    break;
+                }
+            }
+
+            CheckState();
+        }
+        public IList<PowerDeviceIdEntry> GetEnabled(bool enabled = true)
+        {
+            return deviceIds.Where((d) => d.Enabled == enabled).ToArray();
         }
 
         public bool GetEnabled(PowerDeviceIdEntry entry)
@@ -92,35 +150,51 @@ namespace TrippLite.ViewModel
             return false;
         }
 
-        public void SetEnabled(string devicePath, bool enabled)
+        public ObservableCollection<PowerDeviceIdEntry> DeviceIds
         {
-            int i, c = deviceIds.Count;
-
-            for (i = 0; i < c; i++)
+            get => deviceIds;
+            private set
             {
-                if (deviceIds[i].DevicePath == devicePath)
+                if (SetProperty(ref deviceIds, value))
                 {
-                    deviceIds[i].Enabled = enabled;
-                    return;
+                    CheckState();
                 }
             }
         }
 
-        public ObservableCollection<PowerDeviceIdEntry> DeviceIds
+        public bool MultiSelect
         {
-            get => deviceIds;
+            get => selMulti;
             set
             {
-                SetProperty(ref deviceIds, value);
-            }
-        }
+                if (SetProperty(ref selMulti, value) && selMulti == false)
+                {
+                    if (!(SelectedItem is null))
+                    {
+                        foreach (var dev in deviceIds)
+                        {
+                            if (dev != SelectedItem && dev.Enabled)
+                            {
+                                dev.Enabled = false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        int i, c = deviceIds.Count;
+                        string? first = null;
 
-        public ObservableCollection<HidPowerDeviceInfo> Devices
-        {
-            get => devices;
-            protected set
-            {
-                SetProperty(ref devices, value);
+                        for (i = 0; i < c; i++)
+                        {
+                            if (first is null && deviceIds[i].Enabled)
+                            {
+                                first = deviceIds[i].DevicePath;
+                            }
+                            
+                            deviceIds[i].Enabled = (deviceIds[i].DevicePath == first);
+                        }
+                    }
+                }
             }
         }
 

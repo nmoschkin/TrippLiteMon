@@ -1,3 +1,4 @@
+using DataTools.Win32.Usb.Power;
 using DataTools.Win32.Usb;
 
 using System;

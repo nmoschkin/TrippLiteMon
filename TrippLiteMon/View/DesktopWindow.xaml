@@ -129,6 +129,7 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="24" />
+                    <RowDefinition Height="24" />
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition Height="0" />
@@ -172,9 +173,22 @@
 
                 </Grid>
 
-
                 <StackPanel
                     Grid.Row="1"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+
+                    <TextBlock
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Text="{Binding BatteryName}" />
+                </StackPanel>
+
+
+                <StackPanel
+                    Grid.Row="2"
                     Grid.Column="1"
                     VerticalAlignment="Stretch">
 
@@ -191,7 +205,7 @@
                 </StackPanel>
 
                 <StackPanel
-                    Grid.Row="1"
+                    Grid.Row="2"
                     Grid.RowSpan="2"
                     Grid.Column="2"
                     VerticalAlignment="Stretch">
@@ -211,7 +225,7 @@
 
                 <local:LoadBar
                     x:Name="LoadVisual"
-                    Grid.Row="2"
+                    Grid.Row="3"
                     Grid.Column="1"
                     Width="88"
                     Height="24"

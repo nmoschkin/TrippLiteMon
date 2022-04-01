@@ -134,15 +134,7 @@ namespace TrippLite
         {
         }
 
-        public TrippLiteUPS TrippLite
-        {
-            get
-            {
-                TrippLiteUPS TrippLiteRet = default;
-                TrippLiteRet = ViewModel.TrippLite;
-                return TrippLiteRet;
-            }
-        }
+        public TrippLiteUPS TrippLite => ViewModel.TrippLite;
 
         public DesktopWindow(TrippLiteViewModel vm)
         {

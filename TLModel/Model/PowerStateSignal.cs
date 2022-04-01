@@ -1,6 +1,7 @@
 ﻿using DataTools.Observable;
 using DataTools.Win32;
 using DataTools.Win32.Usb;
+using DataTools.Win32.Usb.Power;
 
 using System;
 using System.Collections.Generic;

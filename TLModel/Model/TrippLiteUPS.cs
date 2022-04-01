@@ -11,6 +11,8 @@ using System.Runtime.InteropServices;
 using static TrippLite.TrippLiteCodeUtility;
 using DataTools.Win32;
 using DataTools.Win32.Usb;
+using DataTools.Win32.Usb.Power;
+
 using System.IO;
 using DataTools.MessageBoxEx;
 

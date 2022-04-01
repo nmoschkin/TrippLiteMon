@@ -23,15 +23,20 @@ namespace TrippLite
     {
 
         private BatteryPickerViewModel vm;
-        public BatteryPicker()
+
+        public BatteryPicker(bool multiSelect)
         {
-            vm = new BatteryPickerViewModel();
+            vm = new BatteryPickerViewModel(multiSelect);
             DataContext = vm;
 
             InitializeComponent();
             this.Loaded += BatteryPicker_Loaded;
         }
 
+        public BatteryPicker() : this(false)
+        {
+        }
+                
         private void BatteryPicker_Loaded(object sender, RoutedEventArgs e)
         {
             vm.SetEnabled(Settings.PowerDevices);
@@ -45,8 +50,10 @@ namespace TrippLite
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
+
             Settings.PowerDevices = vm.GetEnabled().ToArray();
-            DialogResult = true;
+            
+            DialogResult = vm.OneSelected;
             Close();
         }
     }

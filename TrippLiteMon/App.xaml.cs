@@ -27,6 +27,11 @@ namespace TrippLite
             this.Startup += Application_Startup;
         }
                 
+        new public static App Current
+        {
+            get => (App)Application.Current;
+        }
+
 
         private PowerMon mainBigWindow;
 
@@ -113,7 +118,7 @@ namespace TrippLite
                 Settings.LastWindow = LastWindowType.Main;
                 Settings.PowerDevices = new PowerDeviceIdEntry[0];
             }
-            
+
             if (Settings.LastWindow == LastWindowType.Cool)
             {
                 SwitchToCool();
@@ -124,20 +129,51 @@ namespace TrippLite
             }
         }
 
-        internal void ShowBatteryPicker()
+        internal bool CheckBattery(bool invokePicker = false)
+        {
+            var devices = Settings.PowerDevices;
+            if (devices == null || devices.Length == 0)
+            {
+                if (invokePicker)
+                {
+
+                    return ShowBatteryPicker();
+
+                }
+
+                return false;
+            }
+
+            return true;
+        }
+
+        internal bool ShowBatteryPicker()
         {
             var picker = new BatteryPicker();
 
             picker.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             picker.ShowDialog();
+
+            if (picker.DialogResult != null)
+            {
+                return (bool)picker.DialogResult;
+            }
+
+            System.Threading.Thread.Sleep(100);
+            GC.Collect(2);
+
+            return false;
         }
 
         private void SwitchToMain()
         {
             var rcM = Settings.PrimaryWindowBounds;
             PowerMonWindow = new PowerMon();
+            Application.Current.MainWindow = PowerMonWindow;
+
             PowerMonWindow.Show();
             Settings.LastWindow = LastWindowType.Main;
+
             if (CoolWindow is object)
             {
                 CoolWindow.ViewModel.StopWatching();
@@ -156,6 +192,13 @@ namespace TrippLite
 
             System.Threading.Thread.Sleep(100);
             GC.Collect(2);
+
+            if (!CheckBattery())
+            {
+                PowerMonWindow.Hide();
+                if (!ShowBatteryPicker()) Environment.Exit(0);
+                PowerMonWindow.Show();
+            }
         }
 
         private void SwitchToCool()
@@ -163,8 +206,9 @@ namespace TrippLite
             var rcC = Settings.CoolWindowBounds;
 
             CoolWindow = new DesktopWindow();
-            CoolWindow.Show();
+            Application.Current.MainWindow = PowerMonWindow;
 
+            CoolWindow.Show();
             Settings.LastWindow = LastWindowType.Cool;
 
             if (PowerMonWindow is object)
@@ -184,8 +228,14 @@ namespace TrippLite
             }
 
             System.Threading.Thread.Sleep(100);
-
             GC.Collect(2);
+
+            if (!CheckBattery())
+            {
+                CoolWindow.Hide();
+                if (!ShowBatteryPicker()) Environment.Exit(0);
+                CoolWindow.Show();
+            }
         }
 
         private void OnRequestOpenMainWindow(object sender, EventArgs e)

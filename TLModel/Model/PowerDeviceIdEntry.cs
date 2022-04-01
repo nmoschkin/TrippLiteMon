@@ -1,4 +1,5 @@
-﻿using DataTools.Observable;
+﻿using DataTools.Desktop;
+using DataTools.Observable;
 using DataTools.Win32.Usb;
 
 using System;
@@ -8,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
+using TrippLite.ViewModel;
+
 namespace TrippLite
 {
     /// <summary>
@@ -15,16 +18,38 @@ namespace TrippLite
     /// </summary>
     public class PowerDeviceIdEntry : ObservableBase, ICloneable
     {
+        BatteryPickerViewModel? bvm;
+
         string name;
         bool enabled;
         BitmapSource? icon;
+        HidDeviceInfo? source;
 
-        public HidDeviceInfo? Source { get; set; } = null;
+        public BatteryPickerViewModel? Parent
+        {
+            get => bvm;
+            protected internal set
+            {
+                SetProperty(ref bvm, value);
+            }
+        }
+
+        public HidDeviceInfo? Source
+        {
+            get => source;
+            protected internal set
+            {
+                if (SetProperty(ref source, value) && source != null)
+                {
+                    Icon = BitmapTools.MakeWPFImage(source.DeviceIcon);
+                }
+            }
+        }
 
         public BitmapSource? Icon
         {
             get => icon;
-            set
+            protected internal set
             {
                 SetProperty(ref icon, value);
             }
@@ -50,7 +75,10 @@ namespace TrippLite
             get => enabled;
             set
             {
-                SetProperty(ref enabled, value);
+                if (SetProperty(ref enabled, value))
+                {
+                    bvm?.CheckState(this);
+                }
             }
         }
 

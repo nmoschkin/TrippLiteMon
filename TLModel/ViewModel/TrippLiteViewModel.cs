@@ -301,11 +301,15 @@ namespace TrippLite
             }
         }
 
-        public TrippLiteViewModel() : this(false)
+        public TrippLiteViewModel() : this(false, null)
         {
         }
 
-        public TrippLiteViewModel(bool init)
+        public TrippLiteViewModel(string devicePath) : this(false, devicePath)
+        {
+        }
+
+        public TrippLiteViewModel(bool init, string? devicePath)
         {
 
 
@@ -314,10 +318,10 @@ namespace TrippLite
             LoadProperties = new TrippLitePropertyBagViewModel(this);
 
             if (init)
-                Initialize();
+                Initialize(devicePath);
         }
 
-        public bool Initialize()
+        public bool Initialize(string? devicePath = null)
         {
 
 
