@@ -15,6 +15,7 @@ using DataTools.Win32.Usb.Power;
 
 using System.IO;
 using DataTools.MessageBoxEx;
+using System.Linq;
 
 namespace TrippLite
 {
@@ -23,13 +24,37 @@ namespace TrippLite
     public class TrippLiteUPS : System.Runtime.ConstrainedExecution.CriticalFinalizerObject, INotifyPropertyChanged, IDisposable
     {
 
+
         /// <summary>
         /// Initialize a new TrippLiteUPS object.
         /// </summary>
         /// <param name="connect"></param>
         /// <remarks></remarks>
-        public TrippLiteUPS(bool connect = true)
+
+        public TrippLiteUPS() : this(true)
         {
+        }
+
+        /// <summary>
+        /// Initialize a new TrippLiteUPS object.
+        /// </summary>
+        /// <param name="connect"></param>
+        /// <remarks></remarks>
+        public TrippLiteUPS(bool connect) : this(connect, 0)
+        {
+
+        }
+
+
+        /// <summary>
+        /// Initialize a new TrippLiteUPS object.
+        /// </summary>
+        /// <param name="connect"></param>
+        /// <remarks></remarks>
+        public TrippLiteUPS(bool connect, int deviceIndex)
+        {
+            this.deviceIndex = deviceIndex;
+
             if (connect)
             {
                 try
@@ -49,6 +74,8 @@ namespace TrippLite
 
         }
 
+        protected int deviceIndex;
+
         protected MemPtr mm;
         
         protected HidPowerDeviceInfo powerDevice;
@@ -56,6 +83,7 @@ namespace TrippLite
         protected long[] values = new long[256];
         
         protected bool connected = false;
+
         protected bool isTrippLite = false;
         
         protected PowerStates powerState = PowerStates.Uninitialized;
@@ -73,6 +101,24 @@ namespace TrippLite
         public event PropertyChangedEventHandler? PropertyChanged;
         public event PowerStateChangedEventHandler? PowerStateChanged;
 
+
+        private PowerDeviceIdEntry? deviceIdEntry = null;
+        public string Name
+        {
+            get => deviceIdEntry?.Name ?? powerDevice?.ProductString ?? powerDevice?.DevicePath ?? string.Empty;
+            set
+            {
+                if (deviceIdEntry == null && powerDevice != null)
+                {
+                    deviceIdEntry = new PowerDeviceIdEntry(powerDevice.DevicePath, value);
+                }
+
+                if (deviceIdEntry != null)
+                {
+                    deviceIdEntry.Name = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Returns a list of all TrippLite devices.
@@ -151,35 +197,44 @@ namespace TrippLite
             if (disposedValue) return false;
             if (connected) return true;
 
-            HidDeviceInfo[] devs;
+            HidDeviceInfo? dev;
+            PowerDeviceIdEntry? hidcfg = null;
 
             int i = 0;
 
             if (device is null)
             {
+
+                try
+                {
+                    hidcfg = Settings.PowerDevices[deviceIndex];
+                    deviceIdEntry = hidcfg;
+                }
+                catch
+                {
+                    return false;
+                }
+
+                
                 do
                 {
-                    devs = HidFeatures.HidDevicesByUsage(HidUsagePage.PowerDevice1);
-
-                    if (devs is object)
+                    if (deviceIdEntry == null)
                     {
-                        foreach (var dev in devs)
-                        {
-                            if (dev.Vid == 0x09AE)
-                            {
-                                powerDevice = HidPowerDeviceInfo.CreateFromHidDevice(dev);
-                                isTrippLite = true;
+                        dev = HidFeatures.HidDevicesByUsage(HidUsagePage.PowerDevice1)[0];
 
-                                break;
-                            }
-                        }
+                    }
+                    else
+                    {
+                        dev = HidFeatures.HidDevicesByUsage(HidUsagePage.PowerDevice1).Where((d) => d.DevicePath == hidcfg.DevicePath).FirstOrDefault();
+                    }
 
-                        if (powerDevice is null)
-                            powerDevice = HidPowerDeviceInfo.CreateFromHidDevice(devs[0]);
+                    if (dev is object)
+                    {
+                        powerDevice = HidPowerDeviceInfo.CreateFromHidDevice(dev);
 
-                        TrippLiteCodes.Initialize(powerDevice);
+                        BatteryPropertyCodes.Initialize(powerDevice);
+
                         propBag = new TrippLitePropertyBag(this);
-
                         connected = true;
 
                         break;
@@ -217,7 +272,7 @@ namespace TrippLite
 
             var result = connected & powerDevice.IsHidOpen;
 
-            if (!connected) throw new FileLoadException("Could not connect to the Hid battery.");
+            if (!connected) throw new FileLoadException("Could not connect to HID battery.");
 
             stateMonitor = new PowerStateSignal(powerDevice);
             stateMonitor.PowerStateChanged += StateMonitor_PowerStateChanged;
@@ -249,6 +304,7 @@ namespace TrippLite
                 stateMonitor = null;
                 connected = false;
                 powerDevice = null;
+                deviceIdEntry = null;
                 propBag = null;                
             }
             catch 
@@ -353,7 +409,7 @@ namespace TrippLite
         {
             get
             {
-                return "SMART" + propBag.FindProperty(TrippLiteCodes.VARATING).GetValue() + "LCDx";
+                return "SMART" + propBag.FindProperty(BatteryPropertyCodes.VARATING).GetValue() + "LCDx";
             }
         }
 
@@ -475,13 +531,13 @@ namespace TrippLite
 
                     if (res)
                     {
-                        if (prop.Code == TrippLiteCodes.InputVoltage)
+                        if (prop.Code == BatteryPropertyCodes.InputVoltage)
                         {
                             volt = v * prop.Multiplier;
                             involtRet = true;
 
                         }
-                        else if (prop.Code == TrippLiteCodes.OutputLoad)
+                        else if (prop.Code == BatteryPropertyCodes.OutputLoad)
                         {
                             if (v > 100 || v < 0)
                                 v = (int)prop.Value;

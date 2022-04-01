@@ -104,11 +104,11 @@ namespace TrippLite
         {
             if (e.NewState == PowerStates.Utility)
             {
-                ViewModel.MakeLoadBarProperty(ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.OutputLoad));
+                ViewModel.MakeLoadBarProperty(ViewModel.Properties.GetPropertyByCode(BatteryPropertyCodes.OutputLoad));
             }
             else
             {
-                ViewModel.MakeLoadBarProperty(ViewModel.Properties.GetPropertyByCode(TrippLiteCodes.ChargeRemaining));
+                ViewModel.MakeLoadBarProperty(ViewModel.Properties.GetPropertyByCode(BatteryPropertyCodes.ChargeRemaining));
             }
         }
 

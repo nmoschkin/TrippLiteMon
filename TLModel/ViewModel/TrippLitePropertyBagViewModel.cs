@@ -23,7 +23,7 @@ namespace TrippLite
             }
         }
 
-        public TrippLitePropertyViewModel GetPropertyByCode(TrippLiteCodes c)
+        public TrippLitePropertyViewModel GetPropertyByCode(BatteryPropertyCodes c)
         {
             foreach (var v in this)
             {

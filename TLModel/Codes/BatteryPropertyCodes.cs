@@ -18,7 +18,7 @@ namespace TrippLite
     /// Represents feature command codes that can be sent to a Tripp Lite Smart battery.
     /// </summary>
     /// <remarks></remarks>
-    public struct TrippLiteCodes 
+    public struct BatteryPropertyCodes 
     {
         private byte value;
 
@@ -26,7 +26,7 @@ namespace TrippLite
         {
             var mapper = new FieldMapper(deviceInfo);
 
-            fields = typeof(TrippLiteCodes).GetFields(BindingFlags.Public | BindingFlags.Static);
+            fields = typeof(BatteryPropertyCodes).GetFields(BindingFlags.Public | BindingFlags.Static);
 
             mapper.MapField(out VARATING, 0x43);
             mapper.MapField(out NominalBatteryVoltage, 0x40, 0x12);
@@ -52,7 +52,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Volt)]
         [NumberFormat("0")]
         [ByteLength()]
-        public static TrippLiteCodes VARATING;
+        public static BatteryPropertyCodes VARATING;
 
         /// <summary>
         /// Nominal Battery Voltage
@@ -62,7 +62,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Volt)]
         [NumberFormat("0")]
         [ByteLength()]
-        public static TrippLiteCodes NominalBatteryVoltage;
+        public static BatteryPropertyCodes NominalBatteryVoltage;
 
         /// <summary>
         /// Low Voltage Transfer
@@ -72,7 +72,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Volt)]
         [NumberFormat("0")]
         [ByteLength()]
-        public static TrippLiteCodes LowVoltageTransfer;
+        public static BatteryPropertyCodes LowVoltageTransfer;
 
         /// <summary>
         /// High Voltage Transfer
@@ -82,7 +82,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Volt)]
         [NumberFormat("0")]
         [ByteLength()]
-        public static TrippLiteCodes HighVoltageTransfer;
+        public static BatteryPropertyCodes HighVoltageTransfer;
 
         /// <summary>
         /// Input Frequency
@@ -92,7 +92,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Hertz)]
         [NumberFormat()]
         [ByteLength()]
-        public static TrippLiteCodes InputFrequency;
+        public static BatteryPropertyCodes InputFrequency;
 
         /// <summary>
         /// Output Frequency
@@ -102,7 +102,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Hertz)]
         [NumberFormat()]
         [ByteLength()]
-        public static TrippLiteCodes OutputFrequency;
+        public static BatteryPropertyCodes OutputFrequency;
 
         /// <summary>
         /// Input Voltage
@@ -112,7 +112,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Volt)]
         [NumberFormat("000.0")]
         [ByteLength()]
-        public static TrippLiteCodes InputVoltage;
+        public static BatteryPropertyCodes InputVoltage;
 
         /// <summary>
         /// Output Voltage
@@ -122,7 +122,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Volt)]
         [NumberFormat("000.0")]
         [ByteLength()]
-        public static TrippLiteCodes OutputVoltage;
+        public static BatteryPropertyCodes OutputVoltage;
 
         /// <summary>
         /// Output Current
@@ -132,7 +132,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Amp)]
         [NumberFormat()]
         [ByteLength()]
-        public static TrippLiteCodes OutputCurrent;
+        public static BatteryPropertyCodes OutputCurrent;
 
         /// <summary>
         /// Output Power
@@ -142,7 +142,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Watt)]
         [NumberFormat("0")]
         [ByteLength()]
-        public static TrippLiteCodes OutputPower;
+        public static BatteryPropertyCodes OutputPower;
 
         /// <summary>
         /// Output Load
@@ -152,7 +152,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Percent)]
         [NumberFormat("0")]
         [ByteLength()]
-        public static TrippLiteCodes OutputLoad;
+        public static BatteryPropertyCodes OutputLoad;
 
         /// <summary>
         /// Seconds Remaining Power
@@ -162,7 +162,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Time)]
         [NumberFormat()]
         [ByteLength()]
-        public static TrippLiteCodes TimeRemaining;
+        public static BatteryPropertyCodes TimeRemaining;
 
         /// <summary>
         /// Seconds Remaining Power
@@ -172,7 +172,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Volt)]
         [NumberFormat()]
         [ByteLength()]
-        public static TrippLiteCodes BatteryVoltage;
+        public static BatteryPropertyCodes BatteryVoltage;
 
         /// <summary>
         /// Charge Remaining
@@ -182,7 +182,7 @@ namespace TrippLite
         [MeasureUnit(MeasureUnitTypes.Percent)]
         [NumberFormat("0")]
         [ByteLength()]
-        public static TrippLiteCodes ChargeRemaining;
+        public static BatteryPropertyCodes ChargeRemaining;
 
         static FieldInfo[] fields;
 
@@ -190,7 +190,7 @@ namespace TrippLite
         {
             foreach (var fi in fields)
             {
-                TrippLiteCodes? b = (TrippLiteCodes?)fi.GetValue(null);
+                BatteryPropertyCodes? b = (BatteryPropertyCodes?)fi.GetValue(null);
                 if (b == value)
                 {
                     return fi.Name;
@@ -200,24 +200,24 @@ namespace TrippLite
             return value.ToString();
         }
 
-        public static implicit operator byte(TrippLiteCodes val)
+        public static implicit operator byte(BatteryPropertyCodes val)
         {
             return val.value;
         }
 
-        public static implicit operator int(TrippLiteCodes val)
+        public static implicit operator int(BatteryPropertyCodes val)
         {
             return val.value;
         }
 
-        public static implicit operator short(TrippLiteCodes val)
+        public static implicit operator short(BatteryPropertyCodes val)
         {
             return val.value;
         }
 
-        public static implicit operator TrippLiteCodes(byte value)
+        public static implicit operator BatteryPropertyCodes(byte value)
         {
-            return new TrippLiteCodes()
+            return new BatteryPropertyCodes()
             {
                 value = value
             };
@@ -259,7 +259,7 @@ namespace TrippLite
             this.initialized = true;
         }
 
-        public void MapField(out TrippLiteCodes value, byte code, byte collection = 0x0)
+        public void MapField(out BatteryPropertyCodes value, byte code, byte collection = 0x0)
         {
             value = 0;
             HidPValueCaps? caps = null;

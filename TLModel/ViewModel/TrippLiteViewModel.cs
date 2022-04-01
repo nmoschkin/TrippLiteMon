@@ -19,7 +19,7 @@ namespace TrippLite
         private Thread waitInit;
         private TrippLiteUPS trippLite;
 
-        private TrippLiteUPS SyncModel
+        public TrippLiteUPS SyncModel
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get
@@ -350,7 +350,7 @@ namespace TrippLite
                                     MessageBoxExIcons.Exclamation);
                             }
 
-                            if (SyncModel is object && SyncModel.IsTrippLite)
+                            if (SyncModel is object && SyncModel.Connected)
                             {
                                 Dispatcher.Invoke(() =>
                                 {
@@ -403,7 +403,7 @@ namespace TrippLite
 
             foreach (var p in SyncModel.PropertyBag)
             {
-                if (p.Code != TrippLiteCodes.InputVoltage && p.Code != TrippLiteCodes.OutputVoltage)
+                if (p.Code != BatteryPropertyCodes.InputVoltage && p.Code != BatteryPropertyCodes.OutputVoltage)
                 {
                     Properties.Add(new TrippLitePropertyViewModel(p, this));
                 }
@@ -416,9 +416,9 @@ namespace TrippLite
                 }
             }
 
-            PromoteToLoad(TrippLiteCodes.OutputPower);
+            PromoteToLoad(BatteryPropertyCodes.OutputPower);
             
-            MakeLoadBarProperty(FindProperty(TrippLiteCodes.OutputLoad));
+            MakeLoadBarProperty(FindProperty(BatteryPropertyCodes.OutputLoad));
 
             SetValue(ProductStringPropertyKey, SyncModel.Device.ProductString);
 
@@ -457,7 +457,7 @@ namespace TrippLite
             }
         }
 
-        public TrippLitePropertyViewModel FindProperty(TrippLiteCodes c)
+        public TrippLitePropertyViewModel FindProperty(BatteryPropertyCodes c)
         {
             foreach (var m in Properties)
             {
@@ -468,7 +468,7 @@ namespace TrippLite
             return null;
         }
 
-        public void PromoteToLoad(TrippLiteCodes code, bool removeFromList = false)
+        public void PromoteToLoad(BatteryPropertyCodes code, bool removeFromList = false)
         {
             TrippLitePropertyViewModel pm = null;
 
@@ -489,7 +489,7 @@ namespace TrippLite
             LoadProperties.Add(pm);
         }
 
-        public void DemoteFromLoad(TrippLiteCodes code)
+        public void DemoteFromLoad(BatteryPropertyCodes code)
         {
             TrippLitePropertyViewModel pm = null;
 
@@ -512,7 +512,7 @@ namespace TrippLite
             Properties.Add(pm);
         }
 
-        public void PromoteProperty(TrippLiteCodes code)
+        public void PromoteProperty(BatteryPropertyCodes code)
         {
             TrippLitePropertyViewModel pm = null;
 
@@ -535,7 +535,7 @@ namespace TrippLite
             ProminentProperties.Add(pm);
         }
 
-        public void DemoteProperty(TrippLiteCodes code)
+        public void DemoteProperty(BatteryPropertyCodes code)
         {
             TrippLitePropertyViewModel pm = null;
 

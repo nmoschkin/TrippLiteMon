@@ -37,7 +37,7 @@ namespace TrippLite
         private bool boost = false;
         private bool voor = false;
         private bool disposedValue;
-
+        
         public bool UpdaterRunning => updater != null;
 
         public PowerStates CurrentState
@@ -223,17 +223,17 @@ namespace TrippLite
 
                 PowerStates newState;
 
-                if (ACPresent)
-                {
-                    newState = PowerStates.Utility;
-                }
-                else if (Boost)
+                if (Boost)
                 {
                     newState = PowerStates.BatteryTransferLow;
                 }
                 else if (Buck)
                 {
                     newState = PowerStates.BatteryTransferHigh;
+                }
+                else if (ACPresent)
+                {
+                    newState = PowerStates.Utility;
                 }
                 else
                 {

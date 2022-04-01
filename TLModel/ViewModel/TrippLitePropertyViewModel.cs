@@ -163,7 +163,7 @@ namespace TrippLite
         /// <value></value>
         /// <returns></returns>
         /// <remarks></remarks>
-        public TrippLiteCodes Code
+        public BatteryPropertyCodes Code
         {
             get
             {

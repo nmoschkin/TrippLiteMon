@@ -77,7 +77,7 @@ namespace TrippLite
 
 
 
-        public ObservableCollection<TrippLiteCodes> DisplayCodes
+        public ObservableCollection<BatteryPropertyCodes> DisplayCodes
         {
             get
             {
@@ -89,17 +89,17 @@ namespace TrippLite
             }
         }
 
-        public static ObservableCollection<TrippLiteCodes> GetDisplayCodes(DependencyObject element)
+        public static ObservableCollection<BatteryPropertyCodes> GetDisplayCodes(DependencyObject element)
         {
             if (element is null)
             {
                 throw new ArgumentNullException("element");
             }
 
-            return (ObservableCollection<TrippLiteCodes>)element.GetValue(DisplayCodesProperty);
+            return (ObservableCollection<BatteryPropertyCodes>)element.GetValue(DisplayCodesProperty);
         }
 
-        public static void SetDisplayCodes(DependencyObject element, ObservableCollection<TrippLiteCodes> value)
+        public static void SetDisplayCodes(DependencyObject element, ObservableCollection<BatteryPropertyCodes> value)
         {
             if (element is null)
             {
@@ -109,7 +109,7 @@ namespace TrippLite
             element.SetValue(DisplayCodesProperty, value);
         }
 
-        public static readonly DependencyProperty DisplayCodesProperty = DependencyProperty.RegisterAttached("DisplayCodes", typeof(ObservableCollection<TrippLiteCodes>), typeof(StatusDisplay), new PropertyMetadata(new ObservableCollection<TrippLiteCodes>(), PropertyChanged));
+        public static readonly DependencyProperty DisplayCodesProperty = DependencyProperty.RegisterAttached("DisplayCodes", typeof(ObservableCollection<BatteryPropertyCodes>), typeof(StatusDisplay), new PropertyMetadata(new ObservableCollection<BatteryPropertyCodes>(), PropertyChanged));
 
         private static void PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -168,7 +168,7 @@ namespace TrippLite
 
             foreach (var dc in vm.TrippLite.PropertyBag)
             {
-                if (new[] { TrippLiteCodes.InputVoltage, TrippLiteCodes.OutputVoltage }.Contains(dc.Code))
+                if (new[] { BatteryPropertyCodes.InputVoltage, BatteryPropertyCodes.OutputVoltage }.Contains(dc.Code))
                 {
                     continue;
                 }

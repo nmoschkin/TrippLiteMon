@@ -129,7 +129,7 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="24" />
-                    <RowDefinition Height="24" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition Height="0" />
@@ -173,19 +173,6 @@
 
                 </Grid>
 
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="2"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
-
-                    <TextBlock
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Text="{Binding BatteryName}" />
-                </StackPanel>
-
 
                 <StackPanel
                     Grid.Row="2"
@@ -222,17 +209,36 @@
 
                 </StackPanel>
 
-
-                <local:LoadBar
-                    x:Name="LoadVisual"
+                <StackPanel
                     Grid.Row="3"
                     Grid.Column="1"
-                    Width="88"
-                    Height="24"
-                    Margin="0,-6,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    LoadValue="{Binding LoadBarValue, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                    Orientation="Vertical">
+
+                    <local:LoadBar
+                        x:Name="LoadVisual"
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Width="88"
+                        Height="24"
+                        Margin="0,-6,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        LoadValue="{Binding LoadBarValue, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        FontSize="8"
+                        Style="{StaticResource SmallNormalProperty}"
+                        Text="{Binding SyncModel.Name}"
+                        ToolTip="{Binding SyncModel.Device.SerialNumber}" />
+
+                </StackPanel>
 
                 <Border
                     Grid.Row="0"

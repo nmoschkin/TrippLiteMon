@@ -18,7 +18,7 @@ namespace TrippLite
         public event PropertyChangedEventHandler PropertyChanged;
 
         private PropertyChangedEventArgs propEvent = new PropertyChangedEventArgs("Value");
-        private TrippLiteCodes propCode;
+        private BatteryPropertyCodes propCode;
 
         internal long value = -1;
 
@@ -35,7 +35,7 @@ namespace TrippLite
         /// <param name="owner">The TrippLiteUPS model object that will own this property.</param>
         /// <param name="c">The property code.</param>
         /// <remarks></remarks>
-        internal TrippLiteProperty(TrippLiteUPS owner, TrippLiteCodes c)
+        internal TrippLiteProperty(TrippLiteUPS owner, BatteryPropertyCodes c)
         {
             model = owner;
             propCode = c;
@@ -87,7 +87,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public string NumberFormat
         {
-            get => GetEnumAttrVal<NumberFormatAttribute, string, TrippLiteCodes>(propCode, "Format");
+            get => GetEnumAttrVal<NumberFormatAttribute, string, BatteryPropertyCodes>(propCode, "Format");
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public double Multiplier
         {
-            get => GetEnumAttrVal<MultiplierAttribute, double, TrippLiteCodes>(propCode, "Value");
+            get => GetEnumAttrVal<MultiplierAttribute, double, BatteryPropertyCodes>(propCode, "Value");
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace TrippLite
         {
             get
             {
-                ushort bl = GetEnumAttrVal<ByteLengthAttribute, ushort, TrippLiteCodes>(propCode, "Length");
+                ushort bl = GetEnumAttrVal<ByteLengthAttribute, ushort, BatteryPropertyCodes>(propCode, "Length");
 
                 if (bl == 0)
                     bl = 4;
@@ -214,7 +214,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public string Description
         {
-            get => GetEnumAttrVal<DescriptionAttribute, string, TrippLiteCodes>(propCode, "Description");
+            get => GetEnumAttrVal<DescriptionAttribute, string, BatteryPropertyCodes>(propCode, "Description");
         }
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public MeasureUnitTypes Unit
         {
-            get => GetEnumAttrVal<MeasureUnitAttribute, MeasureUnitTypes, TrippLiteCodes>(propCode, "Unit");
+            get => GetEnumAttrVal<MeasureUnitAttribute, MeasureUnitTypes, BatteryPropertyCodes>(propCode, "Unit");
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace TrippLite
         /// <value></value>
         /// <returns></returns>
         /// <remarks></remarks>
-        public TrippLiteCodes Code
+        public BatteryPropertyCodes Code
         {
             get => propCode;
         }
