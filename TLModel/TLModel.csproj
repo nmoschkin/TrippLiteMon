@@ -11,11 +11,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataTools\DataTools.Desktop.WPF\DataTools.Desktop.WPF.csproj" />
-    <ProjectReference Include="..\DataTools\DataTools.Win32.Memory\DataTools.Win32.Memory.csproj" />
-    <ProjectReference Include="..\DataTools\DataTools.Win32.Usb\DataTools.Win32.Usb.csproj" />
-    <ProjectReference Include="..\DataTools\DataTools.Win32\DataTools.Win32.csproj" />
-    <ProjectReference Include="..\DataTools\DataTools\DataTools.csproj" />
+    <ProjectReference Include="..\DataTools\Common\DataTools.Graphics\DataTools.Graphics.csproj" />
+    <ProjectReference Include="..\DataTools\Common\DataTools\DataTools.csproj" />
+    <ProjectReference Include="..\DataTools\Win32\DataTools.Win32.Memory\DataTools.Win32.Memory.csproj" />
+    <ProjectReference Include="..\DataTools\Win32\DataTools.Win32.Usb\DataTools.Win32.Usb.csproj" />
+    <ProjectReference Include="..\DataTools\Win32\DataTools.Win32\DataTools.Win32.csproj" />
+    <ProjectReference Include="..\DataTools\Windows\WPF\DataTools.Desktop.WPF\DataTools.Desktop.WPF.csproj" />
     <ProjectReference Include="..\MessageBoxEx\MessageBoxEx5\MessageBoxEx5.csproj" />
   </ItemGroup>
 
