@@ -93,11 +93,11 @@ namespace TrippLite
 
         public static readonly DependencyProperty ItemSpacingProperty = DependencyProperty.RegisterAttached("ItemSpacing", typeof(Thickness), typeof(DesktopWindow), new PropertyMetadata(PropertyChanged));
 
-        public ObservableCollection<BatteryPropertyCodes> DisplayCodes
+        public ObservableCollection<BatteryPropertyCode> DisplayCodes
         {
             get
             {
-                ObservableCollection<BatteryPropertyCodes> DisplayCodesRet = default;
+                ObservableCollection<BatteryPropertyCode> DisplayCodesRet = default;
                 DisplayCodesRet = DesktopWindow.GetDisplayCodes(this);
                 return DisplayCodesRet;
             }
@@ -108,17 +108,17 @@ namespace TrippLite
             }
         }
 
-        public static ObservableCollection<BatteryPropertyCodes> GetDisplayCodes(DependencyObject element)
+        public static ObservableCollection<BatteryPropertyCode> GetDisplayCodes(DependencyObject element)
         {
             if (element is null)
             {
                 throw new ArgumentNullException("element");
             }
 
-            return (ObservableCollection<BatteryPropertyCodes>)element.GetValue(DisplayCodesProperty);
+            return (ObservableCollection<BatteryPropertyCode>)element.GetValue(DisplayCodesProperty);
         }
 
-        public static void SetDisplayCodes(DependencyObject element, ObservableCollection<BatteryPropertyCodes> value)
+        public static void SetDisplayCodes(DependencyObject element, ObservableCollection<BatteryPropertyCode> value)
         {
             if (element is null)
             {
@@ -128,7 +128,7 @@ namespace TrippLite
             element.SetValue(DisplayCodesProperty, value);
         }
 
-        public static readonly DependencyProperty DisplayCodesProperty = DependencyProperty.RegisterAttached("DisplayCodes", typeof(ObservableCollection<BatteryPropertyCodes>), typeof(DesktopWindow), new PropertyMetadata(PropertyChanged));
+        public static readonly DependencyProperty DisplayCodesProperty = DependencyProperty.RegisterAttached("DisplayCodes", typeof(ObservableCollection<BatteryPropertyCode>), typeof(DesktopWindow), new PropertyMetadata(PropertyChanged));
 
         private static void PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -138,7 +138,7 @@ namespace TrippLite
 
         public DesktopWindow(TrippLiteViewModel vm)
         {
-            DisplayCodes = new ObservableCollection<BatteryPropertyCodes>();
+            DisplayCodes = new ObservableCollection<BatteryPropertyCode>();
             ViewModel = vm;
             ViewModel = vm;
 
@@ -158,11 +158,11 @@ namespace TrippLite
 
             foreach (var pr in ViewModel.Properties)
             {
-                if (new[] { BatteryPropertyCodes.InputVoltage,
-                    BatteryPropertyCodes.OutputVoltage,
-                    BatteryPropertyCodes.OutputLoad,
-                    BatteryPropertyCodes.OutputPower,
-                    BatteryPropertyCodes.OutputCurrent }.Contains(pr.Code))
+                if (new[] { vm.TrippLite.PropertyMap.InputVoltage,
+                    vm.TrippLite.PropertyMap.OutputVoltage,
+                    vm.TrippLite.PropertyMap.OutputLoad,
+                    vm.TrippLite.PropertyMap.OutputPower,
+                    vm.TrippLite.PropertyMap.OutputCurrent }.Contains(pr.Code))
                 {
                     continue;
                 }
@@ -175,7 +175,7 @@ namespace TrippLite
 
         public DesktopWindow()
         {
-            DisplayCodes = new ObservableCollection<BatteryPropertyCodes>();
+            DisplayCodes = new ObservableCollection<BatteryPropertyCode>();
             ViewModel = new TrippLiteViewModel();
             this.InitializeComponent();
 
@@ -199,11 +199,11 @@ namespace TrippLite
 
             foreach (var pr in ViewModel.Properties)
             {
-                if (new[] { BatteryPropertyCodes.InputVoltage,
-                    BatteryPropertyCodes.OutputVoltage,
-                    BatteryPropertyCodes.OutputLoad,
-                    BatteryPropertyCodes.OutputPower,
-                    BatteryPropertyCodes.OutputCurrent }.Contains(pr.Code))
+                if (new[] { vm.TrippLite.PropertyMap.InputVoltage,
+                    vm.TrippLite.PropertyMap.OutputVoltage,
+                    vm.TrippLite.PropertyMap.OutputLoad,
+                    vm.TrippLite.PropertyMap.OutputPower,
+                    vm.TrippLite.PropertyMap.OutputCurrent }.Contains(pr.Code))
                 {
                     continue;
                 }
@@ -239,7 +239,7 @@ namespace TrippLite
 
             foreach (var dc in ViewModel.TrippLite.PropertyBag)
             {
-                if (new[] { BatteryPropertyCodes.InputVoltage, BatteryPropertyCodes.OutputVoltage }.Contains(dc.Code))
+                if (new[] { vm.TrippLite.PropertyMap.InputVoltage, vm.TrippLite.PropertyMap.OutputVoltage }.Contains(dc.Code))
                 {
                     continue;
                 }
@@ -327,14 +327,14 @@ namespace TrippLite
                 return;
             if (psu == true)
             {
-                ViewModel.MakeLoadBarProperty(ViewModel.Properties.GetPropertyByCode(BatteryPropertyCodes.ChargeRemaining));
-                ViewModel.Properties.GetPropertyByCode(BatteryPropertyCodes.OutputLoad).IsActiveProperty = false;
+                ViewModel.MakeLoadBarProperty(ViewModel.Properties.GetPropertyByCode(vm.TrippLite.PropertyMap.ChargeRemaining));
+                ViewModel.Properties.GetPropertyByCode(vm.TrippLite.PropertyMap.OutputLoad).IsActiveProperty = false;
                 psuA.psu = true;
             }
             else
             {
-                ViewModel.MakeLoadBarProperty(ViewModel.Properties.GetPropertyByCode(BatteryPropertyCodes.OutputLoad));
-                ViewModel.Properties.GetPropertyByCode(BatteryPropertyCodes.ChargeRemaining).IsActiveProperty = false;
+                ViewModel.MakeLoadBarProperty(ViewModel.Properties.GetPropertyByCode(vm.TrippLite.PropertyMap.OutputLoad));
+                ViewModel.Properties.GetPropertyByCode(vm.TrippLite.PropertyMap.ChargeRemaining).IsActiveProperty = false;
                 psuA.psu = false;
             }
         }

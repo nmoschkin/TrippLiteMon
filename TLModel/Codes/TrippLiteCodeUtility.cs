@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
+using TrippLite.Globalization;
+
 using static TrippLite.TrippLiteCodeUtility;
 
 namespace TrippLite
@@ -153,6 +155,16 @@ namespace TrippLite
             }
 
             return x;
+        }
+
+        /// <summary>
+        /// Get the localized battery property description.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static string GetLocalizedBatteryPropertyDescription(string name)
+        {
+            return AppResources.ResourceManager.GetString(name) ?? name;
         }
     }
 }

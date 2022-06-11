@@ -45,6 +45,8 @@ namespace TrippLite
 
         protected HidPowerDeviceInfo powerDevice;
 
+        protected BatteryPropertyMap propMap;
+
         protected PowerStates powerState = PowerStates.Uninitialized;
 
         protected TrippLitePropertyBag propBag;
@@ -186,7 +188,7 @@ namespace TrippLite
         {
             get
             {
-                return "SMART" + propBag.FindProperty(BatteryPropertyCodes.VARATING).GetValue() + "LCDx";
+                return "SMART" + propBag.FindProperty(propMap.VARATING).GetValue() + "LCDx";
             }
         }
 
@@ -264,6 +266,14 @@ namespace TrippLite
         }
 
         /// <summary>
+        /// Gets the hardware HID property map for the current battery.
+        /// </summary>
+        public BatteryPropertyMap PropertyMap
+        {
+            get => propMap;
+        }
+
+        /// <summary>
         /// Contains all properties exposed by the Tripp Lite HID Power Interface
         /// </summary>
         /// <value></value>
@@ -271,10 +281,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public TrippLitePropertyBag PropertyBag
         {
-            get
-            {
-                return propBag;
-            }
+            get => propBag;
         }
 
         /// <summary>
@@ -379,7 +386,6 @@ namespace TrippLite
 
             if (device is null)
             {
-
                 try
                 {
                     hidcfg = Settings.PowerDevices[deviceIndex];
@@ -389,7 +395,6 @@ namespace TrippLite
                 {
                     return false;
                 }
-
                 
                 do
                 {
@@ -407,9 +412,9 @@ namespace TrippLite
                     {
                         powerDevice = HidPowerDeviceInfo.CreateFromHidDevice(dev);
 
-                        BatteryPropertyCodes.Initialize(powerDevice);
-
+                        propMap = new BatteryPropertyMap(powerDevice);
                         propBag = new TrippLitePropertyBag(this);
+
                         connected = true;
 
                         break;
@@ -579,13 +584,13 @@ namespace TrippLite
 
                     if (res)
                     {
-                        if (prop.Code == BatteryPropertyCodes.InputVoltage)
+                        if (prop.Code == propMap.InputVoltage)
                         {
                             volt = v * prop.Multiplier;
                             involtRet = true;
 
                         }
-                        else if (prop.Code == BatteryPropertyCodes.OutputLoad)
+                        else if (prop.Code == propMap.OutputLoad)
                         {
                             if (v > 100 || v < 0)
                                 v = (int)prop.Value;

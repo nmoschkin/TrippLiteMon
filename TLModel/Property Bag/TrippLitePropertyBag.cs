@@ -37,7 +37,7 @@ namespace TrippLite
             set => model = value;
         }
 
-        public TrippLiteProperty FindProperty(BatteryPropertyCodes c)
+        public TrippLiteProperty FindProperty(BatteryPropertyCode c)
         {
             foreach (var fp in this)
             {
@@ -69,7 +69,7 @@ namespace TrippLite
         
             if (autoPopulate)
             {
-                var t = GetAllEnumVals<BatteryPropertyCodes>();
+                var t = owner.PropertyMap.GetAllCodes();
             
                 int i;
                 int c = t.Length;

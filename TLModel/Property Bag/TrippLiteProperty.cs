@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 using DataTools.Win32.Memory;
 using DataTools.Win32.Usb;
@@ -27,13 +28,15 @@ namespace TrippLite
 
         #region Private Fields
 
+        private string customDesc;
+
         private ushort byteLen = 4;
 
         private bool disposedValue;
 
         private bool isSettable;
 
-        private BatteryPropertyCodes propCode;
+        private BatteryPropertyCode propCode;
 
         private PropertyChangedEventArgs propEvent = new PropertyChangedEventArgs("Value");
 
@@ -47,7 +50,7 @@ namespace TrippLite
         /// <param name="owner">The TrippLiteUPS model object that will own this property.</param>
         /// <param name="c">The property code.</param>
         /// <remarks></remarks>
-        internal TrippLiteProperty(TrippLiteUPS owner, BatteryPropertyCodes c)
+        internal TrippLiteProperty(TrippLiteUPS owner, BatteryPropertyCode c)
         {
             model = owner;
             propCode = c;
@@ -84,7 +87,7 @@ namespace TrippLite
         {
             get
             {
-                ushort bl = GetEnumAttrVal<ByteLengthAttribute, ushort, BatteryPropertyCodes>(propCode, "Length");
+                ushort bl = model.PropertyMap.GetValueAttribute<ByteLengthAttribute, ushort>(propCode, "Length");
 
                 if (bl == 0)
                     bl = 4;
@@ -99,7 +102,7 @@ namespace TrippLite
         /// <value></value>
         /// <returns></returns>
         /// <remarks></remarks>
-        public BatteryPropertyCodes Code
+        public BatteryPropertyCode Code
         {
             get => propCode;
         }
@@ -112,7 +115,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public string Description
         {
-            get => GetEnumAttrVal<DescriptionAttribute, string, BatteryPropertyCodes>(propCode, "Description");
+            get => customDesc ?? GetLocalizedBatteryPropertyDescription(model.PropertyMap.GetNameFromCode(propCode));
         }
 
         /// <summary>
@@ -159,7 +162,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public double Multiplier
         {
-            get => GetEnumAttrVal<MultiplierAttribute, double, BatteryPropertyCodes>(propCode, "Value");
+            get => model.PropertyMap.GetValueAttribute<MultiplierAttribute, double>(propCode, "Value");
         }
 
         // End Get
@@ -183,7 +186,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public string NumberFormat
         {
-            get => GetEnumAttrVal<NumberFormatAttribute, string, BatteryPropertyCodes>(propCode, "Format");
+            get => model.PropertyMap.GetValueAttribute<NumberFormatAttribute, string>(propCode, "Format");
         }
 
         /// <summary>
@@ -216,7 +219,7 @@ namespace TrippLite
         /// <remarks></remarks>
         public MeasureUnitTypes Unit
         {
-            get => GetEnumAttrVal<MeasureUnitAttribute, MeasureUnitTypes, BatteryPropertyCodes>(propCode, "Unit");
+            get => model.PropertyMap.GetValueAttribute<MeasureUnitAttribute, MeasureUnitTypes>(propCode, "Unit");
         }
 
         /// <summary>

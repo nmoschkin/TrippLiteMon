@@ -8,7 +8,8 @@
     x:Name="UcLoad"
     d:DesignHeight="30"
     d:DesignWidth="100"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    >
 
 
     <Grid>
@@ -16,17 +17,20 @@
             x:Name="BarsArea"
             Margin="4,4,4,4"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch" />
+            VerticalAlignment="Stretch"
+            />
 
         <Canvas
             x:Name="DrawingArea"
             Margin="4,4,4,4"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch">
+            VerticalAlignment="Stretch"
+            >
             <Polygon
                 x:Name="BackingBar"
                 Fill="{StaticResource TrippLiteLcdType}"
-                Opacity="0">
+                Opacity="0"
+                >
                 <!--  Points="{Binding ElementName=LoadBar, Path=OutlinePoints}"  -->
 
                 <Polygon.Effect>
@@ -34,7 +38,8 @@
                         BlurRadius="2"
                         Opacity="{Binding ElementName=UcLoad, Path=EffectLevel}"
                         ShadowDepth="2"
-                        Color="{StaticResource TrippLiteDimGrayColor}" />
+                        Color="{StaticResource TrippLiteDimGrayColor}"
+                        />
                 </Polygon.Effect>
 
             </Polygon>

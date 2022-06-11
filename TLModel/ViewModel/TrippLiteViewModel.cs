@@ -403,7 +403,7 @@ namespace TrippLite
 
             foreach (var p in SyncModel.PropertyBag)
             {
-                if (p.Code != BatteryPropertyCodes.InputVoltage && p.Code != BatteryPropertyCodes.OutputVoltage)
+                if (p.Code != trippLite.PropertyMap.InputVoltage && p.Code != trippLite.PropertyMap.OutputVoltage)
                 {
                     Properties.Add(new TrippLitePropertyViewModel(p, this));
                 }
@@ -416,9 +416,9 @@ namespace TrippLite
                 }
             }
 
-            PromoteToLoad(BatteryPropertyCodes.OutputPower);
+            PromoteToLoad(trippLite.PropertyMap.OutputPower);
             
-            MakeLoadBarProperty(FindProperty(BatteryPropertyCodes.OutputLoad));
+            MakeLoadBarProperty(FindProperty(trippLite.PropertyMap.OutputLoad));
 
             SetValue(ProductStringPropertyKey, SyncModel.Device.ProductString);
 
@@ -457,7 +457,7 @@ namespace TrippLite
             }
         }
 
-        public TrippLitePropertyViewModel FindProperty(BatteryPropertyCodes c)
+        public TrippLitePropertyViewModel FindProperty(BatteryPropertyCode c)
         {
             foreach (var m in Properties)
             {
@@ -468,7 +468,7 @@ namespace TrippLite
             return null;
         }
 
-        public void PromoteToLoad(BatteryPropertyCodes code, bool removeFromList = false)
+        public void PromoteToLoad(BatteryPropertyCode code, bool removeFromList = false)
         {
             TrippLitePropertyViewModel pm = null;
 
@@ -489,7 +489,7 @@ namespace TrippLite
             LoadProperties.Add(pm);
         }
 
-        public void DemoteFromLoad(BatteryPropertyCodes code)
+        public void DemoteFromLoad(BatteryPropertyCode code)
         {
             TrippLitePropertyViewModel pm = null;
 
@@ -512,7 +512,7 @@ namespace TrippLite
             Properties.Add(pm);
         }
 
-        public void PromoteProperty(BatteryPropertyCodes code)
+        public void PromoteProperty(BatteryPropertyCode code)
         {
             TrippLitePropertyViewModel pm = null;
 
@@ -535,7 +535,7 @@ namespace TrippLite
             ProminentProperties.Add(pm);
         }
 
-        public void DemoteProperty(BatteryPropertyCodes code)
+        public void DemoteProperty(BatteryPropertyCode code)
         {
             TrippLitePropertyViewModel pm = null;
 
