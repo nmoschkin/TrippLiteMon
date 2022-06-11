@@ -3,12 +3,14 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:dtcolor="clr-namespace:DataTools.ColorControls;assembly=DataTools.ColorControls"
+    xmlns:i18n="clr-namespace:TrippLite.Globalization;assembly=TLModel"
     xmlns:local="clr-namespace:TrippLite;assembly=TLControls"
     Title="DisplayConfig"
     Width="850"
     Height="500"
     Background="{DynamicResource TrippLiteDimGray}"
-    ResizeMode="CanMinimize">
+    ResizeMode="CanMinimize"
+    >
 
     <Window.Resources>
 
@@ -23,10 +25,14 @@
                 Content="{Binding}"
                 FontFamily="Calibri"
                 FontSize="12"
-                Foreground="Black" />
+                Foreground="Black"
+                />
         </DataTemplate>
 
-        <Style x:Key="PropLabelStyle" TargetType="Label">
+        <Style
+            x:Key="PropLabelStyle"
+            TargetType="Label"
+            >
             <Style.Setters>
                 <Setter Property="Foreground" Value="#303030" />
                 <Setter Property="Background" Value="{StaticResource TrippLiteLcd}" />
@@ -41,18 +47,21 @@
 
 
         <Style TargetType="ComboBox">
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="FontFamily" Value="Calibri" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Background" Value="White" />
+            <Setter Property="FontFamily" Value="Calibri" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="Margin" Value="8,6" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
 
 
 
     </Window.Resources>
 
-    <Grid Margin="0" Background="{StaticResource TrippLiteBlue}">
+    <Grid
+        Margin="0"
+        Background="{StaticResource TrippLiteBlue}"
+        >
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -64,7 +73,8 @@
             Grid.Row="0"
             Grid.Column="0"
             Margin="0"
-            Background="{StaticResource TrippLiteBlue}">
+            Background="{StaticResource TrippLiteBlue}"
+            >
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="48" />
@@ -75,14 +85,6 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-
-            <Label
-                Grid.Row="0"
-                Grid.Column="0"
-                Style="{StaticResource PropLabelStyle}">
-                Configure State
-            </Label>
-
             <ComboBox
                 Grid.Column="1"
                 Margin="8,10"
@@ -90,13 +92,23 @@
                 Background="Blue"
                 FontFamily="Calibri"
                 ItemTemplate="{StaticResource PowerTypeTemplate}"
-                SelectedIndex="0">
+                SelectedIndex="0"
+                >
 
                 <ComboBoxItem>A/C Power</ComboBoxItem>
                 <ComboBoxItem>Battery Power (Blackout)</ComboBoxItem>
                 <ComboBoxItem>Battery Power (Brownout)</ComboBoxItem>
                 <ComboBoxItem>Battery Power (Surge)</ComboBoxItem>
             </ComboBox>
+
+
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                Style="{StaticResource PropLabelStyle}"
+                >
+                Configure State
+            </Label>
 
 
 
@@ -108,7 +120,8 @@
             Grid.ColumnSpan="2"
             Margin="0,0,8,0"
             TabSelectionChanged="QuickTabs_TabSelectionChanged"
-            TabsPosition="Left">
+            TabsPosition="Left"
+            >
 
             <local:QuickTabs.Items>
 
@@ -138,7 +151,9 @@
 
                 <local:QuickTab Text="Cool Window Colors">
                     <StackPanel>
-                        <TextBlock Text="Coolers" />
+                        <Label Content="{i18n:Translate ResourceKey=BackColor}" />
+                        <dtcolor:ExtendedColorDropDown />
+
                     </StackPanel>
                 </local:QuickTab>
 
@@ -150,7 +165,10 @@
 
         </local:QuickTabs>
 
-        <Grid Grid.Row="2" Background="{StaticResource TrippLiteBlue}">
+        <Grid
+            Grid.Row="2"
+            Background="{StaticResource TrippLiteBlue}"
+            >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>

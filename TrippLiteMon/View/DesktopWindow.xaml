@@ -9,11 +9,15 @@
     AllowsTransparency="True"
     Background="Transparent"
     ShowInTaskbar="False"
-    WindowStyle="None">
+    WindowStyle="None"
+    >
     <Window.Resources>
         <ResourceDictionary>
 
-            <Style x:Key="FlatButtonStyle" TargetType="Button">
+            <Style
+                x:Key="FlatButtonStyle"
+                TargetType="Button"
+                >
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="Template">
                     <Setter.Value>
@@ -25,7 +29,8 @@
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="10"
                                 Opacity="0.25"
-                                SnapsToDevicePixels="True">
+                                SnapsToDevicePixels="True"
+                                >
 
                                 <ContentPresenter
                                     x:Name="contentPresenter"
@@ -37,7 +42,8 @@
                                     ContentTemplate="{TemplateBinding ContentTemplate}"
                                     Focusable="False"
                                     RecognizesAccessKey="True"
-                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                    />
 
                             </Border>
                             <ControlTemplate.Triggers>
@@ -51,7 +57,8 @@
                                                     Storyboard.TargetName="border"
                                                     Storyboard.TargetProperty="Opacity"
                                                     To="0.25"
-                                                    Duration="0:0:0.15" />
+                                                    Duration="0:0:0.15"
+                                                    />
 
                                             </Storyboard>
                                         </BeginStoryboard>
@@ -69,7 +76,8 @@
                                                     Storyboard.TargetName="border"
                                                     Storyboard.TargetProperty="Opacity"
                                                     To="1"
-                                                    Duration="0:0:0.15" />
+                                                    Duration="0:0:0.15"
+                                                    />
 
                                             </Storyboard>
                                         </BeginStoryboard>
@@ -124,7 +132,8 @@
             Background="{StaticResource TrippLiteLcdTrans}"
             BorderBrush="{StaticResource TrippLiteLcd}"
             BorderThickness="1,1,1,1"
-            CornerRadius="16,16,16,16">
+            CornerRadius="16,16,16,16"
+            >
 
             <Grid>
                 <Grid.RowDefinitions>
@@ -147,7 +156,8 @@
                     Grid.Column="1"
                     Grid.ColumnSpan="2"
                     Margin="4,2,4,0"
-                    Opacity="0.75">
+                    Opacity="0.75"
+                    >
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -157,88 +167,24 @@
                     <Border
                         Grid.Column="0"
                         Background="{StaticResource TrippLiteGray}"
-                        CornerRadius="4">
+                        CornerRadius="4"
+                        >
 
                         <Image
                             Margin="2,2,2,2"
                             RenderOptions.BitmapScalingMode="HighQuality"
-                            Source="{StaticResource TrippLiteLogo}" />
+                            Source="{StaticResource TrippLiteLogo}"
+                            />
 
                     </Border>
 
                     <TextBlock
                         Grid.Column="1"
                         Style="{StaticResource SmallNormalProperty}"
-                        Text="{Binding ElementName=DesktopWindow, Path=ModelId, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding ElementName=DesktopWindow, Path=ModelId, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        />
 
                 </Grid>
-
-
-                <StackPanel
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    VerticalAlignment="Stretch">
-
-                    <ItemsControl
-                        x:Name="LoadItem"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Focusable="False"
-                        ItemTemplate="{StaticResource CoolItemTemplate}"
-                        ItemsSource="{Binding LoadProperties}" />
-
-                </StackPanel>
-
-                <StackPanel
-                    Grid.Row="2"
-                    Grid.RowSpan="2"
-                    Grid.Column="2"
-                    VerticalAlignment="Stretch">
-
-                    <ItemsControl
-                        x:Name="BigItems"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Focusable="False"
-                        ItemTemplate="{StaticResource CoolItemTemplate}"
-                        ItemsSource="{Binding ProminentProperties}" />
-
-                </StackPanel>
-
-                <StackPanel
-                    Grid.Row="3"
-                    Grid.Column="1"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Orientation="Vertical">
-
-                    <local:LoadBar
-                        x:Name="LoadVisual"
-                        Grid.Row="3"
-                        Grid.Column="1"
-                        Width="88"
-                        Height="24"
-                        Margin="0,-6,0,0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        LoadValue="{Binding LoadBarValue, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                    <TextBlock
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Grid.ColumnSpan="2"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        FontSize="8"
-                        Style="{StaticResource SmallNormalProperty}"
-                        Text="{Binding SyncModel.Name}"
-                        ToolTip="{Binding SyncModel.Device.SerialNumber}" />
-
-                </StackPanel>
 
                 <Border
                     Grid.Row="0"
@@ -247,7 +193,8 @@
                     Margin="32,0,0,0"
                     Background="Transparent"
                     BorderThickness="0"
-                    CornerRadius="16,16,16,16">
+                    CornerRadius="16,16,16,16"
+                    >
 
                     <Grid>
 
@@ -269,7 +216,8 @@
                             BorderBrush="Transparent"
                             BorderThickness="0"
                             Focusable="False"
-                            Style="{StaticResource FlatButtonStyle}">
+                            Style="{StaticResource FlatButtonStyle}"
+                            >
 
                             <TextBlock
                                 Width="14"
@@ -283,7 +231,8 @@
                                 Foreground="{StaticResource TrippLiteLcdTrans}"
                                 RenderOptions.BitmapScalingMode="HighQuality"
                                 Text="&#xe7c2;"
-                                TextAlignment="Center" />
+                                TextAlignment="Center"
+                                />
                         </Button>
 
                         <Button
@@ -298,7 +247,8 @@
                             BorderBrush="Transparent"
                             BorderThickness="0"
                             Focusable="False"
-                            Style="{StaticResource FlatButtonStyle}">
+                            Style="{StaticResource FlatButtonStyle}"
+                            >
 
 
                             <TextBlock
@@ -310,17 +260,30 @@
                                 Foreground="{StaticResource TrippLiteLcdTrans}"
                                 RenderOptions.BitmapScalingMode="HighQuality"
                                 Text="&#xf8b0;"
-                                TextAlignment="Center" />
+                                TextAlignment="Center"
+                                />
 
                             <Button.ContextMenu>
                                 <ContextMenu x:Name="OptionsMenu">
-                                    <MenuItem x:Name="RevertToBig" Header="Display Large Monitor" />
+                                    <MenuItem
+                                        x:Name="RevertToBig"
+                                        Header="Display Large Monitor"
+                                        />
                                     <Separator />
-                                    <MenuItem x:Name="SysPower" Header="Open System Power Options" />
+                                    <MenuItem
+                                        x:Name="SysPower"
+                                        Header="Open System Power Options"
+                                        />
                                     <Separator />
-                                    <MenuItem x:Name="RunStart" Header="Run On System Startup" />
+                                    <MenuItem
+                                        x:Name="RunStart"
+                                        Header="Run On System Startup"
+                                        />
                                     <Separator />
-                                    <MenuItem x:Name="Config" Header="Settings" />
+                                    <MenuItem
+                                        x:Name="Config"
+                                        Header="Settings"
+                                        />
                                 </ContextMenu>
                             </Button.ContextMenu>
 
@@ -338,7 +301,8 @@
                             BorderBrush="Transparent"
                             BorderThickness="0"
                             Focusable="False"
-                            Style="{StaticResource FlatButtonStyle}">
+                            Style="{StaticResource FlatButtonStyle}"
+                            >
 
                             <TextBlock
                                 Width="14"
@@ -350,13 +314,88 @@
                                 Foreground="{StaticResource TrippLiteLcdTrans}"
                                 RenderOptions.BitmapScalingMode="HighQuality"
                                 Text="&#xe8bb;"
-                                TextAlignment="Center" />
+                                TextAlignment="Center"
+                                />
 
                         </Button>
 
                     </Grid>
 
                 </Border>
+
+
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    VerticalAlignment="Stretch"
+                    >
+
+                    <ItemsControl
+                        x:Name="LoadItem"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Focusable="False"
+                        ItemTemplate="{StaticResource CoolItemTemplate}"
+                        ItemsSource="{Binding LoadProperties}"
+                        />
+
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.RowSpan="2"
+                    Grid.Column="2"
+                    VerticalAlignment="Stretch"
+                    >
+
+                    <ItemsControl
+                        x:Name="BigItems"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Focusable="False"
+                        ItemTemplate="{StaticResource CoolItemTemplate}"
+                        ItemsSource="{Binding ProminentProperties}"
+                        />
+
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Orientation="Vertical"
+                    >
+
+                    <local:LoadBar
+                        x:Name="LoadVisual"
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Width="88"
+                        Height="24"
+                        Margin="0,-6,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        LoadValue="{Binding LoadBarValue, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        />
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        FontSize="8"
+                        Style="{StaticResource SmallNormalProperty}"
+                        Text="{Binding SyncModel.Name}"
+                        ToolTip="{Binding SyncModel.Device.SerialNumber}"
+                        />
+
+                </StackPanel>
 
 
 

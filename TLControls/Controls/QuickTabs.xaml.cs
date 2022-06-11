@@ -207,9 +207,18 @@ namespace TrippLite
             InitializeComponent();
 
             this.Unloaded += QuickTabs_Unloaded;
+            this.IsVisibleChanged += QuickTabs_IsVisibleChanged;
             ReTab();
             WireAndUnwire(Items, null);
 
+        }
+
+        private void QuickTabs_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (Visibility != Visibility.Visible)
+            {
+                Clear();
+            }
         }
 
         #endregion Public Constructors
@@ -294,6 +303,8 @@ namespace TrippLite
             Content_AREA.Children.Clear();
             Items_AREA.Children.Clear();
 
+            GC.Collect();
+
             c = Items.Count;
 
             var itemsAfter = c != 0;
@@ -362,19 +373,34 @@ namespace TrippLite
             }
         }
 
-        private void QuickTabs_Unloaded(object sender, RoutedEventArgs e)
+        private void Clear()
         {
             int c = Items_AREA.Children.Count;
             int i;
 
             for (i = 0; i < c; i++)
             {
-                Items[i].Header.MouseUp -= Header_MouseUp;
+                try
+                {
+                    Items[i].Header.MouseUp -= Header_MouseUp;
+                }
+                catch { }
             }
 
             Content_AREA.Children.Clear();
             Items_AREA.Children.Clear();
         }
+
+        private void QuickTabs_Unloaded(object sender, RoutedEventArgs e)
+        {
+            Clear();
+        }
+
+        ~QuickTabs()
+        {
+            Clear();
+        }
+
         private void ReTab()
         {
             switch (TabsPosition)

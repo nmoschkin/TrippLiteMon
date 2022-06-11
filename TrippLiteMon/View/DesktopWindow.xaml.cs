@@ -60,14 +60,11 @@ namespace TrippLite
         {
             get
             {
-                Thickness ItemSpacingRet = default;
-                ItemSpacingRet = DesktopWindow.GetItemSpacing(this);
-                return ItemSpacingRet;
+                return GetItemSpacing(this);
             }
-
             set
             {
-                DesktopWindow.SetItemSpacing(this, value);
+                SetItemSpacing(this, value);
             }
         }
 
@@ -97,14 +94,11 @@ namespace TrippLite
         {
             get
             {
-                ObservableCollection<BatteryPropertyCode> DisplayCodesRet = default;
-                DisplayCodesRet = DesktopWindow.GetDisplayCodes(this);
-                return DisplayCodesRet;
+                return GetDisplayCodes(this);
             }
-
             set
             {
-                DesktopWindow.SetDisplayCodes(this, value);
+                SetDisplayCodes(this, value);
             }
         }
 

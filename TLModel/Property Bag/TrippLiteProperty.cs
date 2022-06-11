@@ -1,6 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Configuration;
+using System.DirectoryServices.ActiveDirectory;
 using System.Windows.Forms;
 
 using DataTools.Win32.Memory;
@@ -116,6 +118,14 @@ namespace TrippLite
         public string Description
         {
             get => customDesc ?? GetLocalizedBatteryPropertyDescription(model.PropertyMap.GetNameFromCode(propCode));
+            set
+            {
+                if (customDesc != value)
+                {
+                    customDesc = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Description)));
+                }
+            }
         }
 
         /// <summary>

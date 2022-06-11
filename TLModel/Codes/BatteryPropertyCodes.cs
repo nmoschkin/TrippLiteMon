@@ -371,10 +371,22 @@ namespace TrippLite
             return l.ToArray();
         }
 
-
-        public U? GetValueAttribute<T, U>(BatteryPropertyCode code, string attrPropName) where T : Attribute
+        /// <summary>
+        /// Gets a <see cref="BatteryPropertyCode"/> mapped property attribute value.
+        /// </summary>
+        /// <typeparam name="TAttr">The type of the attribute.</typeparam>
+        /// <typeparam name="TReturn">The type of the return value.</typeparam>
+        /// <param name="code">The battery property code to look up.</param>
+        /// <param name="attrPropName">The name of the property on the attribute to retrieve.</param>
+        /// <remarks>
+        /// This will look up the property that currently has the corresponding code, and then look up the specified attribute
+        /// associated with that property.  If the attribute is found, it will look up the property <paramref name="attrPropName"/> and
+        /// return that value.
+        /// </remarks>
+        /// <returns>The value of the specified property for the specified attribute for the specified code.</returns>
+        public TReturn? GetValueAttribute<TAttr, TReturn>(BatteryPropertyCode code, string attrPropName) where TAttr : Attribute
         {
-            U? result = default;
+            TReturn? result = default;
 
             foreach (var prop in props)
             {
@@ -383,13 +395,13 @@ namespace TrippLite
                 if (bv != null && bv == code)
                 {
 
-                    var attr = prop.GetCustomAttribute<T>();
+                    var attr = prop.GetCustomAttribute<TAttr>();
                     if (attr != null)
                     {
                         var apInfo = attr.GetType().GetProperty(attrPropName);
                         if (apInfo != null)
                         {
-                            result = (U?)apInfo.GetValue(attr);
+                            result = (TReturn?)apInfo.GetValue(attr);
                         }
                     }
 
