@@ -15,7 +15,7 @@ namespace TrippLite.Globalization;
 public class TranslateExtension : MarkupExtension
 {
     CultureInfo? ci = null;
-    const string ResourceId = "TrippLiteMon.Globalization.AppResources";
+    const string ResourceId = "TrippLite.Globalization.AppResources";
 
     static readonly Lazy<ResourceManager> ResMgr = new Lazy<ResourceManager>(
         () => new ResourceManager(ResourceId, IntrospectionExtensions.GetTypeInfo(typeof(AppResources)).Assembly));
