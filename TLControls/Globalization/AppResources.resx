@@ -168,6 +168,9 @@
   <data name="BatteryPower" xml:space="preserve">
     <value>Battery Power</value>
   </data>
+  <data name="BatteryVoltage" xml:space="preserve">
+    <value>Seconds Remaining Power</value>
+  </data>
   <data name="Blackout" xml:space="preserve">
     <value>Blackout</value>
   </data>
@@ -279,6 +282,15 @@
   <data name="HID_Long" xml:space="preserve">
     <value>Human Interface Device</value>
   </data>
+  <data name="HighVoltageTransfer" xml:space="preserve">
+    <value>High Voltage Transfer</value>
+  </data>
+  <data name="InputFrequency" xml:space="preserve">
+    <value>Input Frequency</value>
+  </data>
+  <data name="InputVoltage" xml:space="preserve">
+    <value>Input Voltage</value>
+  </data>
   <data name="Italic" xml:space="preserve">
     <value>Italic</value>
   </data>
@@ -294,11 +306,17 @@
   <data name="Load" xml:space="preserve">
     <value>Load</value>
   </data>
+  <data name="LowVoltageTransfer" xml:space="preserve">
+    <value>Low Voltage Transfer</value>
+  </data>
   <data name="MainsStatus" xml:space="preserve">
     <value>Mains Status</value>
   </data>
   <data name="Menu" xml:space="preserve">
     <value>Menu</value>
+  </data>
+  <data name="NominalBatteryVoltage" xml:space="preserve">
+    <value>Nominal Battery Voltage</value>
   </data>
   <data name="NotPrimary" xml:space="preserve">
     <value>Not Primary</value>
@@ -320,6 +338,21 @@
   </data>
   <data name="OpenSystemPowerSettings" xml:space="preserve">
     <value>Open System Power Settings</value>
+  </data>
+  <data name="OutputCurrent" xml:space="preserve">
+    <value>Output Current</value>
+  </data>
+  <data name="OutputFrequency" xml:space="preserve">
+    <value>Output Frequency</value>
+  </data>
+  <data name="OutputLoad" xml:space="preserve">
+    <value>Output Load</value>
+  </data>
+  <data name="OutputPower" xml:space="preserve">
+    <value>Output Power</value>
+  </data>
+  <data name="OutputVoltage" xml:space="preserve">
+    <value>Output Voltage</value>
   </data>
   <data name="PercentRemaining" xml:space="preserve">
     <value>Percent Remaining</value>
@@ -431,6 +464,9 @@
   </data>
   <data name="UPS_Long" xml:space="preserve">
     <value>Uninterruptable Power Supply</value>
+  </data>
+  <data name="VARATING" xml:space="preserve">
+    <value>VA RATING</value>
   </data>
   <data name="Volt" xml:space="preserve">
     <value>Volt</value>

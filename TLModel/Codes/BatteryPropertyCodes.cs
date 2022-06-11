@@ -225,7 +225,7 @@ namespace TrippLite
 
     }
 
-    public class FieldMapper
+    internal class FieldMapper
     {
 
         bool initialized;
@@ -246,9 +246,11 @@ namespace TrippLite
             {
                 this.deviceInfo = HidPowerDeviceInfo.CreateFromHidDevice(hidDevice);
             }
+
+            Initialize();
         }
 
-        public void Initialize()
+        private void Initialize()
         {
             if (deviceInfo == null)
             {

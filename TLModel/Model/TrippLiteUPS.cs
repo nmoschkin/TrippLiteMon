@@ -31,6 +31,42 @@ namespace TrippLite
         /// <param name="connect"></param>
         /// <remarks></remarks>
 
+        #region Protected Fields
+
+        protected long bufflen = 65L;
+
+        protected bool connected = false;
+
+        protected int deviceIndex;
+
+        protected bool isTrippLite = false;
+
+        protected MemPtr mm;
+
+        protected HidPowerDeviceInfo powerDevice;
+
+        protected PowerStates powerState = PowerStates.Uninitialized;
+
+        protected TrippLitePropertyBag propBag;
+
+        protected PowerStateSignal? stateMonitor = null;
+
+        protected long[] values = new long[256];
+
+        #endregion Protected Fields
+
+        #region Private Fields
+
+        static int lps;
+
+        private PowerDeviceIdEntry? deviceIdEntry = null;
+
+        private bool disposedValue;
+
+        #endregion Private Fields
+
+        #region Public Constructors
+
         public TrippLiteUPS() : this(true)
         {
         }
@@ -74,35 +110,86 @@ namespace TrippLite
 
         }
 
-        protected int deviceIndex;
+        #endregion Public Constructors
 
-        protected MemPtr mm;
-        
-        protected HidPowerDeviceInfo powerDevice;
-        
-        protected long[] values = new long[256];
-        
-        protected bool connected = false;
+        #region Private Destructors
 
-        protected bool isTrippLite = false;
-        
-        protected PowerStates powerState = PowerStates.Uninitialized;
-        
-        protected TrippLitePropertyBag propBag;
-        
-        protected long bufflen = 65L;
+        ~TrippLiteUPS()
+        {
+            Dispose(false);
+        }
+
+        #endregion Private Destructors
+
+        #region Public Events
+
+        public event PowerStateChangedEventHandler? PowerStateChanged;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        #endregion Public Events
+
+        #region Public Properties
 
         public static int DefaultRetries { get; set; } = 2;
 
         public static int DefaultRetryDelay { get; set; } = 1000;
+        /// <summary>
+        /// Gets a value indicating whether or not the current object is connected to a battery.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public bool Connected
+        {
+            get
+            {
+                return connected;
+            }
+        }
 
-        protected PowerStateSignal? stateMonitor = null;
+        /// <summary>
+        /// Contains detailed Operating System-Reported information about the device.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public HidPowerDeviceInfo Device
+        {
+            get
+            {
+                return powerDevice;
+            }
+        }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public event PowerStateChangedEventHandler? PowerStateChanged;
+        /// <summary>
+        /// Indicates whether this power interface is attached to a Tripp Lite power device.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public bool IsTrippLite
+        {
+            get
+            {
+                return isTrippLite;
+            }
+        }
 
+        /// <summary>
+        /// Gets the model of the SMART Tripp Lite UPS
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public string ModelId
+        {
+            get
+            {
+                return "SMART" + propBag.FindProperty(BatteryPropertyCodes.VARATING).GetValue() + "LCDx";
+            }
+        }
 
-        private PowerDeviceIdEntry? deviceIdEntry = null;
         public string Name
         {
             get => deviceIdEntry?.Name ?? powerDevice?.ProductString ?? powerDevice?.DevicePath ?? string.Empty;
@@ -119,6 +206,94 @@ namespace TrippLite
                 }
             }
         }
+
+        /// <summary>
+        /// Returns the current power state of the Tripp Lite device.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public PowerStates PowerState
+        {
+            get
+            {
+                return powerState;
+            }
+
+            protected set
+            {
+                if (powerState != value)
+                {
+                    var os = powerState;
+                    powerState = value;
+                    PowerStateChanged?.Invoke(this, new PowerStateChangedEventArgs(os, powerState));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PowerState"));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the description of the current power state.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public string PowerStateDescription
+        {
+            get
+            {
+
+                // ' retrieve the 'Description' property (as string) of the DescriptionAttribute
+                // ' associated with the specified field of the PowerStates enumeration.
+                return GetEnumAttrVal<DescriptionAttribute, string, PowerStates>(powerState, "Description");
+            }
+        }
+
+        /// <summary>
+        /// Gets the detailed description of the current power state.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public string PowerStateDetail
+        {
+            get
+            {
+                return GetEnumAttrVal<DetailAttribute, string, PowerStates>(powerState, "Detail");
+            }
+        }
+
+        /// <summary>
+        /// Contains all properties exposed by the Tripp Lite HID Power Interface
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public TrippLitePropertyBag PropertyBag
+        {
+            get
+            {
+                return propBag;
+            }
+        }
+
+        /// <summary>
+        /// Gets the title of the device.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public string Title
+        {
+            get
+            {
+                return Device.HidManufacturer + " " + Device.ClassName;
+            }
+        }
+
+        #endregion Public Properties
+
+        #region Public Methods
 
         /// <summary>
         /// Returns a list of all TrippLite devices.
@@ -280,12 +455,6 @@ namespace TrippLite
             return result;
         }
 
-        private void StateMonitor_PowerStateChanged(object? sender, PowerStateChangedEventArgs e)
-        {
-            PowerState = e.NewState;
-            PowerStateChanged?.Invoke(this, e);
-        }
-
         /// <summary>
         /// Disconnect the device and free all resources.
         /// </summary>
@@ -305,9 +474,9 @@ namespace TrippLite
                 connected = false;
                 powerDevice = null;
                 deviceIdEntry = null;
-                propBag = null;                
+                propBag = null;
             }
-            catch 
+            catch
             {
                 return false;
             }
@@ -315,144 +484,10 @@ namespace TrippLite
             return true;
         }
 
-        /// <summary>
-        /// Gets a value indicating whether or not the current object is connected to a battery.
-        /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public bool Connected
+        public void Dispose()
         {
-            get
-            {
-                return connected;
-            }
-        }
-
-        /// <summary>
-        /// Returns the current power state of the Tripp Lite device.
-        /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public PowerStates PowerState
-        {
-            get
-            {
-                return powerState;
-            }
-
-            protected set
-            {
-                if (powerState != value)
-                {
-                    var os = powerState;
-                    powerState = value;
-                    PowerStateChanged?.Invoke(this, new PowerStateChangedEventArgs(os, powerState));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PowerState"));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the description of the current power state.
-        /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public string PowerStateDescription
-        {
-            get
-            {
-
-                // ' retrieve the 'Description' property (as string) of the DescriptionAttribute
-                // ' associated with the specified field of the PowerStates enumeration.
-                return GetEnumAttrVal<DescriptionAttribute, string, PowerStates>(powerState, "Description");
-            }
-        }
-
-        /// <summary>
-        /// Gets the detailed description of the current power state.
-        /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public string PowerStateDetail
-        {
-            get
-            {
-                return GetEnumAttrVal<DetailAttribute, string, PowerStates>(powerState, "Detail");
-            }
-        }
-
-        /// <summary>
-        /// Gets the title of the device.
-        /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public string Title
-        {
-            get
-            {
-                return Device.HidManufacturer + " " + Device.ClassName;
-            }
-        }
-
-        /// <summary>
-        /// Gets the model of the SMART Tripp Lite UPS
-        /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public string ModelId
-        {
-            get
-            {
-                return "SMART" + propBag.FindProperty(BatteryPropertyCodes.VARATING).GetValue() + "LCDx";
-            }
-        }
-
-        /// <summary>
-        /// Contains all properties exposed by the Tripp Lite HID Power Interface
-        /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public TrippLitePropertyBag PropertyBag
-        {
-            get
-            {
-                return propBag;
-            }
-        }
-
-        /// <summary>
-        /// Indicates whether this power interface is attached to a Tripp Lite power device.
-        /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public bool IsTrippLite
-        {
-            get
-            {
-                return isTrippLite;
-            }
-        }
-
-        /// <summary>
-        /// Contains detailed Operating System-Reported information about the device.
-        /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public HidPowerDeviceInfo Device
-        {
-            get
-            {
-                return powerDevice;
-            }
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -502,7 +537,20 @@ namespace TrippLite
             propBag.SignalRefresh();
         }
 
-        static int lps;
+        #endregion Public Methods
+
+        #region Protected Methods
+
+        // IDisposable
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                Disconnect();
+            }
+
+            disposedValue = true;
+        }
 
         protected bool InternalRefresh(System.Windows.DependencyObject dep = null)
         {
@@ -542,14 +590,14 @@ namespace TrippLite
                             if (v > 100 || v < 0)
                                 v = (int)prop.Value;
                         }
-                        
+
                         if (prop.value != v || prop.value == -1)
                         {
                             prop.value = v;
                             activeProps.Add(prop);
                         }
                     }
-                    
+
                 }
             }
             catch (ThreadAbortException)
@@ -561,113 +609,7 @@ namespace TrippLite
                 return false;
             };
 
-            
-            stateMonitor.DeterminePowerState();
-
-            //if (involtRet == true)
-            //{
-            //    min = propBag.FindProperty(TrippLiteCodes.LowVoltageTransfer).Value;
-            //    max = propBag.FindProperty(TrippLiteCodes.HighVoltageTransfer).Value;
-
-            //    switch (volt)
-            //    {
-            //        case 0d:
-            //            if (PowerState != PowerStates.Battery)
-            //            {
-            //                if (lps >= lpsMax)
-            //                {
-            //                    if (dep is object)
-            //                    {
-            //                        dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.Battery);
-            //                    }
-            //                    else
-            //                    {
-            //                        PowerState = PowerStates.Battery;
-            //                    }
-
-            //                    lps = 0;
-            //                }
-            //            }
-            //            else
-            //            {
-            //                lps += 1;
-            //            }
-
-            //            break;
-
-            //        case var @case when @case <= min:
-            //            if (PowerState != PowerStates.BatteryTransferLow)
-            //            {
-            //                if (lps >= lpsMax)
-            //                {
-            //                    if (dep is object)
-            //                    {
-            //                        dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.BatteryTransferLow);
-            //                    }
-            //                    else
-            //                    {
-            //                        PowerState = PowerStates.BatteryTransferLow;
-            //                    }
-
-            //                    lps = 0;
-            //                }
-            //            }
-            //            else
-            //            {
-            //                lps += 1;
-            //            }
-
-            //            break;
-
-            //        case var case1 when case1 >= max:
-            //            if (PowerState != PowerStates.BatteryTransferHigh)
-            //            {
-            //                if (lps >= lpsMax)
-            //                {
-            //                    if (dep is object)
-            //                    {
-            //                        dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.BatteryTransferHigh);
-            //                    }
-            //                    else
-            //                    {
-            //                        PowerState = PowerStates.BatteryTransferHigh;
-            //                    }
-
-            //                    lps = 0;
-            //                }
-            //            }
-            //            else
-            //            {
-            //                lps += 1;
-            //            }
-
-            //            break;
-
-            //        default:
-            //            if (PowerState != PowerStates.Utility)
-            //            {
-            //                if (lps >= lpsMax)
-            //                {
-            //                    if (dep is object)
-            //                    {
-            //                        dep.Dispatcher.BeginInvoke(() => PowerState = PowerStates.Utility);
-            //                    }
-            //                    else
-            //                    {
-            //                        PowerState = PowerStates.Utility;
-            //                    }
-
-            //                    lps = 0;
-            //                }
-            //            }
-            //            else
-            //            {
-            //                lps += 1;
-            //            }
-
-            //            break;
-            //    }
-            //}
+            stateMonitor?.DeterminePowerState();
 
             if (dep is object)
             {
@@ -677,35 +619,26 @@ namespace TrippLite
             else
             {
                 foreach (var prop in activeProps)
+                {
                     prop.SignalRefresh();
+                }
             }
 
             return true;
         }
 
-        private bool disposedValue; // To detect redundant calls
+        #endregion Protected Methods
 
-        // IDisposable
-        protected virtual void Dispose(bool disposing)
+        #region Private Methods
+
+        private void StateMonitor_PowerStateChanged(object? sender, PowerStateChangedEventArgs e)
         {
-            if (!disposedValue)
-            {
-                Disconnect();
-            }
-
-            disposedValue = true;
+            PowerState = e.NewState;
+            PowerStateChanged?.Invoke(this, e);
         }
 
-        ~TrippLiteUPS()
-        {
-            Dispose(false);
-        }
+        #endregion Private Methods
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
+        // To detect redundant calls
     }
 }

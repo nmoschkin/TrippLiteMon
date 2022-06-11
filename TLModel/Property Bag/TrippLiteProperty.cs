@@ -15,19 +15,31 @@ namespace TrippLite
     /// <remarks></remarks>
     public sealed class TrippLiteProperty : INotifyPropertyChanged, IDisposable, IChildOf<TrippLiteUPS>
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        #region Internal Fields
 
-        private PropertyChangedEventArgs propEvent = new PropertyChangedEventArgs("Value");
-        private BatteryPropertyCodes propCode;
+        internal TrippLiteUPS model;
+
+        internal TrippLitePropertyBag propBag;
 
         internal long value = -1;
 
-        private bool isSettable;
+        #endregion Internal Fields
 
-        internal TrippLiteUPS model;
-        internal TrippLitePropertyBag propBag;
+        #region Private Fields
 
         private ushort byteLen = 4;
+
+        private bool disposedValue;
+
+        private bool isSettable;
+
+        private BatteryPropertyCodes propCode;
+
+        private PropertyChangedEventArgs propEvent = new PropertyChangedEventArgs("Value");
+
+        #endregion Private Fields
+
+        #region Internal Constructors
 
         /// <summary>
         /// Initialize a new TrippLiteProperty
@@ -42,13 +54,66 @@ namespace TrippLite
             byteLen = ByteLength;
         }
 
+        #endregion Internal Constructors
+
+        #region Private Destructors
+
+        ~TrippLiteProperty()
+        {
+            // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+            Dispose(false);
+        }
+
+        #endregion Private Destructors
+
+        #region Public Events
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion Public Events
+
+        #region Public Properties
+
         /// <summary>
-        /// Specify whether or not the property object will call to the device, directly, to retrieve (or set) the value of its property.
+        /// Gets the length of the USB HID property, in bytes, as defined in TrippLiteCodes.
         /// </summary>
         /// <value></value>
         /// <returns></returns>
         /// <remarks></remarks>
-        public bool LiveInterface { get; set; } = false;
+        public ushort ByteLength
+        {
+            get
+            {
+                ushort bl = GetEnumAttrVal<ByteLengthAttribute, ushort, BatteryPropertyCodes>(propCode, "Length");
+
+                if (bl == 0)
+                    bl = 4;
+
+                return bl;
+            }
+        }
+
+        /// <summary>
+        /// Gets the Tripp Lite property code.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public BatteryPropertyCodes Code
+        {
+            get => propCode;
+        }
+
+        /// <summary>
+        /// Gets the description of the property.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public string Description
+        {
+            get => GetEnumAttrVal<DescriptionAttribute, string, BatteryPropertyCodes>(propCode, "Description");
+        }
 
         /// <summary>
         /// Indicates whether this is a property that raises change events.
@@ -57,6 +122,69 @@ namespace TrippLite
         /// <returns></returns>
         /// <remarks></remarks>
         public bool IsActiveProperty { get; set; } = true;
+
+        /// <summary>
+        /// Gets a value indicating whether or not this property supports setting on the device.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public bool IsSettable
+        {
+            get
+            {
+                if (model is null)
+                    return false;
+
+                return isSettable;
+            }
+            internal set
+            {
+                isSettable = value;
+            }
+        }
+
+        /// <summary>
+        /// Specify whether or not the property object will call to the device, directly, to retrieve (or set) the value of its property.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public bool LiveInterface { get; set; } = false;
+        /// <summary>
+        /// Gets the multiplier of the property.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public double Multiplier
+        {
+            get => GetEnumAttrVal<MultiplierAttribute, double, BatteryPropertyCodes>(propCode, "Value");
+        }
+
+        // End Get
+        // End Property
+        /// <summary>
+        /// Gets the name of the property.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public string Name
+        {
+            get => propCode.ToString();
+        }
+
+        /// <summary>
+        /// Gets the hard-coded number format for this property type.
+        /// </summary>
+        /// <value></value>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        public string NumberFormat
+        {
+            get => GetEnumAttrVal<NumberFormatAttribute, string, BatteryPropertyCodes>(propCode, "Format");
+        }
 
         /// <summary>
         /// Gets the owner TrippLiteUPS object for this property.
@@ -78,46 +206,28 @@ namespace TrippLite
             get => model;
             set => model = value;
         }
-
+        // Public ReadOnly Property RawValue As Byte()
+        // Get
         /// <summary>
-        /// Gets the hard-coded number format for this property type.
+        /// Gets the unit of the property.
         /// </summary>
         /// <value></value>
         /// <returns></returns>
         /// <remarks></remarks>
-        public string NumberFormat
+        public MeasureUnitTypes Unit
         {
-            get => GetEnumAttrVal<NumberFormatAttribute, string, BatteryPropertyCodes>(propCode, "Format");
+            get => GetEnumAttrVal<MeasureUnitAttribute, MeasureUnitTypes, BatteryPropertyCodes>(propCode, "Unit");
         }
 
         /// <summary>
-        /// Gets the multiplier of the property.
+        /// Gets detailed information about the property unit as a MeasureUnit object.
         /// </summary>
         /// <value></value>
         /// <returns></returns>
         /// <remarks></remarks>
-        public double Multiplier
+        public MeasureUnit UnitInfo
         {
-            get => GetEnumAttrVal<MultiplierAttribute, double, BatteryPropertyCodes>(propCode, "Value");
-        }
-
-        /// <summary>
-        /// Gets the length of the USB HID property, in bytes, as defined in TrippLiteCodes.
-        /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public ushort ByteLength
-        {
-            get
-            {
-                ushort bl = GetEnumAttrVal<ByteLengthAttribute, ushort, BatteryPropertyCodes>(propCode, "Length");
-
-                if (bl == 0)
-                    bl = 4;
-
-                return bl;
-            }
+            get => MeasureUnit.FindUnit(Unit);
         }
 
         /// <summary>
@@ -168,86 +278,65 @@ namespace TrippLite
             }
         }
 
-        // Public ReadOnly Property RawValue As Byte()
-        // Get
+        #endregion Public Properties
 
-        // End Get
-        // End Property
+        #region Public Methods
+
+        public static explicit operator double(TrippLiteProperty v)
+        {
+            return v.Value;
+        }
+
+        public static explicit operator int(TrippLiteProperty v)
+        {
+            return (int)v.Value;
+        }
+
+        public static explicit operator string(TrippLiteProperty v)
+        {
+            return v.ToString();
+        }
+
+        // This code added by Visual Basic to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
-        /// Gets a value indicating whether or not this property supports setting on the device.
+        /// Attempts to retrieve the value directly from the device.
         /// </summary>
-        /// <value></value>
         /// <returns></returns>
         /// <remarks></remarks>
-        public bool IsSettable
+        public long GetValue()
         {
-            get
+            long res = 0L;
+            model.Device.HidGetFeature(propCode, out res);
+            return res;
+        }
+
+        /// <summary>
+        /// Attempt to move this item to another property bag.
+        /// </summary>
+        /// <param name="bag">The destination property bag.</param>
+        /// <returns>True if successful.</returns>
+        /// <remarks></remarks>
+        public bool MoveTo(TrippLitePropertyBag bag)
+        {
+            if (model is null || ReferenceEquals(bag, propBag))
+                return false;
+
+            if (Parent.PropertyBag.Contains(this))
             {
-                if (model is null)
-                    return false;
-
-                return isSettable;
+                if (Parent.PropertyBag.MoveTo(this, bag))
+                {
+                    return true;
+                }
             }
-            internal set
-            {
-                isSettable = value;
-            }
-        }
 
-        /// <summary>
-        /// Gets the name of the property.
-        /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public string Name
-        {
-            get => propCode.ToString();
-        }
-
-        /// <summary>
-        /// Gets the description of the property.
-        /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public string Description
-        {
-            get => GetEnumAttrVal<DescriptionAttribute, string, BatteryPropertyCodes>(propCode, "Description");
-        }
-
-        /// <summary>
-        /// Gets the unit of the property.
-        /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public MeasureUnitTypes Unit
-        {
-            get => GetEnumAttrVal<MeasureUnitAttribute, MeasureUnitTypes, BatteryPropertyCodes>(propCode, "Unit");
-        }
-
-        /// <summary>
-        /// Gets the Tripp Lite property code.
-        /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public BatteryPropertyCodes Code
-        {
-            get => propCode;
-        }
-
-        /// <summary>
-        /// Gets detailed information about the property unit as a MeasureUnit object.
-        /// </summary>
-        /// <value></value>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public MeasureUnit UnitInfo
-        {
-            get => MeasureUnit.FindUnit(Unit);
+            return false;
         }
 
         /// <summary>
@@ -300,19 +389,6 @@ namespace TrippLite
 
             return res;
         }
-
-        /// <summary>
-        /// Attempts to retrieve the value directly from the device.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public long GetValue()
-        {
-            long res = 0L;
-            model.Device.HidGetFeature(propCode, out res);                      
-            return res;
-        }
-
         /// <summary>
         /// Attempt to set a value or flag on the device.
         /// </summary>
@@ -396,29 +472,6 @@ namespace TrippLite
 
             return res;
         }
-
-        /// <summary>
-        /// Attempt to move this item to another property bag.
-        /// </summary>
-        /// <param name="bag">The destination property bag.</param>
-        /// <returns>True if successful.</returns>
-        /// <remarks></remarks>
-        public bool MoveTo(TrippLitePropertyBag bag)
-        {
-            if (model is null || ReferenceEquals(bag, propBag))
-                return false;
-
-            if (Parent.PropertyBag.Contains(this))
-            {
-                if (Parent.PropertyBag.MoveTo(this, bag))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         /// <summary>
         /// Converts this property into its string representation
         /// </summary>
@@ -452,31 +505,26 @@ namespace TrippLite
             return ((float)(Value * Multiplier)).ToString(numFmt) + (!suppressUnit ? " " + UnitInfo.UnitSymbol : "");
         }
 
-        public static explicit operator double(TrippLiteProperty v)
-        {
-            return v.Value;
-        }
+        #endregion Public Methods
 
-        public static explicit operator int(TrippLiteProperty v)
-        {
-            return (int)v.Value;
-        }
-
-        public static explicit operator string(TrippLiteProperty v)
-        {
-            return v.ToString();
-        }
+        #region Internal Methods
 
         internal void SignalRefresh()
         {
             if (IsActiveProperty)
+            {
                 PropertyChanged?.Invoke(this, propEvent);
+            }
         }
 
-        private bool disposedValue; // To detect redundant calls
+        #endregion Internal Methods
+
+        // To detect redundant calls
+
+        #region Private Methods
 
         // IDisposable
-        protected void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!disposedValue)
             {
@@ -487,19 +535,6 @@ namespace TrippLite
             disposedValue = true;
         }
 
-        ~TrippLiteProperty()
-        {
-            // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
-            Dispose(false);
-        }
-
-        // This code added by Visual Basic to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
+        #endregion Private Methods
     }
 }

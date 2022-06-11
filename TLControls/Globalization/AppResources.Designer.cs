@@ -214,6 +214,15 @@ namespace TrippLite.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seconds Remaining Power.
+        /// </summary>
+        internal static string BatteryVoltage {
+            get {
+                return ResourceManager.GetString("BatteryVoltage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Blackout.
         /// </summary>
         internal static string Blackout {
@@ -547,6 +556,33 @@ namespace TrippLite.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to High Voltage Transfer.
+        /// </summary>
+        internal static string HighVoltageTransfer {
+            get {
+                return ResourceManager.GetString("HighVoltageTransfer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input Frequency.
+        /// </summary>
+        internal static string InputFrequency {
+            get {
+                return ResourceManager.GetString("InputFrequency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input Voltage.
+        /// </summary>
+        internal static string InputVoltage {
+            get {
+                return ResourceManager.GetString("InputVoltage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Italic.
         /// </summary>
         internal static string Italic {
@@ -592,6 +628,15 @@ namespace TrippLite.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Low Voltage Transfer.
+        /// </summary>
+        internal static string LowVoltageTransfer {
+            get {
+                return ResourceManager.GetString("LowVoltageTransfer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mains Status.
         /// </summary>
         internal static string MainsStatus {
@@ -606,6 +651,15 @@ namespace TrippLite.Globalization {
         internal static string Menu {
             get {
                 return ResourceManager.GetString("Menu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nominal Battery Voltage.
+        /// </summary>
+        internal static string NominalBatteryVoltage {
+            get {
+                return ResourceManager.GetString("NominalBatteryVoltage", resourceCulture);
             }
         }
         
@@ -669,6 +723,51 @@ namespace TrippLite.Globalization {
         internal static string OpenSystemPowerSettings {
             get {
                 return ResourceManager.GetString("OpenSystemPowerSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output Current.
+        /// </summary>
+        internal static string OutputCurrent {
+            get {
+                return ResourceManager.GetString("OutputCurrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output Frequency.
+        /// </summary>
+        internal static string OutputFrequency {
+            get {
+                return ResourceManager.GetString("OutputFrequency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output Load.
+        /// </summary>
+        internal static string OutputLoad {
+            get {
+                return ResourceManager.GetString("OutputLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output Power.
+        /// </summary>
+        internal static string OutputPower {
+            get {
+                return ResourceManager.GetString("OutputPower", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output Voltage.
+        /// </summary>
+        internal static string OutputVoltage {
+            get {
+                return ResourceManager.GetString("OutputVoltage", resourceCulture);
             }
         }
         
@@ -1002,6 +1101,15 @@ namespace TrippLite.Globalization {
         internal static string UPS_Long {
             get {
                 return ResourceManager.GetString("UPS_Long", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to VA RATING.
+        /// </summary>
+        internal static string VARATING {
+            get {
+                return ResourceManager.GetString("VARATING", resourceCulture);
             }
         }
         
