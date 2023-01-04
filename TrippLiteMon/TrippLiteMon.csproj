@@ -17,6 +17,8 @@
   <ItemGroup>
     <PackageReference Include="DataTools.ColorControls" Version="8.0.0.1039" />
     <PackageReference Include="DataTools.Graphics" Version="8.0.0.1039" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.1" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.1" />
   </ItemGroup>
 
   <ItemGroup>

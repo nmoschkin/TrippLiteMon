@@ -1,13 +1,12 @@
 ﻿using DataTools.Scheduler;
 
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
+
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Security.Permissions;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace TrippLite
@@ -17,21 +16,20 @@ namespace TrippLite
     /// </summary>
     public partial class App : Application
     {
-
         public App()
         {
-
+            AppCenter.Start(System.IO.File.ReadAllText(@"E:\Projects\Keys\TrippLiteAppCenter.txt").Trim('\n').Trim('\r').Trim(),
+                  typeof(Analytics), typeof(Crashes));
             // Application-level events, such as Startup, Exit, and DispatcherUnhandledException
             // can be handled in this file.
             this.SessionEnding += Application_SessionEnding;
             this.Startup += Application_Startup;
         }
-                
-        new public static App Current
+
+        public new static App Current
         {
             get => (App)Application.Current;
         }
-
 
         private PowerMon mainBigWindow;
 
@@ -136,9 +134,7 @@ namespace TrippLite
             {
                 if (invokePicker)
                 {
-
                     return ShowBatteryPicker();
-
                 }
 
                 return false;
