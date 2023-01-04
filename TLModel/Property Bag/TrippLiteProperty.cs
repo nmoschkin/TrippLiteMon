@@ -1,12 +1,7 @@
-using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Configuration;
-using System.DirectoryServices.ActiveDirectory;
-using System.Windows.Forms;
-
 using DataTools.Win32.Memory;
-using DataTools.Win32.Usb;
+
+using System;
+using System.ComponentModel;
 
 using static TrippLite.TrippLiteCodeUtility;
 
@@ -164,6 +159,7 @@ namespace TrippLite
         /// <returns></returns>
         /// <remarks></remarks>
         public bool LiveInterface { get; set; } = false;
+
         /// <summary>
         /// Gets the multiplier of the property.
         /// </summary>
@@ -219,6 +215,7 @@ namespace TrippLite
             get => model;
             set => model = value;
         }
+
         // Public ReadOnly Property RawValue As Byte()
         // Get
         /// <summary>
@@ -361,47 +358,29 @@ namespace TrippLite
         /// <remarks></remarks>
         public bool SetValue(byte[] value)
         {
-            bool res;
-
-            if (IsSettable == false || value is null || value.Length != byteLen)
-                return false;
-
-            var dev = DataTools.Win32.Usb.HidFeatures.OpenHid(model.Device);
-
-            if (dev == IntPtr.Zero)
-                return false;
-
-            MemPtr mm = new MemPtr();
-
-            mm.Alloc(1 + value.Length);
-            mm.ByteAt(0) = (byte)propCode;
-
-            res = UsbLibHelpers.HidD_SetFeature(dev, mm.Handle, (int)1 + value.Length);
-            HidFeatures.CloseHid(dev);
+            var res = model.Device.HidSetFeature(propCode, value);
 
             if (res)
             {
-                if (value.Length >= 8)
+                using (var mm = new SafePtr(value))
                 {
-                    this.value = mm.LongAt(1L);
-                }
-                else
-                {
-                    this.value = mm.IntAt(1L);
+                    if (value.Length >= 8)
+                    {
+                        this.value = mm.LongAt(0);
+                    }
+                    else
+                    {
+                        this.value = mm.IntAt(0);
+                    }
                 }
 
-                mm.Free();
-            
                 if (IsActiveProperty)
                     PropertyChanged?.Invoke(this, propEvent);
-            }
-            else
-            {
-                mm.Free();
             }
 
             return res;
         }
+
         /// <summary>
         /// Attempt to set a value or flag on the device.
         /// </summary>
@@ -415,7 +394,7 @@ namespace TrippLite
             if (res)
             {
                 this.value = value;
-            
+
                 if (IsActiveProperty)
                     PropertyChanged?.Invoke(this, propEvent);
             }
@@ -485,6 +464,7 @@ namespace TrippLite
 
             return res;
         }
+
         /// <summary>
         /// Converts this property into its string representation
         /// </summary>

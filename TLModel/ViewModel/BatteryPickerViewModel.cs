@@ -1,5 +1,5 @@
 ﻿using DataTools.Desktop;
-using DataTools.Observable;
+using DataTools.Essentials.Observable;
 using DataTools.Win32.Usb;
 
 using System;

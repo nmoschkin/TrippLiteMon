@@ -1,19 +1,17 @@
-﻿
-using DataTools.Win32.Memory;
-using System.Drawing;
-using System.Collections.Generic;
+﻿using DataTools.Win32.Memory;
+
 using Microsoft.Win32;
-using System.Windows.Media.Imaging;
-using System.Windows.Media;
+
 using Newtonsoft.Json;
-using System.IO;
-using System.Windows.Forms.Design;
+
 using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Text.RegularExpressions;
 
 namespace TrippLite
 {
-
     #region Registry Settings
 
     /// <summary>
@@ -23,15 +21,15 @@ namespace TrippLite
     public enum LastWindowType
     {
         /// <summary>
-    /// The main window was the last to be displayed.
-    /// </summary>
-    /// <remarks></remarks>
+        /// The main window was the last to be displayed.
+        /// </summary>
+        /// <remarks></remarks>
         Main,
 
         /// <summary>
-    /// The cool window was the last to be displayed.
-    /// </summary>
-    /// <remarks></remarks>
+        /// The cool window was the last to be displayed.
+        /// </summary>
+        /// <remarks></remarks>
         Cool
     }
 
@@ -43,20 +41,20 @@ namespace TrippLite
         {
             get
             {
-                var ljc = LastJsonConfig;
+                using (var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None))
+                {
+                    var ljc = LastJsonConfig;
+                    var res = ((int?)key.GetValue("LoadLastConfigOnStartup", string.IsNullOrEmpty(ljc) ? 0 : 1)) == 1;
 
-                var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
-                var res = ((int?)key.GetValue("LoadLastConfigOnStartup", string.IsNullOrEmpty(ljc) ? 0 : 1)) == 1;
-
-                key.Close();
-
-                return res;
+                    return res;
+                }
             }
             set
             {
-                var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
-                key.SetValue("LastJsonConfig", value ? 1 : 0, RegistryValueKind.DWord);
-                key.Close();
+                using (var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None))
+                {
+                    key.SetValue("LastJsonConfig", value ? 1 : 0, RegistryValueKind.DWord);
+                }
             }
         }
 
@@ -73,18 +71,18 @@ namespace TrippLite
 
                 var defFile = dir + "\\settings.json";
 
-                var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
-                var str = (string?)key.GetValue("LastJsonConfig", defFile);
-                
-                key.Close();
-
-                return str ?? "";
+                using (var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None))
+                {
+                    var str = (string?)key.GetValue("LastJsonConfig", defFile);
+                    return str ?? "";
+                }
             }
             set
             {
-                var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
-                key.SetValue("LastJsonConfig", value, RegistryValueKind.String);
-                key.Close();
+                using (var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None))
+                {
+                    key.SetValue("LastJsonConfig", value, RegistryValueKind.String);
+                }
             }
         }
 
@@ -92,18 +90,17 @@ namespace TrippLite
         {
             get
             {
-                LastWindowType LastWindowRet = default;
-                var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
-                LastWindowRet = (LastWindowType)key.GetValue("LastWindow", 0);
-                key.Close();
-                return LastWindowRet;
+                using (var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None))
+                {
+                    return (LastWindowType)key.GetValue("LastWindow", 0);
+                }
             }
-
             set
             {
-                var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
-                key.SetValue("LastWindow", value, RegistryValueKind.DWord);
-                key.Close();
+                using (var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None))
+                {
+                    key.SetValue("LastWindow", value, RegistryValueKind.DWord);
+                }
             }
         }
 
@@ -111,30 +108,31 @@ namespace TrippLite
         {
             get
             {
-                RectangleF PrimaryWindowBoundsRet = default;
-                var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
-                var mm = new MemPtr(16);
-                mm.FromByteArray((byte[])key.GetValue("PrimaryWindowBounds", (byte[])mm));
-                key.Close();
-                if (mm.SingleAt(2L) == 0f || mm.SingleAt(3L) == 0f)
+                using (var mm = new SafePtr(16L))
                 {
-                    mm.Free();
-                    return new RectangleF(0f, 0f, 0f, 0f);
+                    using (var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None))
+                    {
+                        mm.FromByteArray((byte[])key.GetValue("PrimaryWindowBounds", (byte[])mm));
+                        if (mm.SingleAt(2L) == 0f || mm.SingleAt(3L) == 0f)
+                        {
+                            mm.Free();
+                            return new RectangleF(0f, 0f, 0f, 0f);
+                        }
+
+                        return new RectangleF(mm.SingleAt(0L), mm.SingleAt(1L), mm.SingleAt(2L), mm.SingleAt(3L));
+                    }
                 }
-
-                PrimaryWindowBoundsRet = new RectangleF(mm.SingleAt(0L), mm.SingleAt(1L), mm.SingleAt(2L), mm.SingleAt(3L));
-                mm.Free();
-                return PrimaryWindowBoundsRet;
             }
-
             set
             {
-                var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
-                var mm = new MemPtr(16);
-                mm.FromStruct(value);
-                key.SetValue("PrimaryWindowBounds", mm.ToByteArray(0, 16), RegistryValueKind.Binary);
-                key.Close();
-                mm.Free();
+                using (var mm = new SafePtr(16L))
+                {
+                    using (var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None))
+                    {
+                        mm.FromStruct(value);
+                        key.SetValue("PrimaryWindowBounds", mm.ToByteArray(0, 16), RegistryValueKind.Binary);
+                    }
+                }
             }
         }
 
@@ -142,68 +140,70 @@ namespace TrippLite
         {
             get
             {
-                RectangleF CoolWindowBoundsRet = default;
-                var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
-                var mm = new MemPtr(16);
-                mm.FromByteArray((byte[])key.GetValue("CoolWindowBounds", (byte[])mm));
-                key.Close();
-                if (mm.SingleAt(2L) == 0f || mm.SingleAt(3L) == 0f)
+                using (var mm = new SafePtr(16L))
                 {
-                    mm.Free();
-                    return new RectangleF(0f, 0f, 0f, 0f);
+                    using (var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None))
+                    {
+                        mm.FromByteArray((byte[])key.GetValue("CoolWindowBounds", (byte[])mm));
+
+                        if (mm.SingleAt(2L) == 0f || mm.SingleAt(3L) == 0f)
+                        {
+                            mm.Free();
+                            return new RectangleF(0f, 0f, 0f, 0f);
+                        }
+
+                        return new RectangleF(mm.SingleAt(0L), mm.SingleAt(1L), mm.SingleAt(2L), mm.SingleAt(3L));
+                    }
                 }
-
-                CoolWindowBoundsRet = new RectangleF(mm.SingleAt(0L), mm.SingleAt(1L), mm.SingleAt(2L), mm.SingleAt(3L));
-                mm.Free();
-                return CoolWindowBoundsRet;
             }
-
             set
             {
-                var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
-                var mm = new MemPtr(16);
-                mm.FromStruct(value);
-                key.SetValue("CoolWindowBounds", mm.ToByteArray(0, 16), RegistryValueKind.Binary);
-                key.Close();
-                mm.Free();
+                using (var mm = new SafePtr(16L))
+                {
+                    using (var key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + "", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None))
+                    {
+                        mm.FromStruct(value);
+                        key.SetValue("CoolWindowBounds", mm.ToByteArray(0, 16), RegistryValueKind.Binary);
+                    }
+                }
             }
         }
-
 
         public static PowerDeviceIdEntry[] PowerDevices
         {
             get
             {
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + @"\PowerDevices", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
-                string[] entries = key.GetValueNames();
-
-                List<PowerDeviceIdEntry> recents = new List<PowerDeviceIdEntry>();
-
-                int idx;
-                int ncount = 0;
-                int gcount = 0;
-
-                foreach (string entry in entries)
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + @"\PowerDevices", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None))
                 {
-                    if (entry == null) continue;
+                    string[] entries = key.GetValueNames();
 
-                    if (int.TryParse(entry, out idx))
+                    List<PowerDeviceIdEntry> recents = new List<PowerDeviceIdEntry>();
+
+                    int idx;
+                    int ncount = 0;
+                    int gcount = 0;
+
+                    foreach (string entry in entries)
                     {
-                        ncount++;
+                        if (entry == null) continue;
 
-                        if (key.GetValue(entry) is string rfObj)
+                        if (int.TryParse(entry, out idx))
                         {
-                            gcount++;
-                            recents.Add(PowerDeviceIdEntry.Parse(rfObj));
+                            ncount++;
+
+                            if (key.GetValue(entry) is string rfObj)
+                            {
+                                gcount++;
+                                recents.Add(PowerDeviceIdEntry.Parse(rfObj));
+                            }
                         }
                     }
+
+                    if ((gcount != ncount))
+                        SetPowerDeviceIdList(recents.ToArray());
+
+                    return recents.ToArray();
                 }
-
-                if ((gcount != ncount))
-                    SetPowerDeviceIdList(recents.ToArray());
-
-                key.Close();
-                return recents.ToArray();
             }
             set
             {
@@ -213,38 +213,35 @@ namespace TrippLite
 
         private static void SetPowerDeviceIdList(PowerDeviceIdEntry[] deviceIds)
         {
-            RegistryKey key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + @"\PowerDevices", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
-            string[] values = key.GetValueNames();
-
-            int c = 255;
-            int i;
-            int n;
-
-            foreach (string value in values) key.DeleteValue(value);
-
-            if (deviceIds == null || deviceIds.Length == 0)
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(ConfigRootKey + @"\PowerDevices", RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None))
             {
-                key.Close();
-                return;
+                string[] values = key.GetValueNames();
+
+                int c = 255;
+                int i;
+                int n;
+
+                foreach (string value in values) key.DeleteValue(value);
+
+                if (deviceIds == null || deviceIds.Length == 0)
+                {
+                    key.Close();
+                    return;
+                }
+
+                c = c < deviceIds.Length ? c : deviceIds.Length;
+                n = 0;
+
+                for (i = 0; i <= c - 1; i++)
+                {
+                    if (!deviceIds[i].Enabled) continue;
+                    key.SetValue(n++.ToString(), deviceIds[i].ToString(), RegistryValueKind.String);
+                }
             }
-
-            c = c < deviceIds.Length ? c : deviceIds.Length;
-            n = 0;
-
-            for (i = 0; i <= c - 1; i++)
-            {
-                if (!deviceIds[i].Enabled) continue;
-                key.SetValue(n++.ToString(), deviceIds[i].ToString(), RegistryValueKind.String);
-            }
-
-            key.Close();
         }
-
     }
 
-
-    #endregion
-
+    #endregion Registry Settings
 
     #region JSON Settings
 
@@ -254,14 +251,13 @@ namespace TrippLite
         {
             if (reader.Value is string s)
             {
-
                 var re = new Regex(@"#^([A-Fa-f0-9]{2}])([A-Fa-f0-9]{2}])([A-Fa-f0-9]{2}])([A-Fa-f0-9]{2}])$");
                 var test = re.Match(s);
 
                 if (test.Success)
                 {
                     var a = byte.Parse(test.Groups[0].Value, System.Globalization.NumberStyles.HexNumber);
-                    var r = byte.Parse(test.Groups[1].Value, System.Globalization.NumberStyles.HexNumber);        
+                    var r = byte.Parse(test.Groups[1].Value, System.Globalization.NumberStyles.HexNumber);
                     var g = byte.Parse(test.Groups[2].Value, System.Globalization.NumberStyles.HexNumber);
                     var b = byte.Parse(test.Groups[3].Value, System.Globalization.NumberStyles.HexNumber);
 
@@ -298,7 +294,6 @@ namespace TrippLite
                         throw new InvalidDataException();
                     }
                 }
-
             }
             else
             {
@@ -337,13 +332,10 @@ namespace TrippLite
 
         [JsonProperty("opacity")]
         public double WindowOpacity { get; set; }
-
     }
-
 
     public class JsonSettings
     {
-
         [JsonProperty("utility")]
         public ModeSettings UtilityPower { get; set; } = new ModeSettings();
 
@@ -425,11 +417,7 @@ namespace TrippLite
 
             SaveSettings(FileName);
         }
-
     }
 
-
-    #endregion
-
+    #endregion JSON Settings
 }
-

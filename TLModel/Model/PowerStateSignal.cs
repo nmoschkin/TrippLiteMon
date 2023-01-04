@@ -1,4 +1,4 @@
-﻿using DataTools.Observable;
+﻿using DataTools.Essentials.Observable;
 using DataTools.Win32;
 using DataTools.Win32.Usb;
 using DataTools.Win32.Usb.Power;

@@ -1,24 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <RootNamespace>TrippLite</RootNamespace>
     <Platforms>AnyCPU;x64</Platforms>
     <LangVersion>preview</LangVersion>
 	  <UseWPF>true</UseWPF>
+	  <UseWindowsForms>true</UseWindowsForms>
 	  <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\DataTools\Common\DataTools.Graphics\DataTools.Graphics.csproj" />
-    <ProjectReference Include="..\DataTools\Common\DataTools\DataTools.csproj" />
-    <ProjectReference Include="..\DataTools\Win32\DataTools.Win32.Memory\DataTools.Win32.Memory.csproj" />
-    <ProjectReference Include="..\DataTools\Win32\DataTools.Win32.Usb\DataTools.Win32.Usb.csproj" />
-    <ProjectReference Include="..\DataTools\Win32\DataTools.Win32\DataTools.Win32.csproj" />
-    <ProjectReference Include="..\DataTools\Windows\WPF\DataTools.Desktop.WPF\DataTools.Desktop.WPF.csproj" />
-    <ProjectReference Include="..\MessageBoxEx\MessageBoxEx5\MessageBoxEx5.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
     <Compile Update="Globalization\AppResources.Designer.cs">
@@ -37,6 +28,13 @@
 
   <ItemGroup>
     <Folder Include="Resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DataTools.Desktop.WPF" Version="8.0.0.1039" />
+    <PackageReference Include="DataTools.Graphics" Version="8.0.0.1039" />
+    <PackageReference Include="DataTools.MessageBoxEx" Version="1.2.0.1010" />
+    <PackageReference Include="DataTools.Win32.Usb" Version="8.0.0.1039" />
   </ItemGroup>
 
 </Project>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DataTools.Observable;
+using DataTools.Essentials.Observable;
 
 using DataTools.Win32.Usb;
 

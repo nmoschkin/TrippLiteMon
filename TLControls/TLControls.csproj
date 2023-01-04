@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
 	  <UseWindowsForms>true</UseWindowsForms>
@@ -25,13 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataTools\Common\DataTools.Graphics\DataTools.Graphics.csproj" />
-    <ProjectReference Include="..\DataTools\Common\DataTools\DataTools.csproj" />
-    <ProjectReference Include="..\DataTools\Win32\DataTools.Win32.Memory\DataTools.Win32.Memory.csproj" />
-    <ProjectReference Include="..\DataTools\Win32\DataTools.Win32\DataTools.Win32.csproj" />
-    <ProjectReference Include="..\DataTools\Windows\DataTools.Desktop\DataTools.Desktop.csproj" />
-    <ProjectReference Include="..\DataTools\Windows\WPF\DataTools.ColorControls\DataTools.ColorControls.csproj" />
-    <ProjectReference Include="..\DataTools\Windows\WPF\DataTools.Desktop.WPF\DataTools.Desktop.WPF.csproj" />
+    <PackageReference Include="DataTools.Graphics" Version="8.0.0.1039" />
+    <PackageReference Include="DataTools.MessageBoxEx" Version="1.2.0.1010" />
+    <PackageReference Include="DataTools.Win32.Usb" Version="8.0.0.1039" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TLModel\TLModel.csproj" />
   </ItemGroup>
 

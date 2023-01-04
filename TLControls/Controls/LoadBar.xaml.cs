@@ -1,13 +1,11 @@
-﻿using System;
+﻿using DataTools.MathTools.Polar;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
-
-using DataTools.MathTools.PolarMath;
-
-using System.Windows.Controls;
 
 namespace TrippLite
 {
@@ -237,7 +235,7 @@ namespace TrippLite
                     p = _polyCache[i];
 
                     p.Effect = this.BackingBar.Effect;
-                    
+
                     if (cblin < i)
                     {
                         var diff = (double)i - cblin;
@@ -287,36 +285,36 @@ namespace TrippLite
             this.BarsArea.Children.Clear();
 
             System.Threading.Thread.Sleep(0);
-            
+
             var c = (int)(Sections - 1L);
-            
+
             for (i = 0; i <= c; i++)
             {
                 // ' fresh point collection
                 pc = new PointCollection();
                 p = _polyCache[i];
-                
+
                 pol.Radius = x + w;
                 pol.Radius *= fr;
-                
+
                 pt = PolarCoordinates.ToLinearCoordinates(pol);
-                
+
                 pc.Add(new Point(x, s.Height));
                 pc.Add(new Point(pt.X, s.Height));
                 pc.Add(new Point(pt.X, Math.Max(0d, wHeight - pt.Y)));
-                
+
                 pol.Radius = x;
                 pol.Radius *= fr;
-                
+
                 pt = PolarCoordinates.ToLinearCoordinates(pol);
-                
+
                 pc.Add(new Point(pt.X, Math.Max(0d, wHeight - pt.Y)));
                 pc.Add(new Point(pt.X, s.Height));
-                
+
                 p.Points = pc;
                 p.Fill = bc;
                 p.Effect = this.BackingBar.Effect;
-                
+
                 if (cblin < i)
                 {
                     p.Opacity = 0.33d;

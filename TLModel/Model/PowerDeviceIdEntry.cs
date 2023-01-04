@@ -1,12 +1,10 @@
 ﻿using DataTools.Desktop;
-using DataTools.Observable;
+using DataTools.Essentials.Observable;
 using DataTools.Win32.Usb;
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 using TrippLite.ViewModel;
@@ -18,12 +16,12 @@ namespace TrippLite
     /// </summary>
     public class PowerDeviceIdEntry : ObservableBase, ICloneable
     {
-        BatteryPickerViewModel? bvm;
+        private BatteryPickerViewModel? bvm;
 
-        string name;
-        bool enabled;
-        BitmapSource? icon;
-        HidDeviceInfo? source;
+        private string name;
+        private bool enabled;
+        private BitmapSource? icon;
+        private HidDeviceInfo? source;
 
         public BatteryPickerViewModel? Parent
         {
@@ -157,8 +155,5 @@ namespace TrippLite
         {
             return (PowerDeviceIdEntry)MemberwiseClone();
         }
-
-
     }
-
 }

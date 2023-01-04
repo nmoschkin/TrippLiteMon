@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    >
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <ImageSource x:Key="TrippLiteLogo">pack://application:,,,/TLControls;component/Resources/TrippLiteLogo.png</ImageSource>
     <ImageSource x:Key="Smart1500LCDT">pack://application:,,,/TLControls;component/Resources/TrippLiteSmart1500LCDT.png</ImageSource>
@@ -32,69 +31,54 @@
 
     <SolidColorBrush
         x:Key="TrippLiteErrorDark"
-        Color="DarkRed"
-        />
+        Color="DarkRed" />
     <SolidColorBrush
         x:Key="TrippLiteWarnDark"
-        Color="DarkOrange"
-        />
+        Color="DarkOrange" />
     <SolidColorBrush
         x:Key="TrippLiteOKDark"
-        Color="DarkGreen"
-        />
+        Color="DarkGreen" />
 
     <SolidColorBrush
         x:Key="TrippLiteError"
-        Color="Red"
-        />
+        Color="Red" />
     <SolidColorBrush
         x:Key="TrippLiteWarn"
-        Color="Orange"
-        />
+        Color="Orange" />
     <SolidColorBrush
         x:Key="TrippLiteOK"
-        Color="Green"
-        />
+        Color="Green" />
 
     <SolidColorBrush
         x:Key="TrippLiteErrorLight"
-        Color="LightCoral"
-        />
+        Color="LightCoral" />
     <SolidColorBrush
         x:Key="TrippLiteWarnLight"
-        Color="LightGoldenrodYellow"
-        />
+        Color="LightGoldenrodYellow" />
     <SolidColorBrush
         x:Key="TrippLiteLight"
-        Color="LightGreen"
-        />
+        Color="LightGreen" />
 
     <SolidColorBrush
         x:Key="TrippLiteBlue"
-        Color="#19589b"
-        />
+        Color="#19589b" />
     <SolidColorBrush
         x:Key="TrippLiteGray"
-        Color="#e8ebf0"
-        />
+        Color="#e8ebf0" />
     <SolidColorBrush
         x:Key="TrippLiteDimGray"
-        Color="#c0c0c0"
-        />
+        Color="#c0c0c0" />
 
     <SolidColorBrush
         x:Key="TrippLiteLcd"
-        Color="#FF79BBFF"
-        />
+        Color="#FF79BBFF" />
     <SolidColorBrush
         x:Key="TrippLiteLcdTrans"
-        Color="#7F79BBFF"
-        />
+        Color="#7F79BBFF" />
     <SolidColorBrush
         x:Key="TrippLiteLcdType"
         x:Name="TrippLiteLcdType"
-        Color="#FFD4E7FB"
-        />
+        Color="#FFD4E7FB" />
 
     <LinearGradientBrush x:Key="BlueGradient" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="White" />
@@ -138,15 +122,13 @@
     <Pen
         x:Key="BorderPen"
         Brush="{DynamicResource TrippLitePenGradient}"
-        Thickness="1.5"
-        />
+        Thickness="1.5" />
 
 
 
     <Style
         x:Key="NormalPropertyHeadline"
-        TargetType="{x:Type TextBlock}"
-        >
+        TargetType="{x:Type TextBlock}">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="8" />
         <Setter Property="FontStretch" Value="Normal" />
@@ -158,8 +140,7 @@
 
     <Style
         x:Key="NormalProperty"
-        TargetType="{x:Type TextBlock}"
-        >
+        TargetType="{x:Type TextBlock}">
         <Setter Property="FontFamily" Value="./Resources/#Digital dream Skew Narrow" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="FontStretch" Value="Normal" />
@@ -171,8 +152,7 @@
 
     <Style
         x:Key="SmallNormalProperty"
-        TargetType="{x:Type TextBlock}"
-        >
+        TargetType="{x:Type TextBlock}">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="10" />
         <Setter Property="FontStretch" Value="Normal" />
@@ -185,8 +165,7 @@
 
     <Style
         x:Key="ProminentPropertyHeadline"
-        TargetType="{x:Type TextBlock}"
-        >
+        TargetType="{x:Type TextBlock}">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="8" />
         <Setter Property="FontStretch" Value="Normal" />
@@ -198,8 +177,7 @@
 
     <Style
         x:Key="ProminentProperty"
-        TargetType="{x:Type TextBlock}"
-        >
+        TargetType="{x:Type TextBlock}">
         <Setter Property="FontFamily" Value="./Resources/#Digital dream Skew Narrow" />
         <Setter Property="FontSize" Value="28" />
         <Setter Property="FontStretch" Value="Normal" />
@@ -211,8 +189,7 @@
 
     <Style
         x:Key="CoolPropertyHeadline"
-        TargetType="{x:Type TextBlock}"
-        >
+        TargetType="{x:Type TextBlock}">
         <Setter Property="FontFamily" Value="Segoe UI" />
         <Setter Property="FontSize" Value="8" />
         <Setter Property="FontStretch" Value="Normal" />
@@ -224,8 +201,7 @@
 
     <Style
         x:Key="CoolProperty"
-        TargetType="{x:Type TextBlock}"
-        >
+        TargetType="{x:Type TextBlock}">
         <Setter Property="FontFamily" Value="./Resources/#Digital dream Skew Narrow" />
         <Setter Property="FontSize" Value="20" />
         <Setter Property="FontStretch" Value="Normal" />
@@ -248,8 +224,7 @@
             Background="{DynamicResource TrippLiteLcd}"
             ClipToBounds="True"
             Focusable="False"
-            Opacity="1"
-            >
+            Opacity="1">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -269,8 +244,7 @@
                 Fill="Transparent"
                 Opacity="1"
                 Stroke="{DynamicResource TrippLiteBlue}"
-                StrokeThickness="1"
-                />
+                StrokeThickness="1" />
 
             <Rectangle
                 x:Name="HighlighterFill"
@@ -281,8 +255,7 @@
                 Panel.ZIndex="0"
                 Fill="{DynamicResource TrippLiteBlue}"
                 Opacity="0.2"
-                StrokeThickness="0"
-                />
+                StrokeThickness="0" />
 
             <StackPanel
                 x:Name="Content"
@@ -291,8 +264,7 @@
                 Width="{Binding}"
                 Height="{Binding}"
                 Margin="4,3,4,3"
-                Panel.ZIndex="1"
-                >
+                Panel.ZIndex="1">
 
                 <StackPanel>
                     <TextBlock
@@ -300,8 +272,7 @@
                         Margin="2,2,2,2"
                         HorizontalAlignment="Left"
                         Style="{DynamicResource NormalPropertyHeadline}"
-                        Text="{Binding Header, Mode=OneTime}"
-                        />
+                        Text="{Binding Header, Mode=OneTime}" />
 
                 </StackPanel>
                 <StackPanel>
@@ -311,8 +282,7 @@
                         Margin="2,2,2,2"
                         HorizontalAlignment="Left"
                         Style="{DynamicResource NormalProperty}"
-                        Text="{Binding DisplayValue, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                        />
+                        Text="{Binding DisplayValue, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
             </StackPanel>
 
@@ -330,8 +300,7 @@
             Background="{DynamicResource TrippLiteLcd}"
             ClipToBounds="True"
             Focusable="False"
-            Opacity="1"
-            >
+            Opacity="1">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -351,8 +320,7 @@
                 Fill="Transparent"
                 Opacity="1"
                 Stroke="{DynamicResource TrippLiteBlue}"
-                StrokeThickness="1"
-                />
+                StrokeThickness="1" />
 
             <Rectangle
                 x:Name="HighlighterFill"
@@ -363,8 +331,7 @@
                 Panel.ZIndex="0"
                 Fill="{DynamicResource TrippLiteBlue}"
                 Opacity="0.2"
-                StrokeThickness="0"
-                />
+                StrokeThickness="0" />
 
             <StackPanel
                 x:Name="Content"
@@ -373,8 +340,7 @@
                 Width="{Binding}"
                 Height="{Binding}"
                 Margin="8,4,8,4"
-                Panel.ZIndex="1"
-                >
+                Panel.ZIndex="1">
 
                 <StackPanel>
                     <TextBlock
@@ -382,8 +348,7 @@
                         Margin="2,2,2,2"
                         HorizontalAlignment="Stretch"
                         Style="{DynamicResource ProminentPropertyHeadline}"
-                        Text="{Binding Header, Mode=OneTime}"
-                        />
+                        Text="{Binding Header, Mode=OneTime}" />
 
                 </StackPanel>
                 <StackPanel>
@@ -393,8 +358,7 @@
                         Margin="2,2,2,2"
                         HorizontalAlignment="Stretch"
                         Style="{DynamicResource ProminentProperty}"
-                        Text="{Binding DisplayValue, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                        />
+                        Text="{Binding DisplayValue, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
             </StackPanel>
         </Grid>
@@ -414,8 +378,7 @@
             Background="Transparent"
             ClipToBounds="True"
             Focusable="False"
-            Opacity="1"
-            >
+            Opacity="1">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -433,8 +396,7 @@
                 Height="{Binding}"
                 Margin="12,4,4,4"
                 HorizontalAlignment="Stretch"
-                Panel.ZIndex="1"
-                >
+                Panel.ZIndex="1">
 
                 <StackPanel>
                     <TextBlock
@@ -442,8 +404,7 @@
                         Margin="2,2,2,2"
                         HorizontalAlignment="Stretch"
                         Style="{DynamicResource CoolPropertyHeadline}"
-                        Text="{Binding Header, Mode=OneTime}"
-                        />
+                        Text="{Binding Header, Mode=OneTime}" />
 
                 </StackPanel>
                 <StackPanel>
@@ -453,8 +414,7 @@
                         Margin="2,2,2,2"
                         HorizontalAlignment="Stretch"
                         Style="{DynamicResource CoolProperty}"
-                        Text="{Binding DisplayValue, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                        />
+                        Text="{Binding DisplayValue, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
             </StackPanel>
         </Grid>
@@ -463,8 +423,7 @@
 
     <Style
         x:Key="DefaultHeaderStyle"
-        TargetType="Label"
-        >
+        TargetType="Label">
 
         <Style.Setters>
 
@@ -482,12 +441,10 @@
                             Width="150"
                             Height="48"
                             Background="{TemplateBinding Background}"
-                            BorderThickness="0"
-                            >
+                            BorderThickness="0">
                             <ContentPresenter
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                />
+                                VerticalAlignment="Center" />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -503,13 +460,11 @@
                             <ColorAnimation
                                 Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)"
                                 To="{StaticResource TrippLiteLcdColor}"
-                                Duration="0:0:0.25"
-                                />
+                                Duration="0:0:0.25" />
                             <ColorAnimation
                                 Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)"
                                 To="#3c3c3c"
-                                Duration="0:0:0.25"
-                                />
+                                Duration="0:0:0.25" />
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger.Actions>
@@ -522,13 +477,11 @@
                             <ColorAnimation
                                 Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)"
                                 To="{StaticResource TrippLiteBlueColor}"
-                                Duration="0:0:0.25"
-                                />
+                                Duration="0:0:0.25" />
                             <ColorAnimation
                                 Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)"
                                 To="White"
-                                Duration="0:0:0.25"
-                                />
+                                Duration="0:0:0.25" />
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger.Actions>
@@ -541,12 +494,10 @@
 
                             <ColorAnimationUsingKeyFrames
                                 Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)"
-                                Duration="0:0:0.25"
-                                >
+                                Duration="0:0:0.25">
                                 <LinearColorKeyFrame
                                     KeyTime="0:0:0.125"
-                                    Value="{StaticResource TrippLiteGrayColor}"
-                                    />
+                                    Value="{StaticResource TrippLiteGrayColor}" />
                             </ColorAnimationUsingKeyFrames>
 
                         </Storyboard>
@@ -561,12 +512,10 @@
 
                             <ColorAnimationUsingKeyFrames
                                 Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)"
-                                Duration="0:0:0.25"
-                                >
+                                Duration="0:0:0.25">
                                 <LinearColorKeyFrame
                                     KeyTime="0:0:0.25"
-                                    Value="{StaticResource TrippLiteLcdColor}"
-                                    />
+                                    Value="{StaticResource TrippLiteLcdColor}" />
                             </ColorAnimationUsingKeyFrames>
 
                         </Storyboard>
@@ -582,8 +531,7 @@
 
     <Style
         x:Key="DefaultSelectedHeaderStyle"
-        TargetType="Label"
-        >
+        TargetType="Label">
 
         <Style.Setters>
 
@@ -601,12 +549,10 @@
                             Width="150"
                             Height="48"
                             Background="{TemplateBinding Background}"
-                            BorderThickness="0"
-                            >
+                            BorderThickness="0">
                             <ContentPresenter
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                />
+                                VerticalAlignment="Center" />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -622,13 +568,11 @@
                             <ColorAnimation
                                 Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)"
                                 To="{StaticResource TrippLiteLcdColor}"
-                                Duration="0:0:0.25"
-                                />
+                                Duration="0:0:0.25" />
                             <ColorAnimation
                                 Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)"
                                 To="#3c3c3c"
-                                Duration="0:0:0.25"
-                                />
+                                Duration="0:0:0.25" />
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger.Actions>
@@ -641,13 +585,11 @@
                             <ColorAnimation
                                 Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)"
                                 To="{StaticResource TrippLiteLcdColor}"
-                                Duration="0:0:0.25"
-                                />
+                                Duration="0:0:0.25" />
                             <ColorAnimation
                                 Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)"
                                 To="#3c3c3c"
-                                Duration="0:0:0.25"
-                                />
+                                Duration="0:0:0.25" />
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger.Actions>
@@ -660,12 +602,10 @@
 
                             <ColorAnimationUsingKeyFrames
                                 Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)"
-                                Duration="0:0:0.25"
-                                >
+                                Duration="0:0:0.25">
                                 <LinearColorKeyFrame
                                     KeyTime="0:0:0.125"
-                                    Value="{StaticResource TrippLiteGrayColor}"
-                                    />
+                                    Value="{StaticResource TrippLiteGrayColor}" />
                             </ColorAnimationUsingKeyFrames>
 
                         </Storyboard>
@@ -680,12 +620,10 @@
 
                             <ColorAnimationUsingKeyFrames
                                 Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)"
-                                Duration="0:0:0.25"
-                                >
+                                Duration="0:0:0.25">
                                 <LinearColorKeyFrame
                                     KeyTime="0:0:0.25"
-                                    Value="{StaticResource TrippLiteLcdColor}"
-                                    />
+                                    Value="{StaticResource TrippLiteLcdColor}" />
                             </ColorAnimationUsingKeyFrames>
 
                         </Storyboard>
