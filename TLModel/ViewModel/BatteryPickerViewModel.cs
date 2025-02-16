@@ -1,7 +1,8 @@
 ﻿using DataTools.Desktop;
 using DataTools.Essentials.Observable;
+using DataTools.Win32;
 using DataTools.Win32.Usb;
-
+using DataTools.Win32.Usb.Power;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,11 +31,19 @@ namespace TrippLite.ViewModel
         {
             deviceIds = new ObservableCollection<PowerDeviceIdEntry>();
 
-            var hids = HidDeviceInfo.EnumerateHidDevices(false, new[] { HidUsagePage.PowerDevice1, HidUsagePage.PowerDevice2 });
+            var hids = HidDeviceInfo.EnumerateHidDevices().Where((e) => e.DeviceClass == DeviceClassEnum.Battery).ToList();
+            
+            //var battery = hids.Where((e) => e.DeviceClass == DeviceClassEnum.Battery).ToList().FirstOrDefault();
+
+            //if (battery == null)
+            //{
+            //    Environment.Exit(0);
+            //    return;
+            //}
 
             foreach (var hid in hids)
             {
-                var newDev = new PowerDeviceIdEntry(hid.ProductString, hid.DevicePath, hids.Length == 1) { Source = hid, Parent = this };
+                var newDev = new PowerDeviceIdEntry(hid.ProductString, hid.DevicePath, hids.Count == 1) { Source = hid, Parent = this };
                 deviceIds.Add(newDev);
             }
 

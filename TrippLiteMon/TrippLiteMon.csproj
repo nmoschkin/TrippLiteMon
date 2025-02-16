@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
 	  <UseWindowsForms>true</UseWindowsForms>
@@ -15,8 +15,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DataTools.ColorControls" Version="8.0.0.1039" />
-    <PackageReference Include="DataTools.Graphics" Version="8.0.0.1039" />
+    <PackageReference Include="DataTools.ColorControls" Version="8.0.0.1103" />
+    <PackageReference Include="DataTools.Graphics" Version="8.0.0.1103" />
+    <PackageReference Include="DataTools.MessageBoxEx" Version="1.2.0.1011" />
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.1" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.1" />
   </ItemGroup>

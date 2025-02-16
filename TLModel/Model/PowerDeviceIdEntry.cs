@@ -39,7 +39,7 @@ namespace TrippLite
             {
                 if (SetProperty(ref source, value) && source != null)
                 {
-                    Icon = BitmapTools.MakeWPFImage(source.DeviceIcon);
+                    Icon = WPFBitmapTools.MakeWPFImage(source.DeviceIcon);
                 }
             }
         }

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <RootNamespace>TrippLite</RootNamespace>
     <Platforms>AnyCPU;x64</Platforms>
@@ -31,10 +31,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DataTools.Desktop.WPF" Version="8.0.0.1039" />
-    <PackageReference Include="DataTools.Graphics" Version="8.0.0.1039" />
-    <PackageReference Include="DataTools.MessageBoxEx" Version="1.2.0.1010" />
-    <PackageReference Include="DataTools.Win32.Usb" Version="8.0.0.1039" />
+    <PackageReference Include="DataTools.Desktop.WPF" Version="8.0.0.1103" />
+    <PackageReference Include="DataTools.Graphics" Version="8.0.0.1103" />
+    <PackageReference Include="DataTools.MessageBoxEx" Version="1.2.0.1011" />
+    <PackageReference Include="DataTools.Win32.Usb" Version="8.0.0.1103" />
   </ItemGroup>
 
 </Project>

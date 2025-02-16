@@ -18,7 +18,7 @@ namespace TrippLite
     {
         public App()
         {
-            AppCenter.Start(System.IO.File.ReadAllText(@"E:\Projects\Keys\TrippLiteAppCenter.txt").Trim('\n').Trim('\r').Trim(),
+            AppCenter.Start(System.IO.File.ReadAllText(@"C:\Keys\TrippLiteAppCenter.txt").Trim('\n').Trim('\r').Trim(),
                   typeof(Analytics), typeof(Crashes));
             // Application-level events, such as Startup, Exit, and DispatcherUnhandledException
             // can be handled in this file.
